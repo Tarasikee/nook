@@ -6,7 +6,7 @@ outline: [2, 2]
 
 # Examples
 
-<p class="nk-lead">Every preview runs on <code>@nook/react</code>. Only the CSS is specific to this site; see <a href="../guide/positioning">Positioning</a> and <a href="../guide/animation">Animation</a> for the recipes.</p>
+<p class="nk-lead">Every preview runs on <code>@nook/react</code>. Only the CSS is specific to this site; see <a href="../guide/styling#positioning">Positioning</a> and <a href="../guide/styling#animation">Animation</a> for the recipes.</p>
 
 ## Share popover
 

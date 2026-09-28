@@ -80,9 +80,10 @@ for (const name of skipped.filter((name) => name in exceptions)) {
 
 if (unexplained.length > 0) {
     console.error(`\nExported hooks not compiled: ${unexplained.join(', ')}`)
-    console.error('Triage the events above. Fix real Rules of React violations; record justified false positives in `exceptions`.')
+    console.error(
+        'Triage the events above. Fix real Rules of React violations; record justified false positives in `exceptions`.'
+    )
     process.exit(1)
 }
 
 console.log(`\nAll ${exported.size} exported hooks compiled.`)
-

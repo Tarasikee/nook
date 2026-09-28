@@ -40,10 +40,30 @@ const split = [
 ]
 
 const primitives = [
-    { name: 'Popover', status: 'Available', link: '/guide/popover', text: 'usePopover(): click-triggered, light-dismissible surfaces.' },
-    { name: 'Tooltip', status: 'Chromium', link: '/guide/tooltip', text: 'useTooltip(): hover and focus hints on interestfor.' },
-    { name: 'Menu', status: 'Planned', link: '/guide/roadmap#menu', text: 'Menu semantics and keyboard model on native popovers.' },
-    { name: 'Select', status: 'Planned', link: '/guide/roadmap#select', text: 'Built on the customizable native select.' }
+    {
+        name: 'Popover',
+        status: 'Available',
+        link: '/guide/popover',
+        text: 'usePopover(): click-triggered, light-dismissible surfaces.'
+    },
+    {
+        name: 'Tooltip',
+        status: 'Chromium',
+        link: '/guide/tooltip',
+        text: 'useTooltip(): hover and focus hints on interestfor.'
+    },
+    {
+        name: 'Menu',
+        status: 'Planned',
+        link: '/guide/#status-and-roadmap',
+        text: 'Menu semantics and keyboard model on native popovers.'
+    },
+    {
+        name: 'Select',
+        status: 'Planned',
+        link: '/guide/#status-and-roadmap',
+        text: 'Built on the customizable native select.'
+    }
 ]
 </script>
 
@@ -51,15 +71,17 @@ const primitives = [
     <div class="home">
         <section class="home-hero">
             <div class="home-hero__copy">
-                <p class="home-eyebrow"><span class="home-dot" aria-hidden="true" /> React 19 · Native HTML · Early preview</p>
+                <p class="home-eyebrow">
+                    <span class="home-dot" aria-hidden="true" /> React 19 · Native HTML · Early preview
+                </p>
                 <h1 class="home-title">
                     Accessible primitives.<br />
                     <em>Built on the platform.</em>
                 </h1>
                 <p class="home-lead">
                     Nook is a set of headless React hooks for popovers and tooltips. The browser does the work:
-                    <code>popovertarget</code>, <code>interestfor</code>, the top layer, and CSS anchor positioning. Nook
-                    adds only what the platform leaves out.
+                    <code>popovertarget</code>, <code>interestfor</code>, the top layer, and CSS anchor positioning.
+                    Nook adds only what the platform leaves out.
                 </p>
                 <div class="home-actions">
                     <a class="home-button home-button--primary" :href="withBase('/guide/getting-started')">
@@ -85,7 +107,8 @@ const primitives = [
             <div class="home-hero__demo">
                 <ReactDemo name="hero" :height="360" />
                 <p class="home-hero__caption">
-                    Live, on <code>@nook/react</code>. Click <strong>Share</strong>, hover the icons, press <kbd>Esc</kbd>.
+                    Live, on <code>@nook/react</code>. Click <strong>Share</strong>, hover the icons, press
+                    <kbd>Esc</kbd>.
                 </p>
             </div>
         </section>
@@ -99,9 +122,18 @@ const primitives = [
                     that already knows how to open, close, dismiss, and anchor itself.
                 </p>
                 <ol class="home-steps">
-                    <li><strong>Hook</strong> <code>usePopover()</code> returns trigger, content, title, and close props.</li>
-                    <li><strong>Markup</strong> Spread them on your own <code>&lt;button&gt;</code> and panel. Keep your handlers.</li>
-                    <li><strong>Style</strong> <code>position-area</code> anchors the panel with no measuring or scroll listeners.</li>
+                    <li>
+                        <strong>Hook</strong> <code>usePopover()</code> returns trigger, content, title, and close
+                        props.
+                    </li>
+                    <li>
+                        <strong>Markup</strong> Spread them on your own <code>&lt;button&gt;</code> and panel. Keep your
+                        handlers.
+                    </li>
+                    <li>
+                        <strong>Style</strong> <code>position-area</code> anchors the panel with no measuring or scroll
+                        listeners.
+                    </li>
                 </ol>
             </div>
             <div class="home-code__block vp-doc">
@@ -143,7 +175,9 @@ const primitives = [
                     <tbody>
                         <tr v-for="[job, browser, nook] in split" :key="job">
                             <th scope="row">{{ job }}</th>
-                            <td><code>{{ browser }}</code></td>
+                            <td>
+                                <code>{{ browser }}</code>
+                            </td>
                             <td>{{ nook }}</td>
                         </tr>
                     </tbody>
@@ -295,7 +329,10 @@ const primitives = [
     font-size: 0.92rem;
     font-weight: 700;
     text-decoration: none;
-    transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        transform 0.2s;
 }
 
 .home-button--primary {
@@ -604,7 +641,10 @@ const primitives = [
     font-size: 0.88rem;
     line-height: 1.55;
     text-decoration: none;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        transform 0.2s;
 }
 
 .home-primitive:hover {
@@ -662,8 +702,7 @@ const primitives = [
     border-radius: 22px;
     background:
         radial-gradient(circle at 85% 0%, rgba(56, 189, 248, 0.2), transparent 55%),
-        radial-gradient(circle at 10% 100%, rgba(16, 185, 129, 0.16), transparent 50%),
-        var(--vp-c-bg-alt);
+        radial-gradient(circle at 10% 100%, rgba(16, 185, 129, 0.16), transparent 50%), var(--vp-c-bg-alt);
     text-align: center;
 }
 

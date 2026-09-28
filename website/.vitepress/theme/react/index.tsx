@@ -31,4 +31,3 @@ export function mountDemo(host: HTMLElement, name: DemoName): () => void {
     )
     return () => root.unmount()
 }
-

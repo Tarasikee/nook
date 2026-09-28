@@ -10,4 +10,3 @@ export function render(name: FixtureName): string {
         </StrictMode>
     )
 }
-

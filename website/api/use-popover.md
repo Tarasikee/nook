@@ -11,26 +11,26 @@ description: API reference for usePopover().
 
 ## Options
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `mode` | `'auto' \| 'manual'` | `'auto'` | `'auto'` light-dismisses; `'manual'` closes only through the trigger, `closeProps`, or code. |
-| `open` | `boolean` | | Controlled state. In `'auto'` mode the browser can still close the popover; this is reported through `onOpenChange` and cannot be prevented. |
-| `defaultOpen` | `boolean` | `false` | Opens once after mount. Ignored when `open` is set. |
-| `onOpenChange` | `(open: boolean) => void` | | Called after every native state change, whatever caused it. |
-| `id` | `string` | `useId()` | The content element's id. |
+| Option         | Type                      | Default   | Description                                                                                                                                  |
+| -------------- | ------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mode`         | `'auto' \| 'manual'`      | `'auto'`  | `'auto'` light-dismisses; `'manual'` closes only through the trigger, `closeProps`, or code.                                                 |
+| `open`         | `boolean`                 |           | Controlled state. In `'auto'` mode the browser can still close the popover; this is reported through `onOpenChange` and cannot be prevented. |
+| `defaultOpen`  | `boolean`                 | `false`   | Opens once after mount. Ignored when `open` is set.                                                                                          |
+| `onOpenChange` | `(open: boolean) => void` |           | Called after every native state change, whatever caused it.                                                                                  |
+| `id`           | `string`                  | `useId()` | The content element's id.                                                                                                                    |
 
 ## Returns
 
-| Property | Type | Description |
-| --- | --- | --- |
-| `open` | `boolean` | The browser's actual state (`:popover-open`). `false` on the server. |
-| `show()` | `() => void` | Opens it, passing the trigger as `source` so it stays anchored. |
-| `hide()` | `() => void` | Closes it. |
-| `toggle()` | `() => void` | Toggles it. |
-| `triggerProps` | `{ popoverTarget, 'data-open'? }` | Spread onto a `<button>`. |
-| `contentProps` | `{ id, popover, 'aria-labelledby', ref }` | Spread onto the popover surface. |
-| `titleProps` | `{ id }` | Spread onto the heading that names it. |
-| `closeProps` | `{ popoverTarget, popoverTargetAction: 'hide' }` | Spread onto a `<button>` inside; closes without JavaScript. |
+| Property       | Type                                             | Description                                                          |
+| -------------- | ------------------------------------------------ | -------------------------------------------------------------------- |
+| `open`         | `boolean`                                        | The browser's actual state (`:popover-open`). `false` on the server. |
+| `show()`       | `() => void`                                     | Opens it, passing the trigger as `source` so it stays anchored.      |
+| `hide()`       | `() => void`                                     | Closes it.                                                           |
+| `toggle()`     | `() => void`                                     | Toggles it.                                                          |
+| `triggerProps` | `{ popoverTarget, 'data-open'? }`                | Spread onto a `<button>`.                                            |
+| `contentProps` | `{ id, popover, 'aria-labelledby', ref }`        | Spread onto the popover surface.                                     |
+| `titleProps`   | `{ id }`                                         | Spread onto the heading that names it.                               |
+| `closeProps`   | `{ popoverTarget, popoverTargetAction: 'hide' }` | Spread onto a `<button>` inside; closes without JavaScript.          |
 
 `triggerProps` contains attributes only: no event handlers and no ref. `show()` before the content mounts is applied once it attaches.
 
@@ -53,4 +53,3 @@ return (
 ```
 
 See the [Popover guide](../guide/popover).
-

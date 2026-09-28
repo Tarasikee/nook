@@ -142,11 +142,19 @@ function tone(version: string) {
             </thead>
             <tbody>
                 <tr v-for="row in rows" :key="row.capability">
-                    <th scope="row"><code>{{ row.capability }}</code></th>
+                    <th scope="row">
+                        <code>{{ row.capability }}</code>
+                    </th>
                     <td class="nk-support__used">{{ row.usedBy }}</td>
-                    <td><span class="nk-version" :data-tone="tone(row.chrome)">{{ row.chrome }}</span></td>
-                    <td><span class="nk-version" :data-tone="tone(row.firefox)">{{ row.firefox }}</span></td>
-                    <td><span class="nk-version" :data-tone="tone(row.safari)">{{ row.safari }}</span></td>
+                    <td>
+                        <span class="nk-version" :data-tone="tone(row.chrome)">{{ row.chrome }}</span>
+                    </td>
+                    <td>
+                        <span class="nk-version" :data-tone="tone(row.firefox)">{{ row.firefox }}</span>
+                    </td>
+                    <td>
+                        <span class="nk-version" :data-tone="tone(row.safari)">{{ row.safari }}</span>
+                    </td>
                     <td>
                         <span class="nk-detect" :data-tone="status(row.capability).tone">
                             {{ status(row.capability).label }}
@@ -216,4 +224,3 @@ function tone(version: string) {
     background: var(--vp-c-bg-soft);
 }
 </style>
-

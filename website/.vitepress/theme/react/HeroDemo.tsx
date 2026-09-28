@@ -62,7 +62,6 @@ export function HeroDemo() {
                                 {...share.triggerProps}
                                 className="nk-btn nk-btn--primary"
                                 type="button"
-                                data-testid="hero-share"
                                 onClick={() => setClicks(clicks + 1)}
                             >
                                 <Icon name="share" size={16} />
@@ -113,7 +112,7 @@ export function HeroDemo() {
                 Archive project
             </div>
 
-            <div {...share.contentProps} className="nk-panel nk-animated hero-demo__panel" data-testid="hero-share-panel">
+            <div {...share.contentProps} className="nk-panel nk-animated hero-demo__panel">
                 <h3 {...share.titleProps} className="nk-panel__title">
                     Share “Product roadmap”
                 </h3>
@@ -142,4 +141,3 @@ export function HeroDemo() {
         </div>
     )
 }
-

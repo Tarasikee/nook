@@ -1,11 +1,11 @@
 ---
 title: Core concepts
-description: The design principles behind Nook's hooks.
+description: The ideas behind Nook's hooks.
 ---
 
 # Core concepts
 
-<p class="nk-lead">One principle: when the browser already provides a behavior, render the HTML that asks for it instead of recreating it in JavaScript.</p>
+<p class="nk-lead">When the browser already provides a behavior, render the HTML that asks for it instead of recreating it in JavaScript.</p>
 
 ## Hooks render relationships
 
@@ -16,49 +16,32 @@ A click popover is a relationship between a trigger and its content, and HTML al
 <div id="share" popover>…</div>
 ```
 
-`usePopover()` returns exactly these attributes, with a stable id from `useId`. Once they are in the DOM, the browser provides:
-
-- toggling on click, <kbd>Enter</kbd>, and <kbd>Space</kbd>
-- the expanded state for assistive technology
-- focus order that continues from the trigger into the popover
-- focus returning to the trigger when <kbd>Esc</kbd> closes it
-- an implicit anchor for [CSS positioning](./positioning)
-
-`useTooltip()` does the same with `interestfor`, which gives hover, focus, long press, Escape, and CSS-controlled delays.
+`usePopover()` returns these attributes with a stable id; `useTooltip()` does the same with `interestfor`. The browser then handles activation, dismissal, focus, and anchoring.
 
 ## Attributes, not handlers
 
-Many libraries attach behavior by cloning your element, wrapping it in a Slot, or asking you to route handlers through prop getters. Nook needs none of that, because what it adds to your trigger is attributes only: no `onClick`, no `onPointerEnter`, no ref.
+Nook adds no `onClick`, `onPointerEnter`, or ref to your trigger. So there is nothing to merge: spread several hooks on one element, in any order, next to your own handlers.
 
 ```tsx
-const actions = usePopover()
-const hint = useTooltip()
-
 <button {...actions.triggerProps} {...hint.triggerProps} onClick={track}>…</button>
 ```
 
-Spread order doesn't matter, nothing is overwritten, and your design system's `<Button>` works as long as it forwards props to a native button.
-
-<ReactDemo name="combined" :height="280" />
+This also works with your design system's `<Button>`, as long as it forwards props to a native button. A live example is on the [Tooltip](./tooltip#with-a-popover-on-the-same-button) page.
 
 ## The browser owns the state
 
-An auto popover can close without React knowing: an outside click, <kbd>Esc</kbd>, another popover opening. So Nook never keeps its own copy of the open state.
+An auto popover can close without React knowing: an outside click, <kbd>Esc</kbd>, or another popover opening. So Nook keeps no copy of the open state. The hooks read `:popover-open` through `useSyncExternalStore`, subscribed to the native `toggle` event. `open` is always the browser's actual state, and `onOpenChange` fires whatever caused the change.
 
-The hooks read `:popover-open` through `useSyncExternalStore`, subscribed to the native `toggle` event. `open` is always the browser's actual state, and no effect ever sets React state to mirror it. `onOpenChange` is called from the native event, whatever caused it.
+Browsers can merge rapid changes into one `toggle` event. An event that ends in the state it started from is not reported.
 
-::: info Coalesced toggles
-Browsers can merge rapid changes into one `toggle` event. An event that ends in the state it started from is not a change, so Nook does not report it.
-:::
+## Server rendering
+
+Because relationships are attributes with ids from `useId`, the server renders working HTML. Before hydration the trigger, close button, <kbd>Esc</kbd>, and outside clicks already work, and `popover` keeps content hidden, so nothing flashes. After hydration `open` reads the real state, so a popover opened before hydration is reported as open. The package entry is marked `'use client'`: call the hooks in client components.
 
 ## Top layer instead of portals
 
-Open popovers render in the **top layer**, above `overflow: hidden` ancestors and stacking contexts. The element stays where you rendered it, so React context, event bubbling, and CSS inheritance keep working. No portal needed.
+Open popovers render in the top layer, above `overflow: hidden` and stacking contexts. The element stays where you rendered it, so React context, event bubbling, and CSS inheritance keep working without a portal.
 
-## Styleless by design
+## Styleless
 
-The hooks add attributes, never classes or styles. Placement, size, color, and animation are your CSS. See [Positioning](./positioning) and [Animation](./animation).
-
-## What stays your responsibility
-
-A popover is **non-modal** and has no implicit role. Nook does not add `role="dialog"` or `role="menu"`, trap focus, or implement menu arrow keys. Choose the semantics your content has; see [Accessibility](./accessibility).
+The hooks add attributes, never classes or styles. See [Positioning](./styling#positioning) and [Animation](./styling#animation). Semantics beyond what the hooks render, such as menu roles or focus trapping, are yours; see [Accessibility](./accessibility).

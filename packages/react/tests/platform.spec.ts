@@ -68,7 +68,9 @@ test('showPopover() anchors to the trigger only when given a source', async ({ p
     await page.evaluate(() => document.getElementById('panel')!.hidePopover())
 
     await page.evaluate(() => {
-        const panel = document.getElementById('panel') as HTMLElement & { showPopover(options?: { source?: HTMLElement }): void }
+        const panel = document.getElementById('panel') as HTMLElement & {
+            showPopover(options?: { source?: HTMLElement }): void
+        }
         panel.showPopover({ source: document.getElementById('panel-trigger')! })
     })
     const anchored = (await page.locator('#panel').boundingBox())!
@@ -78,4 +80,3 @@ test('showPopover() anchors to the trigger only when given a source', async ({ p
     expect(Math.round(anchored.x)).toBe(Math.round(trigger.x))
     expect(Math.round(anchored.y)).toBe(Math.round(trigger.y + trigger.height))
 })
-

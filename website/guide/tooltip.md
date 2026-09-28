@@ -5,10 +5,10 @@ description: Hover and focus tooltips with useTooltip() on native interest invok
 
 # Tooltip <span class="nk-pill">Chromium 142+</span>
 
-<p class="nk-lead">A short, non-interactive hint shown by the browser on hover, focus, or long press through the native <code>interestfor</code> attribute. Timing is CSS. Nook adds the accessibility relationship the platform leaves out.</p>
+<p class="nk-lead">A short, non-interactive hint the browser shows on hover, focus, or long press through <code>interestfor</code>. Timing is CSS.</p>
 
 <div class="nk-meta">
-  <span><strong>Hook</strong> <code>useTooltip</code> from <code>@nook/react</code></span>
+  <span><strong>Hook</strong> <code>useTooltip</code></span>
   <span><strong>Native feature</strong> <code>interestfor</code>, <code>popover="hint"</code></span>
   <span><strong>API</strong> <a href="../api/use-tooltip">useTooltip()</a></span>
 </div>
@@ -17,80 +17,39 @@ description: Hover and focus tooltips with useTooltip() on native interest invok
 
 ## Usage
 
-::: code-group
+```tsx
+const tooltip = useTooltip() // role: 'description'
 
-```tsx [PublishButton.tsx]
-import { useTooltip } from '@nook/react'
-
-export function PublishButton() {
-  const tooltip = useTooltip() // role: 'description' by default
-
-  return (
-    <>
-      <button {...tooltip.triggerProps}>Publish</button>
-      <div {...tooltip.contentProps} className="tooltip">
-        Visible to everyone in your workspace
-      </div>
-    </>
-  )
-}
+<button {...tooltip.triggerProps}>Publish</button>
+<div {...tooltip.contentProps} className="tooltip">Visible to everyone in your workspace</div>
 ```
 
-```css [tooltip.css]
+```css
 [interestfor] {
-  interest-delay: 300ms 100ms;
-}
-
-.tooltip {
-  padding: 4px 8px;
-  border: 0;
-  border-radius: 6px;
-  color: white;
-  background: #0b2a2f;
-}
-
-@supports (position-area: block-start) {
-  .tooltip {
-    inset: auto;
-    margin: 0;
-    position-area: block-start;
-    margin-block-end: 8px;
-    position-try-fallbacks: flip-block;
-  }
+  interest-delay: 300ms 100ms; /* show, hide */
 }
 ```
 
-:::
+Position `.tooltip` with the [positioning recipe](./styling#positioning), using `position-area: block-start`.
 
-## What the browser does
+## What the browser does, and what Nook adds
 
-`interestfor` is an **interest invoker**. The browser decides when the user shows interest (hover, keyboard focus, long press), shows the `popover="hint"` target, and hides it when interest ends or on <kbd>Esc</kbd>. The trigger becomes the tooltip's implicit anchor. Nook installs no hover or focus listeners and no timers.
+The browser decides when the user shows interest, shows the `popover="hint"` target, hides it when interest ends or on <kbd>Esc</kbd>, and anchors it to the trigger. Nook installs no listeners or timers.
 
-Timing is the CSS `interest-delay` property: one value for both directions, or two for show and hide. `:interest-source` and `:interest-target` let you style the active pair.
+In Chromium 145, `interestfor` exposes the tooltip text to assistive technology **only while the tooltip is open**. So the hook adds a relationship that always exists:
 
-## What Nook adds
+| `role`                      | Renders            | Use for                                          |
+| --------------------------- | ------------------ | ------------------------------------------------ |
+| `'description'` _(default)_ | `aria-describedby` | Extra text on a labeled control                  |
+| `'label'`                   | `aria-labelledby`  | Icon-only buttons, where the tooltip is the name |
 
-In Chromium 145, `interestfor` exposes the tooltip text as the trigger's description **only while the tooltip is open**. A screen reader user who focuses the button hears nothing until the delay passes. So the hook adds an explicit relationship that exists all the time:
-
-| `role` | Renders | Use for |
-| --- | --- | --- |
-| `'description'` *(default)* | `aria-describedby` | Supplementary text on a labeled control |
-| `'label'` | `aria-labelledby` | Icon-only buttons, where the tooltip is the name |
-
-It also sets `role="tooltip"` and `popover="hint"` on the content, and reports state through `open` and `onOpenChange`.
-
-::: info Label role and duplicate text
-With `role: 'label'`, Chromium 145 exposes the text as both the name and the description. Whether screen readers read it twice has not been verified.
-:::
+With `'label'`, Chromium also exposes the text as a description. Whether screen readers read it twice is unverified.
 
 ## With a popover on the same button
 
-`hint` popovers don't close open auto popovers, and both hooks return attributes only, so one button can have both:
+A `hint` doesn't close an open auto popover, and both hooks return attributes only:
 
 ```tsx
-const actions = usePopover()
-const hint = useTooltip({ role: 'label' })
-
 <button {...actions.triggerProps} {...hint.triggerProps}>…</button>
 ```
 
@@ -98,10 +57,6 @@ const hint = useTooltip({ role: 'label' })
 
 ## Guidelines
 
-- Keep tooltips **short and non-interactive**. For interactive content, use a [popover](./popover).
-- Triggers must be `<button>`, `<a>`, or `<area>`: these are the elements that support `interestfor`.
-- Never put essential information only in a tooltip.
-
-## Browser support
-
-`interestfor` is experimental and available only in Chromium 142 and later. In other browsers the tooltip does not appear, but the `aria-describedby` or `aria-labelledby` relationship still gives its text to assistive technology. Nook ships no fallback. See [Browser support](./browser-support).
+- Keep tooltips short and non-interactive; use a [popover](./popover) for interactive content.
+- Triggers must be `<button>`, `<a>`, or `<area>`.
+- In browsers without `interestfor`, the tooltip never appears, but its ARIA relationship remains. See [Browser support](./browser-support).

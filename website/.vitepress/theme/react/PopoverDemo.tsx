@@ -34,7 +34,6 @@ export function PopoverDemo() {
                 {...share.triggerProps}
                 className="nk-btn nk-btn--primary"
                 type="button"
-                data-testid="popover-trigger"
                 onClick={() => setClicks(clicks + 1)}
             >
                 <Icon name="share" size={16} />
@@ -44,14 +43,17 @@ export function PopoverDemo() {
             <ul className="nk-log" aria-label="Event log">
                 <li>your onClick ran {clicks}×</li>
                 {events.map((event, index) => (
-                    <li key={`${events.length - index}`} className={event.includes('true') ? 'nk-log__open' : undefined}>
+                    <li
+                        key={`${events.length - index}`}
+                        className={event.includes('true') ? 'nk-log__open' : undefined}
+                    >
                         {event}
                     </li>
                 ))}
                 {events.length === 0 ? <li className="nk-log__empty">waiting for a toggle…</li> : null}
             </ul>
 
-            <div {...share.contentProps} className="nk-panel nk-animated" data-testid="popover-content">
+            <div {...share.contentProps} className="nk-panel nk-animated">
                 <span className="nk-panel__eyebrow">Atlas project</span>
                 <h3 {...share.titleProps} className="nk-panel__title">
                     Invite collaborators
@@ -75,4 +77,3 @@ export function PopoverDemo() {
         </Demo>
     )
 }
-

@@ -1,41 +1,42 @@
 # Nook
 
-Popovers, tooltips, and selects built around native browser capabilities, with as little JavaScript as practical.
+Accessible, headless primitives built on native HTML. The browser does the behavior (`popovertarget`, `interestfor`, the top layer, CSS anchor positioning); Nook adds only what the platform leaves out. User documentation is the website in `website/`.
 
-Nook aims to be a small, framework-agnostic library with no third-party runtime dependencies in its core. Native HTML, CSS, and browser APIs should do the heavy lifting; JavaScript should fill the gaps. React bindings will make the same primitives convenient to use in React applications.
+Early implementation. All packages are private and their names are provisional.
 
-The scope is deliberately focused. Nook aims to offer an alternative to broader floating-element libraries without pursuing feature parity or building a general-purpose positioning engine.
+| Package          | Contents                                                                                      |
+| ---------------- | --------------------------------------------------------------------------------------------- |
+| `packages/core`  | Framework-agnostic DOM helpers and a popover store. No dependencies, never imports a binding. |
+| `packages/react` | `usePopover()` and `useTooltip()` for React 19.2+, shipped compiled by React Compiler.        |
+| `website`        | VitePress documentation with live React demos.                                                |
 
-## Status
+## Develop
 
-Early implementation. `@nook/core` provides small DOM helpers that observe and drive native popover state. `@nook/react` provides `usePopover()` and `useTooltip()`, React 19.2+ hooks shipped compiled by React Compiler and built on `popovertarget` and `interestfor`. The tooltip relies on interest invokers, currently Chromium-only. The website runs on VitePress, and its live demos use the React hooks. Select is not implemented. Package names are provisional and all workspace packages are private.
+Node.js and pnpm (`mise.toml` provides both):
 
-## Repository
-
-```text
-packages/
-  core/           Framework-independent browser primitives
-  react/          React bindings for core
-website/          Documentation, interactive examples, and project site
-docs/
-  architecture.md Shared direction and package boundaries
-AGENTS.md         Guidance for coding agents
-CONTRIBUTING.md   Guidance for contributors
+```sh
+pnpm install
+pnpm dev       # documentation site
+pnpm format    # Prettier
+pnpm check     # Prettier check, ESLint, typecheck, React Compiler check
+pnpm test      # build, then Playwright suites for the hooks and the website
+pnpm clean     # remove build output and test artifacts
 ```
 
-Start with the [architecture](docs/architecture.md), [core README](packages/core/README.md), [React README](packages/react/README.md), or [website README](website/README.md). See [CONTRIBUTING.md](CONTRIBUTING.md) for workspace setup.
+Rules are enforced by tools rather than prose. Formatting is `.prettierrc.json`. Code rules are `eslint.config.js`: the Rules of React, no manual memoization, core never importing a framework, and no test IDs in demos. `packages/react/scripts/check-compiler.mjs` fails if an exported hook is not compiled.
 
-See the [implementation direction](docs/implementation-direction.md) for the proposed styleless primitives and event composition model.
+## Design decisions
 
-The initial structure is intentionally small. Public APIs, tooling, and release details will be decided as implementation begins.
+- **Hooks return attributes.** Props contain no event handlers and no trigger refs, so several hooks compose on one element without Slot, `cloneElement`, or prop merging.
+- **The browser owns the state.** Hooks read `:popover-open` through core's store with `useSyncExternalStore` and hold no React state. A controlled `open` drives the browser, but the browser can still close an `auto` popover, because `beforetoggle` cannot cancel closing.
+- **Relationships render on the server,** so open, close, and Escape work before hydration.
+- **Tooltips use `interestfor`** (Chromium-only, accepted), plus an explicit ARIA relationship, because the native one exists only while the tooltip is open.
+- **React Compiler:** `target: '19'`, `panicThreshold: 'none'` for the published build. Tests run against compiled and uncompiled code; correctness never depends on memoization. Lint and compiler reports can be false positives: fix real violations, and record justified exceptions inline with a reason.
+- **Next:** menu (keyboard model; `focusgroup` was not available in Chromium 145), hover card, toast (`ariaNotify`), select, combobox.
 
-## Browser support approach
+## Browser-support policy
 
-Build the main features around native browser capabilities first, even when support is limited to a few browsers. For now, compatibility fixes, polyfills, and fallback implementations are deferred. Document which capabilities each feature requires and where support is limited as work progresses.
-
-## Browser API reference
-
-The [browser API knowledge base](docs/reference/README.md) records researched behavior, compatibility, and implementation questions for contributors and coding agents. It is dated research, not a Nook browser-support commitment.
+Build on native capabilities first. Support in only a few browsers, including Chromium-only, experimental, or flag-gated features, is acceptable. Add no polyfills or fallbacks. Record each feature's capabilities, versions, and gaps in [docs/research.md](docs/research.md), and verify the behavior the design depends on with a test. Limited support never excuses broken accessibility for what is implemented.
 
 ## License
 

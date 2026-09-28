@@ -10,5 +10,11 @@
             "@nook/react": ["packages/react/src/index.ts"]
         }
     },
-    "include": [".vitepress/**/*.ts", ".vitepress/**/*.tsx", ".vitepress/**/*.vue", "tests/**/*.ts", "playwright.config.ts"]
+    "include": [
+        ".vitepress/**/*.ts",
+        ".vitepress/**/*.tsx",
+        ".vitepress/**/*.vue",
+        "tests/**/*.ts",
+        "playwright.config.ts"
+    ]
 }

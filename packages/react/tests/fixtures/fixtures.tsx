@@ -176,5 +176,3 @@ export const fixtures = {
 }
 
 export type FixtureName = keyof typeof fixtures
-
-

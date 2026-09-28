@@ -7,17 +7,12 @@ const pages = [
     '/guide/concepts',
     '/guide/popover',
     '/guide/tooltip',
-    '/guide/positioning',
-    '/guide/animation',
+    '/guide/styling',
     '/guide/accessibility',
-    '/guide/server-rendering',
-    '/guide/quality',
     '/guide/browser-support',
-    '/guide/roadmap',
     '/api/',
     '/api/use-popover',
     '/api/use-tooltip',
-    '/api/core',
     '/examples/'
 ]
 
@@ -44,63 +39,65 @@ for (const path of pages) {
     })
 }
 
+// Demos are located by role and accessible name, like a user would find them.
+const panel = (page: Page, title: string) =>
+    page.locator('.nk-panel').filter({ has: page.getByRole('heading', { name: title }) })
+
 test('home hero popover opens, keeps the app handler, and closes on Escape', async ({ page }) => {
     await page.goto('/')
-    const trigger = page.getByTestId('hero-share')
-    const panel = page.getByTestId('hero-share-panel')
+    const title = page.getByRole('heading', { name: 'Share “Product roadmap”' })
 
-    await trigger.click()
-    await expect(panel).toBeVisible()
-    await expect(page.getByText('your onclick ran 1×')).toBeVisible()
+    await page.getByRole('button', { name: 'Share', exact: true }).click()
+    await expect(title).toBeVisible()
+    await expect(page.getByText('your onClick ran 1×')).toBeVisible()
     await expect(page.getByText('onOpenChange(true)')).toBeVisible()
 
     await page.keyboard.press('Escape')
-    await expect(panel).toBeHidden()
+    await expect(title).toBeHidden()
     await expect(page.getByText('onOpenChange(false)')).toBeVisible()
 })
 
 test('popover demo light-dismisses on outside click', async ({ page }) => {
-    await page.goto('/guide/popover')
-    const panel = page.getByTestId('popover-content')
+    await page.goto('/guide/getting-started')
+    const title = page.getByRole('heading', { name: 'Invite collaborators' })
 
-    await page.getByTestId('popover-trigger').click()
-    await expect(panel).toBeVisible()
+    await page.getByRole('button', { name: 'Share', exact: true }).click()
+    await expect(title).toBeVisible()
 
     await page.mouse.click(5, 300)
-    await expect(panel).toBeHidden()
+    await expect(title).toBeHidden()
 })
 
 test('tooltip opens on keyboard focus and closes on blur', async ({ page }) => {
     await page.goto('/guide/tooltip')
-    const trigger = page.getByTestId('tooltip-trigger-italic')
-    const tooltip = page.getByTestId('tooltip-content-italic')
+    const trigger = page.getByRole('button', { name: 'Italic' })
+    const tooltip = page.getByRole('tooltip').filter({ hasText: 'Italic' })
 
     await trigger.focus()
     await expect(tooltip).toBeVisible()
-    await expect(trigger).toHaveAccessibleName('Italic')
 
     await trigger.blur()
     await expect(tooltip).toBeHidden()
 })
 
-test('manual popover ignores Escape and closes through the controller', async ({ page }) => {
+test('controlled manual popover ignores Escape and closes from state', async ({ page }) => {
     await page.goto('/guide/popover')
-    const panel = page.getByTestId('manual-content')
+    const title = page.getByRole('heading', { name: 'Everything is live.' })
 
-    await page.getByTestId('manual-trigger').click()
-    await expect(panel).toBeVisible()
+    await page.getByRole('button', { name: 'Deployment status' }).click()
+    await expect(title).toBeVisible()
 
     await page.keyboard.press('Escape')
-    await expect(panel).toBeVisible()
+    await expect(title).toBeVisible()
 
     await page.getByRole('button', { name: 'setOpen(false)' }).click()
-    await expect(panel).toBeHidden()
+    await expect(title).toBeHidden()
 })
 
 test('popover is anchored below its trigger', async ({ page }) => {
-    await page.goto('/guide/popover')
-    const trigger = page.getByTestId('popover-trigger')
-    const panel = page.getByTestId('popover-content')
+    await page.goto('/guide/getting-started')
+    const trigger = page.getByRole('button', { name: 'Share', exact: true })
+    const surface = panel(page, 'Invite collaborators')
 
     // Leave room below the trigger; otherwise position-try-fallbacks correctly flips the panel above.
     await trigger.evaluate((element) => {
@@ -108,24 +105,24 @@ test('popover is anchored below its trigger', async ({ page }) => {
         window.scrollBy(0, -120)
     })
     await trigger.click()
-    await expect(panel).toBeVisible()
-    await panel.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)))
+    await expect(surface).toBeVisible()
+    await surface.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)))
 
     const triggerBox = (await trigger.boundingBox())!
-    const panelBox = (await panel.boundingBox())!
+    const panelBox = (await surface.boundingBox())!
     expect(panelBox.y).toBeGreaterThanOrEqual(triggerBox.y + triggerBox.height)
     expect(Math.abs(panelBox.x - triggerBox.x)).toBeLessThan(2)
 })
 
 test('client-side navigation cleans up demos', async ({ page }) => {
     const errors = collectErrors(page)
-    await page.goto('/guide/popover')
-    await page.getByTestId('popover-trigger').click()
+    await page.goto('/guide/getting-started')
+    await page.getByRole('button', { name: 'Share', exact: true }).click()
 
     await page.keyboard.press('Escape')
     await page.locator('.VPSidebar').getByRole('link', { name: 'Tooltip', exact: true }).click()
     await expect(page).toHaveURL(/\/guide\/tooltip$/)
-    await expect(page.getByTestId('popover-content')).toHaveCount(0)
+    await expect(page.getByRole('heading', { name: 'Invite collaborators' })).toHaveCount(0)
     expect(errors).toEqual([])
 })
 
@@ -148,6 +145,3 @@ test.describe('mobile layout', () => {
         })
     }
 })
-
-
-

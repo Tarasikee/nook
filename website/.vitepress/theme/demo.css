@@ -121,7 +121,10 @@
     font-weight: 650;
     line-height: 1;
     cursor: pointer;
-    transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    transition:
+        background-color 0.15s,
+        border-color 0.15s,
+        box-shadow 0.15s;
 }
 
 .nk-btn:focus-visible,
@@ -188,7 +191,10 @@
     color: var(--vp-c-text-2);
     background: var(--vp-c-bg);
     cursor: pointer;
-    transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+    transition:
+        color 0.15s,
+        background-color 0.15s,
+        border-color 0.15s;
 }
 
 .nk-icon-btn:hover {

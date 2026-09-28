@@ -17,49 +17,37 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         items: [
             { text: 'Popover', link: '/guide/popover' },
             { text: 'Tooltip', link: '/guide/tooltip' },
-            { text: 'Menu <span class="nk-soon">planned</span>', link: '/guide/roadmap#menu' },
-            { text: 'Select <span class="nk-soon">planned</span>', link: '/guide/roadmap#select' }
-        ]
-    },
-    {
-        text: 'Styling',
-        items: [
-            { text: 'Positioning', link: '/guide/positioning' },
-            { text: 'Animation', link: '/guide/animation' }
+            { text: 'Menu <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' },
+            { text: 'Select <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' }
         ]
     },
     {
         text: 'Guides',
         items: [
+            { text: 'Styling', link: '/guide/styling' },
             { text: 'Accessibility', link: '/guide/accessibility' },
-            { text: 'Server rendering', link: '/guide/server-rendering' },
-            { text: 'Quality and React rules', link: '/guide/quality' },
-            { text: 'Browser support', link: '/guide/browser-support' },
-            { text: 'Roadmap', link: '/guide/roadmap' }
+            { text: 'Browser support', link: '/guide/browser-support' }
         ]
     },
     {
-        text: 'API reference',
+        text: 'Reference',
         items: [
-            { text: 'Overview', link: '/api/' },
+            { text: 'API overview', link: '/api/' },
             { text: 'usePopover', link: '/api/use-popover' },
             { text: 'useTooltip', link: '/api/use-tooltip' },
-            { text: 'Core helpers', link: '/api/core' }
+            { text: 'Examples', link: '/examples/' }
         ]
-    },
-    {
-        text: 'Examples',
-        items: [{ text: 'Gallery', link: '/examples/' }]
     }
 ]
 
 export default defineConfig({
     title: 'Nook',
     titleTemplate: ':title · Nook',
-    description: 'Accessible, headless React primitives built on native HTML: popovers and tooltips with no positioning JavaScript.',
+    description:
+        'Accessible, headless React primitives built on native HTML: popovers and tooltips with no positioning JavaScript.',
     lang: 'en-US',
     cleanUrls: true,
-    srcExclude: ['README.md', 'tests/**'],
+    srcExclude: ['tests/**'],
     head: [
         ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
         ['meta', { name: 'theme-color', content: '#047857' }],
@@ -85,9 +73,9 @@ export default defineConfig({
             {
                 text: '0.0.0',
                 items: [
-                    { text: 'Roadmap', link: '/guide/roadmap' },
+                    { text: 'Roadmap', link: '/guide/#status-and-roadmap' },
                     { text: 'Browser support', link: '/guide/browser-support' },
-                    { text: 'Contributing', link: `${repository}/blob/main/CONTRIBUTING.md` }
+                    { text: 'Contributing', link: `${repository}#develop` }
                 ]
             }
         ],

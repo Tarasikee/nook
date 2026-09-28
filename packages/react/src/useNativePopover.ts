@@ -28,4 +28,3 @@ export function useNativePopover(onOpenChange: ((open: boolean) => void) | undef
 
     return { store, open }
 }
-

@@ -19,4 +19,3 @@ hydrateRoot(
 )
 
 window.nookHydrated = true
-

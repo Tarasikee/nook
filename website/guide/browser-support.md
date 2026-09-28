@@ -23,11 +23,11 @@ The version columns are the first stable release recorded for each capability. *
 
 ## By hook
 
-| Hook | Needs | Effectively |
-| --- | --- | --- |
-| `usePopover()` | Popover API, `popovertarget` | Chrome 114, Firefox 125, Safari 17 |
-| `useTooltip()` | `interestfor`, current `popover="hint"` | Chromium 142+ (hint semantics current from 151) |
-| Positioning recipes | `position-area`, implicit anchor | Chrome 133, Firefox 147, Safari 26 |
+| Hook                | Needs                                   | Effectively                                     |
+| ------------------- | --------------------------------------- | ----------------------------------------------- |
+| `usePopover()`      | Popover API, `popovertarget`            | Chrome 114, Firefox 125, Safari 17              |
+| `useTooltip()`      | `interestfor`, current `popover="hint"` | Chromium 142+ (hint semantics current from 151) |
+| Positioning recipes | `position-area`, implicit anchor        | Chrome 133, Firefox 147, Safari 26              |
 
 ## Caveats
 
@@ -42,12 +42,12 @@ Compat data marks `interestfor` experimental and not on the standards track. It 
 
 ## What happens without support
 
-| Missing | Effect |
-| --- | --- |
-| Popover API | Content is not hidden or shown as a popover. The demos on this site show a notice. |
-| `interestfor` | Tooltips never appear; the ARIA relationship remains. |
-| Anchor positioning | With `@supports`, popovers keep the default centered placement. |
-| `@starting-style`, `transition-behavior` | Popovers open and close instantly. |
+| Missing                                  | Effect                                                                             |
+| ---------------------------------------- | ---------------------------------------------------------------------------------- |
+| Popover API                              | Content is not hidden or shown as a popover. The demos on this site show a notice. |
+| `interestfor`                            | Tooltips never appear; the ARIA relationship remains.                              |
+| Anchor positioning                       | With `@supports`, popovers keep the default centered placement.                    |
+| `@starting-style`, `transition-behavior` | Popovers open and close instantly.                                                 |
 
 ## Feature detection
 
@@ -57,4 +57,4 @@ const hasInterest = Object.hasOwn(HTMLButtonElement.prototype, 'interestForEleme
 const hasAnchorPositioning = CSS.supports('position-area', 'top')
 ```
 
-The repository's [browser API knowledge base](https://github.com/Tarasikee/nook/tree/main/docs/reference) records the research, sources, and observed behavior behind this page.
+The repository's [browser research](https://github.com/Tarasikee/nook/blob/main/docs/research.md) records the sources and observed behavior behind this page.

@@ -9,11 +9,19 @@
         "build": "pnpm --filter @nook/core build && pnpm --filter @nook/react build && pnpm --filter @nook/website build",
         "dev": "pnpm --filter @nook/website dev",
         "preview": "pnpm --filter @nook/website preview",
-        "check": "pnpm --filter @nook/core typecheck && pnpm --filter @nook/react typecheck && pnpm --filter @nook/react lint && pnpm --filter @nook/react check:compiler",
-        "test": "pnpm build && pnpm --filter @nook/react test && pnpm --filter @nook/website test"
+        "check": "prettier --check . && pnpm lint && pnpm -r typecheck && pnpm --filter @nook/react check:compiler",
+        "test": "pnpm build && pnpm --filter @nook/react test && pnpm --filter @nook/website test",
+        "clean": "rm -rf packages/*/dist packages/*/test-results packages/*/node_modules/.cache website/test-results website/.vitepress/cache website/.vitepress/dist",
+        "lint": "eslint --max-warnings 0 .",
+        "format": "prettier --write ."
     },
     "devDependencies": {
-        "typescript": "^5.7.3"
+        "eslint": "^9.39.5",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-react-hooks": "7.1.1",
+        "prettier": "^3.9.9",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.70.1"
     },
     "devEngines": {
         "packageManager": {

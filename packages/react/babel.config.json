@@ -2,4 +2,3 @@
     "plugins": [["babel-plugin-react-compiler", { "target": "19", "panicThreshold": "none" }]],
     "presets": [["@babel/preset-typescript", { "onlyRemoveTypeImports": true }]]
 }
-

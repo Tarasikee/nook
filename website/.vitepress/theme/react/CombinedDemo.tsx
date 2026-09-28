@@ -20,7 +20,6 @@ export function CombinedDemo() {
                 {...hint.triggerProps}
                 className="nk-icon-btn"
                 type="button"
-                data-testid="combined-trigger"
                 onClick={() => setClicks(clicks + 1)}
             >
                 <Icon name="more" />
@@ -28,7 +27,9 @@ export function CombinedDemo() {
 
             <ul className="nk-log" aria-label="State">
                 <li className={hint.open ? 'nk-log__open' : undefined}>tooltip: {hint.open ? 'open' : 'closed'}</li>
-                <li className={actions.open ? 'nk-log__open' : undefined}>popover: {actions.open ? 'open' : 'closed'}</li>
+                <li className={actions.open ? 'nk-log__open' : undefined}>
+                    popover: {actions.open ? 'open' : 'closed'}
+                </li>
                 <li>your onClick ran {clicks}×</li>
             </ul>
 
@@ -41,9 +42,10 @@ export function CombinedDemo() {
                 <h3 {...actions.titleProps} className="nk-panel__title">
                     Project actions
                 </h3>
-                <p className="nk-panel__text">One ordinary button with a click popover, a hover tooltip, and your own handler.</p>
+                <p className="nk-panel__text">
+                    One ordinary button with a click popover, a hover tooltip, and your own handler.
+                </p>
             </div>
         </Demo>
     )
 }
-

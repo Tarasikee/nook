@@ -47,7 +47,11 @@ export type UseTooltipResult = {
  * The hook adds an explicit accessible relationship: browsers expose the
  * native one only while the tooltip is open.
  */
-export function useTooltip({ role = 'description', onOpenChange, id: providedId }: UseTooltipOptions = {}): UseTooltipResult {
+export function useTooltip({
+    role = 'description',
+    onOpenChange,
+    id: providedId
+}: UseTooltipOptions = {}): UseTooltipResult {
     const generatedId = useId()
     const id = providedId ?? generatedId
     const { store, open } = useNativePopover(onOpenChange)

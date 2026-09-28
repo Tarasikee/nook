@@ -17,4 +17,3 @@ export {
     type UseTooltipOptions,
     type UseTooltipResult
 } from './useTooltip.js'
-

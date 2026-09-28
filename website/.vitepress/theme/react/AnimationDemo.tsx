@@ -32,11 +32,10 @@ export function AnimationDemo() {
                     Transitioned
                 </h3>
                 <p className="nk-panel__text">
-                    <code>@starting-style</code> sets the entry state; <code>allow-discrete</code> keeps it visible while
-                    it fades out.
+                    <code>@starting-style</code> sets the entry state; <code>allow-discrete</code> keeps it visible
+                    while it fades out.
                 </p>
             </div>
         </Demo>
     )
 }
-

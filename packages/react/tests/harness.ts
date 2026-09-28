@@ -1,5 +1,5 @@
 import { build } from 'esbuild'
-import { mkdirSync } from 'node:fs'
+import { mkdirSync, rmSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { test, type Page } from '@playwright/test'
 import type { FixtureName } from './fixtures/fixtures'
@@ -66,7 +66,12 @@ function serverModule(target: Variant) {
             external: ['react', 'react-dom', 'react/*', 'react-dom/*'],
             alias: { '@nook/react': entries[target], '@nook/core': core },
             logLevel: 'silent'
-        }).then(() => import(pathToFileURL(outfile).href))
+        }).then(async () => {
+            // Node keeps the module in memory once imported, so the file can go immediately.
+            const imported = await import(pathToFileURL(outfile).href)
+            rmSync(outfile, { force: true })
+            return imported
+        })
         serverModules.set(target, module)
     }
     return module
@@ -141,4 +146,3 @@ export async function accessibilityNode(page: Page, selector: string) {
         expanded: node.properties?.find((property) => property.name === 'expanded')?.value.value
     }
 }
-

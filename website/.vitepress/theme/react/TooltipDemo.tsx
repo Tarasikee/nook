@@ -3,14 +3,13 @@ import { useState } from 'react'
 import { Demo, Icon, useUnsupported, type IconName } from './shared'
 
 type ToolProps = {
-    name: string
     icon: IconName
     label: string
     pressed: boolean
     onToggle(): void
 }
 
-function Tool({ name, icon, label, pressed, onToggle }: ToolProps) {
+function Tool({ icon, label, pressed, onToggle }: ToolProps) {
     const tooltip = useTooltip({ role: 'label' })
 
     return (
@@ -20,12 +19,11 @@ function Tool({ name, icon, label, pressed, onToggle }: ToolProps) {
                 className="nk-icon-btn"
                 type="button"
                 aria-pressed={pressed}
-                data-testid={`tooltip-trigger-${name}`}
                 onClick={onToggle}
             >
                 <Icon name={icon} />
             </button>
-            <div {...tooltip.contentProps} className="nk-tooltip nk-animated" data-testid={`tooltip-content-${name}`}>
+            <div {...tooltip.contentProps} className="nk-tooltip nk-animated">
                 {label}
             </div>
         </>
@@ -45,11 +43,10 @@ export function TooltipDemo() {
             unsupported={unsupported}
         >
             <div className="nk-toolbar" role="toolbar" aria-label="Formatting">
-                <Tool name="bold" icon="bold" label="Bold" pressed={pressed.bold} onToggle={() => toggle('bold')} />
-                <Tool name="italic" icon="italic" label="Italic" pressed={pressed.italic} onToggle={() => toggle('italic')} />
-                <Tool name="link" icon="link" label="Insert link" pressed={pressed.link} onToggle={() => toggle('link')} />
+                <Tool icon="bold" label="Bold" pressed={pressed.bold} onToggle={() => toggle('bold')} />
+                <Tool icon="italic" label="Italic" pressed={pressed.italic} onToggle={() => toggle('italic')} />
+                <Tool icon="link" label="Insert link" pressed={pressed.link} onToggle={() => toggle('link')} />
             </div>
         </Demo>
     )
 }
-

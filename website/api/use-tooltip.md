@@ -11,21 +11,21 @@ description: API reference for useTooltip().
 
 ## Options
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `role` | `'description' \| 'label'` | `'description'` | `'description'` renders `aria-describedby`; `'label'` renders `aria-labelledby`, for icon-only buttons. |
-| `onOpenChange` | `(open: boolean) => void` | | Called after the tooltip is shown or hidden. |
-| `id` | `string` | `useId()` | The tooltip element's id. |
+| Option         | Type                       | Default         | Description                                                                                             |
+| -------------- | -------------------------- | --------------- | ------------------------------------------------------------------------------------------------------- |
+| `role`         | `'description' \| 'label'` | `'description'` | `'description'` renders `aria-describedby`; `'label'` renders `aria-labelledby`, for icon-only buttons. |
+| `onOpenChange` | `(open: boolean) => void`  |                 | Called after the tooltip is shown or hidden.                                                            |
+| `id`           | `string`                   | `useId()`       | The tooltip element's id.                                                                               |
 
 Timing is not an option: use the CSS `interest-delay` property on the trigger.
 
 ## Returns
 
-| Property | Type | Description |
-| --- | --- | --- |
-| `open` | `boolean` | The browser's actual state. |
+| Property       | Type                                                       | Description                                   |
+| -------------- | ---------------------------------------------------------- | --------------------------------------------- |
+| `open`         | `boolean`                                                  | The browser's actual state.                   |
 | `triggerProps` | `{ interestfor, 'aria-describedby' \| 'aria-labelledby' }` | Spread onto a `<button>`, `<a>`, or `<area>`. |
-| `contentProps` | `{ id, popover: 'hint', role: 'tooltip', ref }` | Spread onto the tooltip element. |
+| `contentProps` | `{ id, popover: 'hint', role: 'tooltip', ref }`            | Spread onto the tooltip element.              |
 
 ## Example
 
@@ -41,4 +41,3 @@ return (
 ```
 
 See the [Tooltip guide](../guide/tooltip).
-

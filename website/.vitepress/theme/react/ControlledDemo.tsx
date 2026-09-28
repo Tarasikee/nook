@@ -14,7 +14,7 @@ export function ControlledDemo() {
             hint="A manual popover ignores outside clicks and Escape. React state drives it here, and the trigger and Dismiss button keep that state in sync through onOpenChange."
             unsupported={unsupported}
         >
-            <button {...status.triggerProps} className="nk-btn nk-btn--secondary" type="button" data-testid="manual-trigger">
+            <button {...status.triggerProps} className="nk-btn nk-btn--secondary" type="button">
                 <Icon name="bell" size={16} />
                 Deployment status
             </button>
@@ -31,7 +31,7 @@ export function ControlledDemo() {
                 </span>
             </div>
 
-            <div {...status.contentProps} className="nk-panel nk-animated" data-testid="manual-content">
+            <div {...status.contentProps} className="nk-panel nk-animated">
                 <span className="nk-panel__eyebrow">Production · main</span>
                 <h3 {...status.titleProps} className="nk-panel__title">
                     Everything is live.
@@ -46,4 +46,3 @@ export function ControlledDemo() {
         </Demo>
     )
 }
-

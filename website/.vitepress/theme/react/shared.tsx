@@ -19,7 +19,9 @@ const subscribeNever = () => () => {}
 export function useUnsupported(requirements: Requirement[]): string {
     return useSyncExternalStore(
         subscribeNever,
-        () => requirements.map((requirement) => (supported[requirement]() ? '' : messages[requirement])).find(Boolean) ?? '',
+        () =>
+            requirements.map((requirement) => (supported[requirement]() ? '' : messages[requirement])).find(Boolean) ??
+            '',
         () => ''
     )
 }
@@ -92,4 +94,3 @@ export function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
         </svg>
     )
 }
-

@@ -217,12 +217,7 @@ test('returned prop objects keep their identity across re-renders only when comp
     })
 
     // Measured evidence for the "compiler optimized" claim, not an assumption.
-    expect(stable).toEqual(variant() === 'compiled' ? { trigger: true, content: true } : { trigger: false, content: false })
+    expect(stable).toEqual(
+        variant() === 'compiled' ? { trigger: true, content: true } : { trigger: false, content: false }
+    )
 })
-
-
-
-
-
-
-
