@@ -1,0 +1,10 @@
+packages:
+  - 'packages/*'
+  - 'website'
+
+nodeLinker: hoisted
+
+onlyBuiltDependencies:
+  - esbuild
+allowBuilds:
+  esbuild: true

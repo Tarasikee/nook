@@ -1,0 +1,22 @@
+{
+  "name": "nook",
+  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "description": "Native browser primitives for popovers, tooltips, and selects.",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @nook/core build && pnpm --filter @nook/website build",
+    "dev": "pnpm --filter @nook/website dev",
+    "preview": "pnpm --filter @nook/website preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm"
+    }
+  }
+}

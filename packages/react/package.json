@@ -1,0 +1,8 @@
+{
+    "name": "@nook/react",
+    "version": "0.0.0",
+    "license": "MIT",
+    "private": true,
+    "description": "React bindings for Nook's native browser primitives.",
+    "type": "module"
+}

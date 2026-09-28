@@ -1,0 +1,23 @@
+{
+    "name": "@nook/core",
+    "version": "0.0.0",
+    "license": "MIT",
+    "private": true,
+    "description": "Framework-independent native browser primitives for Nook.",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "typecheck": "tsc --noEmit"
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@nook/website",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Documentation and interactive examples for Nook.",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @nook/core build && vite",
+    "build": "pnpm --filter @nook/core build && tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@nook/core": "workspace:*"
+  }
+}
