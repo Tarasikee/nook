@@ -3,6 +3,48 @@
     "version": "0.0.0",
     "license": "MIT",
     "private": true,
-    "description": "React bindings for Nook's native browser primitives.",
-    "type": "module"
+    "description": "React hooks for Nook's native browser primitives.",
+    "type": "module",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "babel src --out-dir dist --extensions .ts --delete-dir-on-start && tsc -p tsconfig.build.json",
+        "typecheck": "tsc --noEmit",
+        "check:compiler": "node scripts/check-compiler.mjs",
+        "test": "playwright test",
+        "lint": "eslint --max-warnings 0 ."
+    },
+    "peerDependencies": {
+        "react": "^19.2.0"
+    },
+    "dependencies": {
+        "@nook/core": "workspace:*"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.28.0",
+        "@babel/core": "^7.28.0",
+        "@babel/preset-typescript": "^7.27.0",
+        "@playwright/test": "1.58.2",
+        "@types/node": "^22.20.4",
+        "@types/react": "^19.2.0",
+        "@types/react-dom": "^19.2.0",
+        "babel-plugin-react-compiler": "1.0.0",
+        "esbuild": "^0.25.0",
+        "eslint": "^9.39.5",
+        "eslint-plugin-react-hooks": "7.1.1",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.70.1"
+    }
 }

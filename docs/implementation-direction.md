@@ -1,6 +1,16 @@
 # Implementation direction
 
-This is design guidance for when implementation starts, not a public API specification. The goal is the convenience of Floating UI's ready-to-use, composable primitives with a smaller native-browser foundation and direct integration into the user's own elements.
+This is design guidance, not a public API specification. Nook provides accessible, headless primitives built on native HTML: the platform does the behavior, and Nook adds only what it lacks, such as ARIA wiring, keyboard patterns, and framework state sync. Direct integration into the user's own elements is a goal.
+
+## Decisions so far (2026-09-28)
+
+- **React first, hooks first.** `@nook/react` exposes hooks (`usePopover`, `useTooltip`) that return plain attribute objects. Trigger props contain no event handlers or refs, so hooks compose on one element without Slot, `cloneElement`, or prop merging. Components may come later as an optional thin layer.
+- **No plain-JS behavior API.** `createPopover()` and `createTooltip()` were removed; native attributes do their job. Core keeps only helpers bindings need (`observePopover`, `setPopoverOpen`, `findPopoverInvoker`, `isPopoverOpen`).
+- **Native state is the source of truth.** Hooks read it with `useSyncExternalStore` over core's `createPopoverStore()` and hold no React state; effects never set state (see the Rules of React section in `packages/react/README.md`). Controlled `open` pushes into the browser. The browser can still close an `auto` popover (`beforetoggle` cannot cancel closing), which is reported through `onOpenChange`. Use `manual` when the app must own closing.
+- **Server-rendered relationships.** Linking attributes render on the server, so open, close, and Escape work before hydration.
+- **Tooltips use `interestfor`** (Chromium-only, accepted), with an explicit ARIA relationship because the native one exists only while open.
+- **React 19.2+, compiled by React Compiler.** See `packages/react/README.md`.
+- **Next:** rewrite the website guide and API pages for the hooks, then a menu primitive (keyboard model; `focusgroup` is not available in Chromium 145), then hover card, toast (`ariaNotify`), select, and combobox.
 
 ## Product shape
 

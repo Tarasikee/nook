@@ -8,7 +8,7 @@ The scope is deliberately focused. Nook aims to offer an alternative to broader 
 
 ## Status
 
-Early implementation. `@nook/core` currently includes native popover and tooltip controllers, and the Nook website is a runnable documentation site with interactive examples. Select and React bindings have not been implemented. Package names are provisional and all workspace packages are private.
+Early implementation. `@nook/core` provides small DOM helpers that observe and drive native popover state. `@nook/react` provides `usePopover()` and `useTooltip()`, React 19.2+ hooks shipped compiled by React Compiler and built on `popovertarget` and `interestfor`. The tooltip relies on interest invokers, currently Chromium-only. The website runs on VitePress, and its live demos use the React hooks. Select is not implemented. Package names are provisional and all workspace packages are private.
 
 ## Repository
 

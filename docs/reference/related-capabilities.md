@@ -23,3 +23,17 @@ Nook research: opening/closing should remain correct when animations are unavail
 Customizable select research should begin with the native select rather than assuming a hand-built listbox. `appearance: base-select`, `::picker(select)`, and `<selectedcontent>` participate in this newer model; the picker has an implicit popover relationship and anchor. MDN notes framework integration and server-rendering caveats. These capabilities require separate support checks, and this snapshot does not establish a select-support baseline. [MDN customizable select guide](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select)
 
 Nook research: preserve labeling, value submission, reset, validation, keyboard behavior, and disabled options before choosing how much custom behavior is needed. The existence of the Popover API alone does not provide these form-control responsibilities.
+
+## Screen reader announcements
+
+Verified: **2026-09-28**.
+
+`Element.ariaNotify(announcement, { priority })` and `Document.ariaNotify()` queue text for screen readers without a live region. Announcements need no DOM change and no transient activation. `priority: 'normal'` (default) roughly matches `aria-live="polite"`; `'high'` roughly matches `assertive` and interrupts current speech. Live-region announcements still take precedence over `ariaNotify()`. The voice follows the nearest `lang`. An `aria-notify` Permissions Policy can silently block calls, including in iframes. Calls on elements the browser ignores in the accessibility tree (commonly `html` and `body`) may not announce; `document.ariaNotify()` is the safer global target. [MDN Element.ariaNotify](https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaNotify), [ARIA spec](https://w3c.github.io/aria/#ARIANotifyMixin)
+
+Caveats recorded by MDN and BCD:
+
+- Multiple queued announcements are not guaranteed to be read in order; often only the most recent is spoken. Combine messages instead of firing several.
+- On macOS, VoiceOver can drop an announcement when another accessibility event fires at the same time, for example a focus move when a popover opens. This affects every browser on macOS. [BCD issue 29610](https://github.com/mdn/browser-compat-data/issues/29610)
+- On ChromeOS, Chrome exposes the method but never speaks announcements.
+
+Nook research: consider `ariaNotify()` for toast announcements, combobox result counts, and confirmations such as "Copied", instead of hidden live-region nodes. Investigate announcement timing relative to focus changes, rate limiting (no user activation is required), and message coalescing. Its baseline is below the `hint` baseline Nook's tooltip already needs, so adopting it would not narrow support. Detection: `'ariaNotify' in Element.prototype`.

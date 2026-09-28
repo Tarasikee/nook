@@ -20,7 +20,7 @@ The intended dependency direction is React bindings → core → browser capabil
 
 ## Browser support approach
 
-Implement the main features using native browser capabilities first. Support in only a few browsers is acceptable and does not by itself justify an alternative implementation. Compatibility fixes, polyfills, and fallbacks for missing or partial browser support are deferred for now.
+Implement the main features using native browser capabilities first. Support in only a few browsers is acceptable and does not by itself justify an alternative implementation. This includes Chromium-only, experimental, and flag-gated features, provided their browser, version, and flag are documented. Compatibility fixes, polyfills, and fallbacks for missing or partial browser support are deferred for now.
 
 Record the capabilities each feature uses, their browser availability, and known limitations in the reference documentation. Verify behavior in supporting browsers. This approach does not defer correctness or accessibility work for the interactions we implement.
 

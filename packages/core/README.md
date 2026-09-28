@@ -1,18 +1,26 @@
 # Nook core
 
-The future framework-independent foundation for Nook's popovers, tooltips, and selects.
+Framework-independent DOM helpers for Nook's native primitives. No runtime dependencies.
 
-Core will use native browser capabilities wherever practical and supply the minimum JavaScript needed to complete the interaction. It will own shared browser behavior without depending on React, other frameworks, or third-party runtime libraries.
-
-The first implementation exports `createPopover()` and `createTooltip()`. Both functions attach behavior to existing DOM elements and return a controller for lifecycle and imperative visibility. `createPopover()` uses the native declarative trigger relationship; `createTooltip()` keeps trigger behavior separate through DOM event listeners.
+Behavior comes from HTML: `popover`, `popovertarget`, `commandfor`, and `interestfor` handle opening, closing, light dismiss, Escape, focus return, layering, and anchoring. Core only covers what those attributes leave out: observing native state and opening popovers from script with the correct source. Framework bindings such as [`@nook/react`](../react/README.md) build on it.
 
 ```ts
-createPopover({ trigger: shareButton, content: sharePanel })
-createTooltip({ trigger: archiveButton, content: archiveHint })
+import { findPopoverInvoker, isPopoverOpen, observePopover, setPopoverOpen } from '@nook/core'
+
+const stop = observePopover(panel, (open) => console.log(open))
+setPopoverOpen(panel, true) // passes the invoker as `source`, so the implicit anchor applies
+stop()
 ```
 
-The popover content needs an `id`; the controller uses it to create the browser's native trigger relationship. Tooltip behavior handles pointer and keyboard focus with its own DOM listeners, leaving the trigger's existing event handlers untouched. Both rely on the browser's Popover API and do not provide a fallback.
+| Export | Purpose |
+| --- | --- |
+| `observePopover(popover, onChange)` | Reports every native state change, whatever caused it. Coalesced `toggle` events that end in their starting state are not reported. Returns a cleanup function. |
+| `setPopoverOpen(popover, open, source?)` | Shows or hides; a no-op when already in that state or disconnected. When showing, passes the invoker as `source`. Without it, Chromium does not anchor a script-opened popover to its trigger (verified in Chromium 145). |
+| `findPopoverInvoker(popover)` | First element with `popovertarget`, `commandfor`, or `interestfor` pointing at the popover's `id`, in the same document or shadow root. |
+| `isPopoverOpen(element)` | Whether the element matches `:popover-open`. |
+| `createPopoverStore()` | The popover's native state as an external store: `attach` (usable as a React 19 ref callback), `subscribe`, `getSnapshot`, `onChange`, `setOpen` (deferred until attached), and `control` (reapplied on every attach). The browser stays the source of truth. `@nook/react` reads it with `useSyncExternalStore`. |
+| `PopoverMode` | `'auto' \| 'manual' \| 'hint'` |
 
-The package remains private while its API is being shaped. Read the [implementation direction](../../docs/implementation-direction.md) before building on these first primitives.
+The earlier `createPopover()` and `createTooltip()` APIs were removed. Their jobs are done by native attributes (`popovertarget`, and `interestfor` with the CSS `interest-delay` property) plus these helpers.
 
-See the runnable [website examples](../../website/README.md), [architecture direction](../../docs/architecture.md) and [contributor guide](../../CONTRIBUTING.md).
+Core is tested through the React package's Playwright suite. The package is private and its API may change. See the [architecture](../../docs/architecture.md) and [implementation direction](../../docs/implementation-direction.md).

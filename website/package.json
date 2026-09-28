@@ -1,16 +1,31 @@
 {
-  "name": "@nook/website",
-  "version": "0.0.0",
-  "private": true,
-  "license": "MIT",
-  "description": "Documentation and interactive examples for Nook.",
-  "type": "module",
-  "scripts": {
-    "dev": "pnpm --filter @nook/core build && vite",
-    "build": "pnpm --filter @nook/core build && tsc --noEmit && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@nook/core": "workspace:*"
-  }
+    "name": "@nook/website",
+    "version": "0.0.0",
+    "private": true,
+    "license": "MIT",
+    "description": "Documentation and interactive examples for Nook.",
+    "type": "module",
+    "scripts": {
+        "dev": "vitepress dev",
+        "build": "vue-tsc --noEmit && vitepress build",
+        "preview": "vitepress preview --port 4173",
+        "typecheck": "vue-tsc --noEmit",
+        "test": "playwright test"
+    },
+    "dependencies": {
+        "@nook/core": "workspace:*",
+        "@nook/react": "workspace:*",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0"
+    },
+    "devDependencies": {
+        "@playwright/test": "1.58.2",
+        "@types/node": "^22.20.4",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "typescript": "^5.7.3",
+        "vitepress": "1.6.4",
+        "vue": "^3.5.43",
+        "vue-tsc": "^2.2.12"
+    }
 }

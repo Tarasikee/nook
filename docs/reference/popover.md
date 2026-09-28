@@ -56,6 +56,16 @@ The toggle method returns the resulting boolean state in current implementations
 
 The current standard makes repeated show-on-open and hide-on-hidden operations return without a state change. The usage guide still describes errors for these cases. Missing popover configuration can cause `NotSupportedError`; disconnected elements, inactive documents, modal dialogs, and fullscreen elements can cause `InvalidStateError`. Reentrant operations during another show/hide also have restrictions. Check the specific algorithm and browser version rather than relying on the guide's shorthand. [HTML Standard algorithms](https://html.spec.whatwg.org/multipage/popover.html#dom-showpopover)
 
+## Observed in Chromium 145
+
+Verified: **2026-09-28**, Playwright's bundled Chromium 145.0.7632.6. Accessibility results come from Chromium's own tree through CDP. Guarded by `packages/react/tests/platform.spec.ts` and `hooks.spec.ts`.
+
+- `showPopover()` without `source` does **not** anchor to the invoker: an element styled with `position-area` rendered at the viewport origin. With `source`, or when opened by clicking the `popovertarget` button, it was anchored.
+- `popovertarget` and `commandfor` + `command="toggle-popover"` both expose the trigger's expanded state natively (`expanded: false/true`). An author `aria-expanded` is unnecessary.
+- Popover content has role `group` with no name unless the author labels it.
+- `showPopover()` then `hidePopover()` in the same task produced one `toggle` event with `oldState` and `newState` both `closed`. Clicking a trigger and then outside with no wait between them was also coalesced. Consumers that compare states must ignore such no-op events.
+- `ToggleEvent.source` reported the invoking button for a `popovertarget` click.
+
 ## Implications to investigate for Nook
 
 - Let browser dismissal participate in state management. A React binding must observe native changes rather than assume all changes come from React handlers.

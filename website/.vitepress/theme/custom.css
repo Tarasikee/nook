@@ -1,0 +1,251 @@
+/*
+ * Nook brand layer: green, light blue, and white.
+ * Text-bearing greens are chosen for at least 4.5:1 contrast on white
+ * (#047857 on #fff is about 5.5:1).
+ */
+
+:root {
+    --vp-font-family-base: Avenir, 'Avenir Next', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --vp-font-family-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    --nk-green-50: #ecfdf5;
+    --nk-green-100: #d1fae5;
+    --nk-green-300: #6ee7b7;
+    --nk-green-500: #10b981;
+    --nk-green-600: #059669;
+    --nk-green-700: #047857;
+    --nk-green-800: #065f46;
+    --nk-sky-50: #f0f9ff;
+    --nk-sky-100: #e0f2fe;
+    --nk-sky-200: #bae6fd;
+    --nk-sky-400: #38bdf8;
+    --nk-sky-600: #0284c7;
+    --nk-ink: #0b2a2f;
+
+    --nk-accent-gradient: linear-gradient(100deg, var(--nk-green-600) 0%, #0ea5a4 45%, var(--nk-sky-600) 100%);
+    --nk-surface-gradient: linear-gradient(160deg, var(--nk-sky-50) 0%, #ffffff 45%, var(--nk-green-50) 100%);
+
+    --vp-c-brand-1: var(--nk-green-700);
+    --vp-c-brand-2: var(--nk-green-800);
+    --vp-c-brand-3: var(--nk-green-600);
+    --vp-c-brand-soft: rgba(16, 185, 129, 0.14);
+
+    --vp-c-bg: #ffffff;
+    --vp-c-bg-alt: var(--nk-sky-50);
+    --vp-c-bg-soft: #e8f5fd;
+    --vp-c-bg-elv: #ffffff;
+    --vp-c-text-1: var(--nk-ink);
+    --vp-c-text-2: #3d5c63;
+    --vp-c-text-3: #6b8a91;
+    --vp-c-divider: #d6ebf5;
+    --vp-c-gutter: #e3f1f9;
+    --vp-c-border: #c7e3f1;
+
+    --vp-code-color: var(--nk-green-700);
+    --vp-code-bg: rgba(16, 185, 129, 0.1);
+    --vp-code-block-bg: #f4fafe;
+    --vp-code-tab-bg: #eaf5fc;
+    --vp-code-tab-divider: #d6ebf5;
+    --vp-code-copy-code-bg: #ffffff;
+
+    --vp-button-brand-bg: var(--nk-green-700);
+    --vp-button-brand-hover-bg: var(--nk-green-800);
+    --vp-button-brand-active-bg: #064e3b;
+
+    --vp-custom-block-tip-bg: rgba(16, 185, 129, 0.08);
+    --vp-custom-block-tip-border: transparent;
+    --vp-custom-block-tip-text: var(--vp-c-text-1);
+    --vp-custom-block-info-bg: rgba(56, 189, 248, 0.1);
+    --vp-custom-block-info-border: transparent;
+
+    --vp-nav-logo-height: 26px;
+    --vp-layout-max-width: 1380px;
+}
+
+.dark {
+    --nk-accent-gradient: linear-gradient(100deg, var(--nk-green-300) 0%, #5eead4 45%, #7dd3fc 100%);
+    --nk-surface-gradient: linear-gradient(160deg, #0b2530 0%, #071b20 50%, #082a22 100%);
+
+    --vp-c-brand-1: #34d399;
+    --vp-c-brand-2: #6ee7b7;
+    --vp-c-brand-3: var(--nk-green-600);
+    --vp-c-brand-soft: rgba(52, 211, 153, 0.16);
+
+    --vp-c-bg: #071b20;
+    --vp-c-bg-alt: #0a232a;
+    --vp-c-bg-soft: #0e2d35;
+    --vp-c-bg-elv: #0c262d;
+    --vp-c-text-1: #e7faf4;
+    --vp-c-text-2: #a8c9cf;
+    --vp-c-text-3: #749aa1;
+    --vp-c-divider: #173b44;
+    --vp-c-gutter: #051418;
+    --vp-c-border: #1f4852;
+
+    --vp-code-color: #6ee7b7;
+    --vp-code-bg: rgba(52, 211, 153, 0.12);
+    --vp-code-block-bg: #0a2329;
+    --vp-code-tab-bg: #081e24;
+    --vp-code-tab-divider: #173b44;
+    --vp-code-copy-code-bg: #0e2d35;
+
+    --vp-button-brand-bg: var(--nk-green-700);
+    --vp-button-brand-hover-bg: var(--nk-green-600);
+
+    --vp-custom-block-info-bg: rgba(56, 189, 248, 0.08);
+}
+
+/* Navigation */
+
+.VPNavBarTitle .title {
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.VPSidebarItem .text .nk-soon,
+.nk-soon {
+    margin-left: 0.35rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    color: var(--vp-c-text-3);
+    background: var(--vp-c-bg-soft);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    vertical-align: 0.08em;
+}
+
+/* Document typography */
+
+.vp-doc h1 {
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.vp-doc h2 {
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    border-top-color: var(--vp-c-divider);
+}
+
+.vp-doc h3 {
+    letter-spacing: -0.02em;
+}
+
+.vp-doc h3 > code,
+.vp-doc h2 > code {
+    font-size: 0.92em;
+}
+
+.vp-doc .nk-lead {
+    margin-top: 0.5rem;
+    color: var(--vp-c-text-2);
+    font-size: 1.12rem;
+    line-height: 1.7;
+}
+
+/* Keep VitePress's scrollable tables on small screens; stretch them on wider ones. */
+@media (min-width: 768px) {
+    .vp-doc table {
+        display: table;
+        width: 100%;
+    }
+}
+
+.vp-doc table th {
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--vp-c-text-2);
+}
+
+.vp-doc tr:nth-child(2n) {
+    background-color: color-mix(in srgb, var(--vp-c-bg-alt) 60%, transparent);
+}
+
+/* API signature block */
+
+.vp-doc .nk-signature {
+    margin: 1rem 0 1.5rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--vp-c-border);
+    border-left: 3px solid var(--vp-c-brand-3);
+    border-radius: 8px;
+    background: var(--vp-c-bg-alt);
+    font-family: var(--vp-font-family-mono);
+    font-size: 0.86rem;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+.vp-doc .nk-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: -0.25rem 0 1rem;
+    color: var(--vp-c-text-2);
+    font-size: 0.85rem;
+}
+
+.vp-doc .nk-meta strong {
+    color: var(--vp-c-text-1);
+    font-weight: 600;
+}
+
+.vp-doc .nk-pill {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    color: var(--nk-sky-600);
+    background: rgba(56, 189, 248, 0.14);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.dark .vp-doc .nk-pill {
+    color: #7dd3fc;
+}
+
+/* Card links used on overview pages */
+
+.nk-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+}
+
+.vp-doc a.nk-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--vp-c-border);
+    border-radius: 12px;
+    background: var(--nk-surface-gradient);
+    color: var(--vp-c-text-1);
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.vp-doc a.nk-card:hover {
+    border-color: var(--vp-c-brand-3);
+    box-shadow: 0 10px 30px rgba(5, 150, 105, 0.12);
+    transform: translateY(-1px);
+}
+
+.vp-doc a.nk-card strong {
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.vp-doc a.nk-card span {
+    color: var(--vp-c-text-2);
+    font-size: 0.86rem;
+    line-height: 1.55;
+}
+
+.vp-doc a.nk-card code {
+    align-self: flex-start;
+}

@@ -10,7 +10,7 @@ Project direction: build the main native features first and document limited bro
 | --- | --- |
 | Modes, invokers, focus, events, lifecycle, and edge cases | [Popover API](popover.md) |
 | Native hover/focus interactions and tooltip research | [Interest invokers](interest-invokers.md) |
-| Positioning, transitions, and native select research | [Related browser capabilities](related-capabilities.md) |
+| Positioning, transitions, native select, and screen reader announcements (`ariaNotify`) | [Related browser capabilities](related-capabilities.md) |
 | Versions, partial implementations, and feature detection | [Browser compatibility](browser-compatibility.md) |
 
 ## Starting sources

@@ -29,12 +29,22 @@ Source: [MDN interest invoker guide](https://developer.mozilla.org/en-US/docs/We
 
 MDN labels the interest events experimental and non-standard. BCD records the main HTML/DOM/CSS surfaces in Chromium from 142 and no Firefox or Safari implementation in this snapshot. This is separate from support for ordinary popovers and `hint`. See the [dated compatibility evidence](browser-compatibility.md).
 
+## Observed in Chromium 145
+
+Verified: **2026-09-28**, Playwright's bundled Chromium 145.0.7632.6. Accessibility results come from Chromium's own tree through CDP (`Accessibility.getPartialAXTree`), not Playwright's DOM-based approximation. Guarded by `packages/react/tests/platform.spec.ts`.
+
+- Hover and keyboard focus both show the target; Escape cancels interest. With no `interest-delay`, the hint appeared between 400 and 800 ms after hover.
+- Moving the pointer from the invoker into the target keeps interest, so an interactive hover card stays open.
+- For a plain-text `popover="hint"` target, the invoker's accessible description is the target text **only while it is open**. When closed, there is no description. A rich target (with a button inside) produced no description relationship.
+- With an explicit `aria-labelledby` pointing at the hint, Chromium exposed the text as both name and description, even while closed. Screen reader output was not tested.
+- `interestfor` and `popovertarget` coexist on one button; a `hint` target does not close an open `auto` popover.
+
+Nook's `useTooltip` adds an explicit `aria-describedby` (or `aria-labelledby`) because of the open-only description above.
+
 ## Implications to investigate for Nook
 
-- This is a promising way to reduce tooltip timers and hover/focus listeners. Limited browser support is acceptable under the current project direction; document it alongside any feature that uses this capability.
+- Nook's tooltip now relies on this capability (Chromium-only accepted). Remaining questions: long press on touch, multiple invokers sharing a target, and screen reader output.
 - Detect interest support independently from Popover support. Check the invoker interface actually being used, and the specific CSS features required.
-- Record behavior and limitations in unsupported browsers. Defer fallback implementations and compatibility fixes while building the main features.
-- Test pointer movement from trigger into content, keyboard access, long press, Escape, multiple invokers sharing a target, and interaction with activation-based popovers.
 - Distinguish a text tooltip from an interactive preview card before assigning roles or focus behavior. Native invocation does not settle those design questions.
 
 These are Nook research questions. This document does not commit to an interest-invoker dependency or a tooltip API; the decision to defer compatibility work is established in the architecture.

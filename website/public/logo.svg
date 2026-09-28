@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="nook-mark" x1="2" y1="30" x2="22" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#047857"/>
+      <stop offset="1" stop-color="#0ea5a4"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="10" width="20" height="20" rx="6" fill="url(#nook-mark)"/>
+  <rect x="7.5" y="15.5" width="9" height="9" rx="2.5" fill="#fff"/>
+  <circle cx="24" cy="8" r="6" fill="#fff" stroke="#38bdf8" stroke-width="3"/>
+  <circle cx="24" cy="8" r="2" fill="#0284c7"/>
+</svg>

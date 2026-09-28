@@ -38,6 +38,10 @@ The snapshot’s browser release records mark Chrome 154, Firefox 156, and Safar
 | [@starting-style](https://github.com/mdn/browser-compat-data/blob/a2d2a599a78df7885f57bfe21880d21821036dc5/css/at-rules/starting-style.json) | 117 | 129 | 17.5 |
 | [transition-behavior](https://github.com/mdn/browser-compat-data/blob/a2d2a599a78df7885f57bfe21880d21821036dc5/css/properties/transition-behavior.json) | 117 | 129 | 17.4 |
 | [overlay](https://github.com/mdn/browser-compat-data/blob/a2d2a599a78df7885f57bfe21880d21821036dc5/css/properties/overlay.json) | 117 | No | No |
+| [Element.ariaNotify](https://github.com/mdn/browser-compat-data/blob/0fe836f1c9b303b5684fc6fd1a55a565ae4e09d2/api/Element.json) ¹ | 141 | 150 | 27 |
+| [Document.ariaNotify](https://github.com/mdn/browser-compat-data/blob/0fe836f1c9b303b5684fc6fd1a55a565ae4e09d2/api/Document.json) ¹ | 141 | 150 | 27 |
+
+¹ Recorded from BCD revision [`0fe836f1c9b303b5684fc6fd1a55a565ae4e09d2`](https://github.com/mdn/browser-compat-data/tree/0fe836f1c9b303b5684fc6fd1a55a565ae4e09d2) (committed 2026-09-28), not the snapshot revision above. BCD marks it standard-track and not experimental. See [announcement caveats](related-capabilities.md#screen-reader-announcements).
 
 ## Caveats that affect behavior
 
@@ -67,6 +71,8 @@ Nook currently prioritizes its main native features and accepts limited browser 
 
 ## Current Nook mapping
 
-As of this snapshot, `createPopover()` requires the base Popover API and a supported button or button-type input invoker. It uses the declarative `popovertarget` relationship, then passes the trigger as `source` when controller methods show or toggle the element. Browsers that support base popovers but have incomplete `source` support can still expose a popover, while newer focus-navigation and anchoring refinements are not guaranteed.
+Updated 2026-09-28. `usePopover()` renders the declarative `popovertarget` relationship and needs the base Popover API. Script-driven opens (`show()`, controlled `open`) go through core's `setPopoverOpen()`, which passes the invoker as `source`. In Chromium 145, a popover shown without `source` is not anchored to its trigger. Browsers with incomplete `source` support still show the popover, but anchoring and focus refinements are not guaranteed.
 
-`createTooltip()` uses Nook-managed pointer and focus listeners to request a `popover="hint"` surface. It does not yet use interest invokers. The current hint stack behavior therefore needs the versions recorded in the hint row; older or unsupported browsers can interpret the unknown `hint` value as a manual popover. Nook deliberately supplies no fallback, polyfill, or compatibility layer for that case.
+`useTooltip()` renders `interestfor` with a `popover="hint"` target. It therefore requires interest invokers (Chromium 142+, experimental, not standards-track in BCD) as well as current `hint` semantics. In other browsers the tooltip does not appear; its explicit ARIA relationship still gives the description to assistive technology. This Chromium-only dependency is an accepted project decision. Nook supplies no fallback.
+
+Other relevant rows from BCD `main` (checked 2026-09-28): `button.commandfor` and `button.command` are recorded at Chrome 135, Firefox 144, and Safari 26.2, and are standards-track. `focusgroup` has no BCD entry, and `'focusgroup' in HTMLElement.prototype` was false in Chromium 145.
