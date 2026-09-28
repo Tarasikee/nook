@@ -14,7 +14,7 @@
         <a href="#examples">Examples</a>
         <a href="#api">API</a>
         <a href="#support">Support</a>
-        <a class="nav-link" href="https://github.com" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <a class="nav-link" href="#implementation">Notes</a>
       </nav>
     </header>
 
@@ -115,14 +115,14 @@ notice.hide()</code></pre>
         <div class="section-heading"><span class="kicker">Platform support</span><h2 id="support-title">The browser is part of the API.</h2><p>Nook does not polyfill missing native features. Support is documented so consumers can make an explicit product choice.</p></div>
         <div class="support-grid">
           <div class="support-table-wrap"><table><thead><tr><th>Capability</th><th>Chrome</th><th>Firefox</th><th>Safari</th></tr></thead><tbody><tr><th>Basic Popover API</th><td>114</td><td>125</td><td>17</td></tr><tr><th><code>hint</code> mode</th><td>151</td><td>153</td><td>Preview</td></tr><tr><th>Interest invokers</th><td>142</td><td>—</td><td>—</td></tr><tr><th><code>source</code> option</th><td>137</td><td>144</td><td>26</td></tr></tbody></table><p class="table-note">Research snapshot: September 28, 2026. Browser version availability does not replace testing on your supported devices.</p></div>
-          <article class="support-note"><h3>What this means today</h3><p><strong>Popover</strong> needs the base Popover API. <strong>Tooltip</strong> currently relies on the newer <code>hint</code> mode; browsers that do not recognize it can treat it as manual, so it does not preserve the native hint stack behavior.</p><p>Nook intentionally has no fallback or polyfill at this stage. Interest invokers are tracked as a promising future browser primitive, but Nook does not use them yet.</p><a href="../docs/reference/browser-compatibility.md">Read the compatibility record <span aria-hidden="true">→</span></a></article>
+          <article class="support-note"><h3>What this means today</h3><p><strong>Popover</strong> needs the base Popover API. <strong>Tooltip</strong> currently relies on the newer <code>hint</code> mode; browsers that do not recognize it can treat it as manual, so it does not preserve the native hint stack behavior.</p><p>Nook intentionally has no fallback or polyfill at this stage. Interest invokers are tracked as a promising future browser primitive, but Nook does not use them yet.</p><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/popover#browser_compatibility" target="_blank" rel="noreferrer">Check MDN compatibility <span aria-hidden="true">↗</span></a></article>
         </div>
       </section>
 
       <section class="implementation section" aria-labelledby="implementation-title"><div><span class="kicker">Implementation notes</span><h2 id="implementation-title">Native relationships solve the common collision.</h2></div><div class="implementation-copy"><p>Floating-element libraries often need to compose several trigger props so hover, focus, click, and consumer handlers can cooperate. Nook starts with a different question: can the actual element and browser relationship express this interaction?</p><p>For a click popover, <code>popovertarget</code> provides that relationship. For behavior that still needs JavaScript, Nook observes with separate event listeners rather than overwriting an application handler. This keeps event ownership visible and lets an auto popover and a hint coexist where the browser supports those modes.</p><p>Native popovers render in the top layer, so they are not clipped by ancestor overflow or ordinary stacking contexts. Positioning, semantic roles, keyboard models, and focus requirements still belong to the specific component you build on top.</p></div></section>
     </main>
 
-    <footer><a class="brand" href="#top" aria-label="Back to top">N<span class="brand-eye" aria-hidden="true">◉</span>K</a><p>Native primitives for the web platform.</p><a href="../LICENSE">MIT License</a></footer>
+    <footer><a class="brand" href="#top" aria-label="Back to top">N<span class="brand-eye" aria-hidden="true">◉</span>K</a><p>Native primitives for the web platform.</p><span>MIT License</span></footer>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

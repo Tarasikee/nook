@@ -8,7 +8,7 @@ The scope is deliberately focused. Nook aims to offer an alternative to broader 
 
 ## Status
 
-Early implementation. `@nook/core` currently includes native popover and tooltip controllers, and  the Nook website is a runnable documentation site with interactive examples. Select and React bindings have not been implemented. Package names are provisional and all workspace packages are private.
+Early implementation. `@nook/core` currently includes native popover and tooltip controllers, and the Nook website is a runnable documentation site with interactive examples. Select and React bindings have not been implemented. Package names are provisional and all workspace packages are private.
 
 ## Repository
 

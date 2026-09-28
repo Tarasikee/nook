@@ -1,7 +1,13 @@
 # Nook website
 
-The root-level home for the Nook project website.
+The website is Nook's documentation and interactive example application. It uses `@nook/core` through the same public source import and lifecycle that a consumer would use; its visual design is local to this folder.
 
-This folder is separate from the packages workspace. It is a placeholder: no site framework, content structure, build tooling, or hosting setup has been chosen.
+From the repository root:
 
-See the [project architecture](../docs/architecture.md) and [contributor guide](../CONTRIBUTING.md).
+```sh
+pnpm dev
+pnpm build
+pnpm preview
+```
+
+The site currently documents the implemented `createPopover()` and `createTooltip()` APIs, their native browser dependencies, and the project’s no-fallback support policy. See the detailed [browser API knowledge base](../docs/reference/README.md) for dated research and source links.

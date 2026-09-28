@@ -17,11 +17,11 @@ importers:
 
   packages/core: {}
 
-  packages/examples:
+  website:
     dependencies:
       '@nook/core':
         specifier: workspace:*
-        version: link:../core
+        version: link:../packages/core
 
   packages/react: {}
 

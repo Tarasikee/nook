@@ -64,3 +64,9 @@ These are future implementation checks, not utilities added to the repository.
 | Browser baseline | Real interaction tests in target versions, including mobile | BCD is evidence, not a substitute for those tests |
 
 Nook currently prioritizes its main native features and accepts limited browser availability. Record required capabilities and support gaps per feature. Compatibility fixes, polyfills, and fallback implementations are deferred for now; this matrix documents limitations rather than gating development on broad browser support.
+
+## Current Nook mapping
+
+As of this snapshot, `createPopover()` requires the base Popover API and a supported button or button-type input invoker. It uses the declarative `popovertarget` relationship, then passes the trigger as `source` when controller methods show or toggle the element. Browsers that support base popovers but have incomplete `source` support can still expose a popover, while newer focus-navigation and anchoring refinements are not guaranteed.
+
+`createTooltip()` uses Nook-managed pointer and focus listeners to request a `popover="hint"` surface. It does not yet use interest invokers. The current hint stack behavior therefore needs the versions recorded in the hint row; older or unsupported browsers can interpret the unknown `hint` value as a manual popover. Nook deliberately supplies no fallback, polyfill, or compatibility layer for that case.
