@@ -7,11 +7,19 @@
     "overrides": [
         {
             "files": "*.md",
-            "options": { "tabWidth": 2, "embeddedLanguageFormatting": "off" }
+            "options": {
+                "tabWidth": 2,
+                "embeddedLanguageFormatting": "off"
+            }
         },
         {
-            "files": ["*.yaml", "*.yml"],
-            "options": { "tabWidth": 2 }
+            "files": [
+                "*.yaml",
+                "*.yml"
+            ],
+            "options": {
+                "tabWidth": 2
+            }
         }
     ]
 }
