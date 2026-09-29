@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig, type DefaultTheme } from 'vitepress'
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
+import { defineConfig, postcssIsolateStyles, type DefaultTheme } from 'vitepress'
 import { sourcePlugin } from './source-plugin'
 
 const repository = 'https://github.com/Tarasikee/nook'
@@ -110,13 +111,17 @@ export default defineConfig({
     },
     vite: {
         esbuild: { jsx: 'automatic', jsxImportSource: 'react' },
-        plugins: [sourcePlugin()],
+        plugins: [sourcePlugin(), vanillaExtractPlugin()],
+        css: {
+            // Markdown styles (.vp-doc h2, p, code…) skip elements inside .vp-raw, such as demo previews.
+            postcss: { plugins: [postcssIsolateStyles({ includeFiles: [/vp-doc\.css/] })] }
+        },
         resolve: {
             alias: {
                 '@nook/core': fileURLToPath(new URL('../../packages/core/src/index.ts', import.meta.url)),
                 '@nook/react': fileURLToPath(new URL('../../packages/react/src/index.ts', import.meta.url)),
                 '@nook/ui-react': fileURLToPath(new URL('../../packages/ui-react/src/index.ts', import.meta.url)),
-                '@nook/ui': fileURLToPath(new URL('../../packages/ui', import.meta.url))
+                '@nook/ui': fileURLToPath(new URL('../../packages/ui/src', import.meta.url))
             }
         }
     }

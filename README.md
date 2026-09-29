@@ -8,7 +8,7 @@ Early implementation. All packages are private and their names are provisional.
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | `packages/core`     | Framework-agnostic DOM helpers and a popover store. No dependencies, never imports a binding.       |
 | `packages/react`    | `usePopover()` and `useTooltip()` for React 19.2+, shipped compiled by React Compiler.              |
-| `packages/ui`       | Nook's design language as one CSS file (`nook.css`): tokens, button, tooltip, popover.              |
+| `packages/ui`       | Nook's design language as plain CSS, one file per component in `src/`; `nook.css` imports them all. |
 | `packages/ui-react` | Opinionated components on the hooks and `nook.css`: `Button`, `Tooltip`, `TooltipGroup`, `Popover`. |
 | `website`           | VitePress documentation with live React demos.                                                      |
 

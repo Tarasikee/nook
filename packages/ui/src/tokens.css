@@ -1,0 +1,42 @@
+/* Theme with these custom properties; add `.dark` or `data-theme="dark"` on an ancestor for dark mode. */
+:root {
+    --nook-font: Avenir, 'Avenir Next', Inter, ui-sans-serif, system-ui, sans-serif;
+    --nook-radius: 10px;
+    --nook-radius-large: 14px;
+    --nook-offset: 8px;
+    --nook-duration: 160ms;
+
+    --nook-accent: #047857;
+    --nook-accent-strong: #065f46;
+    --nook-accent-text: #fff;
+    --nook-secondary: #0369a1;
+    --nook-secondary-soft: rgb(56 189 248 / 0.14);
+    --nook-focus: #38bdf8;
+
+    --nook-text: #0b2a2f;
+    --nook-text-muted: #3d5c63;
+    --nook-surface: #fff;
+    --nook-border: #c7e3f1;
+    --nook-shadow: 0 18px 50px rgb(11 42 47 / 0.16), 0 2px 6px rgb(11 42 47 / 0.06);
+
+    --nook-tooltip-surface: #0b2a2f;
+    --nook-tooltip-text: #fff;
+    --nook-tooltip-delay: 300ms;
+    --nook-tooltip-hide-delay: 100ms;
+}
+
+.dark,
+[data-theme='dark'] {
+    --nook-accent-text: #fff;
+    --nook-secondary: #7dd3fc;
+    --nook-secondary-soft: rgb(56 189 248 / 0.16);
+
+    --nook-text: #e7faf4;
+    --nook-text-muted: #a8c9cf;
+    --nook-surface: #0c262d;
+    --nook-border: #1f4852;
+    --nook-shadow: 0 18px 50px rgb(0 0 0 / 0.5);
+
+    --nook-tooltip-surface: #d1fae5;
+    --nook-tooltip-text: #0b2a2f;
+}

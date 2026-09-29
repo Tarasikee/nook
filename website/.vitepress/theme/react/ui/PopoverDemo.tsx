@@ -1,5 +1,6 @@
 import { Button, Popover, PopoverClose, Tooltip } from '@nook/ui-react'
-import { Demo, Icon, useUnsupported } from '../shared'
+import { Demo } from '../Demo'
+import { Icon, useUnsupported } from '../shared'
 
 export function PopoverDemo() {
     const unsupported = useUnsupported(['popover'])

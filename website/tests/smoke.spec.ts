@@ -38,14 +38,14 @@ for (const path of pages) {
         expect(response?.status()).toBe(200)
         await expect(page.locator('h1').first()).toBeVisible()
         await expect(page.locator('.nk-island[data-pending]')).toHaveCount(0)
-        await expect(page.locator('.nk-demo__unsupported')).toHaveCount(0)
+        await expect(page.locator('.nk-island [role="status"]')).toHaveCount(0)
         expect(errors).toEqual([])
     })
 }
 
 // Demos are located by role and accessible name, like a user would find them.
 const panel = (page: Page, title: string) =>
-    page.locator('.nk-panel').filter({ has: page.getByRole('heading', { name: title }) })
+    page.locator('[popover]').filter({ has: page.getByRole('heading', { name: title }) })
 
 test('home hero popover opens, keeps the app handler, and closes on Escape', async ({ page }) => {
     await page.goto('/')
@@ -112,7 +112,7 @@ test('toolbar tooltips switch without the delay once one is showing', async ({ p
 test.describe('demo source tabs', () => {
     test('the Code tab shows the exact file that runs the demo', async ({ page }) => {
         await page.goto('/guide/getting-started')
-        const demo = page.locator('.nk-demo').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
+        const demo = page.getByRole('figure').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
 
         await demo.getByRole('tab', { name: 'Code' }).click()
         const code = demo.getByRole('tabpanel', { name: 'Code' })
@@ -125,9 +125,9 @@ test.describe('demo source tabs', () => {
         await expect(code.locator('button.copy')).toHaveCount(1)
     })
 
-    test('tabs follow the keyboard pattern and the CSS tab shows the behavior styles', async ({ page }) => {
+    test('tabs follow the keyboard pattern and the CSS tab shows the popover styles', async ({ page }) => {
         await page.goto('/guide/getting-started')
-        const demo = page.locator('.nk-demo').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
+        const demo = page.getByRole('figure').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
         const preview = demo.getByRole('tab', { name: 'Preview' })
 
         await expect(preview).toHaveAttribute('aria-selected', 'true')
@@ -137,7 +137,9 @@ test.describe('demo source tabs', () => {
         const css = demo.getByRole('tab', { name: 'CSS' })
         await expect(css).toBeFocused()
         await expect(css).toHaveAttribute('aria-selected', 'true')
-        await expect(demo.getByRole('tabpanel', { name: 'CSS' })).toContainText('position-area')
+        await expect(demo.getByRole('tabpanel', { name: 'CSS' })).toContainText(
+            "positionArea: 'block-end span-inline-end'"
+        )
 
         await page.keyboard.press('Home')
         await expect(preview).toBeFocused()
@@ -146,7 +148,7 @@ test.describe('demo source tabs', () => {
 
     test('the preview keeps its state while another tab is shown', async ({ page }) => {
         await page.goto('/guide/getting-started')
-        const demo = page.locator('.nk-demo').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
+        const demo = page.getByRole('figure').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
 
         await demo.getByRole('button', { name: 'Share', exact: true }).click()
         await page.keyboard.press('Escape')
@@ -207,7 +209,7 @@ test('client-side navigation cleans up demos', async ({ page }) => {
 test('every React demo island mounts', async ({ page }) => {
     await page.goto('/examples/')
     await expect(page.locator('.nk-island[data-pending]')).toHaveCount(0)
-    await expect(page.locator('.nk-island .nk-demo')).toHaveCount(6)
+    await expect(page.locator('.nk-island').getByRole('figure')).toHaveCount(6)
 })
 
 test.describe('mobile layout', () => {

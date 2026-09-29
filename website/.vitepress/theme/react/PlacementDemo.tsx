@@ -1,6 +1,9 @@
 import { usePopover } from '@nook/react'
 import { useState, type CSSProperties } from 'react'
-import { Demo, useAnchorPositioning, useUnsupported } from './shared'
+import { Demo } from './Demo'
+import * as kit from './kit.css'
+import * as styles from './PlacementDemo.css'
+import { useAnchorPositioning, useUnsupported } from './shared'
 
 const placements = [
     'top span-left',
@@ -35,12 +38,12 @@ export function PlacementDemo() {
             }
             unsupported={unsupported}
         >
-            <div className="nk-placement-demo">
-                <div className="nk-placement-options" role="group" aria-label="Placement">
+            <div className={styles.layout}>
+                <div className={styles.options} role="group" aria-label="Placement">
                     {placements.map((value) => (
                         <button
                             key={value}
-                            className="nk-chip"
+                            className={kit.chip}
                             type="button"
                             aria-pressed={placement === value}
                             onClick={() => choose(value)}
@@ -49,8 +52,8 @@ export function PlacementDemo() {
                         </button>
                     ))}
                 </div>
-                <div className="nk-placement-area">
-                    <button {...preview.triggerProps} className="nk-btn nk-btn--primary" type="button">
+                <div className={styles.area}>
+                    <button {...preview.triggerProps} className={kit.button({ variant: 'primary' })} type="button">
                         Anchor
                     </button>
                 </div>
@@ -58,8 +61,8 @@ export function PlacementDemo() {
 
             <div
                 {...preview.contentProps}
-                className="nk-panel nk-placement"
-                style={{ '--nk-area': placement } as CSSProperties}
+                className={styles.placement}
+                style={{ '--area': placement } as CSSProperties}
             >
                 <code {...preview.titleProps}>position-area: {placement};</code>
             </div>

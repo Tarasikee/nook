@@ -1,0 +1,105 @@
+/*
+ * Shared by tooltip.css and popover.css: placement next to the trigger, and open/close motion.
+ *
+ * The trigger is the implicit anchor (popovertarget / interestfor), so position-area is enough.
+ * Tooltips default to above and centered, popovers to below and start-aligned; data-side
+ * (top | bottom | left | right) and data-align (start | center | end) change that.
+ * Browsers without anchor positioning keep the default centered popover.
+ */
+@import './tokens.css';
+
+@supports (position-area: block-end) {
+    .nook-tooltip,
+    .nook-popover {
+        /* What start and end mean along the edge that faces the trigger. */
+        --nook-start: span-inline-end;
+        --nook-end: span-inline-start;
+
+        inset: auto;
+        margin: 0;
+        position-area: var(--nook-side) var(--nook-align);
+        position-try-fallbacks: flip-block, flip-inline;
+    }
+
+    .nook-tooltip {
+        --nook-side: block-start;
+        --nook-align: center;
+        margin-block-end: var(--nook-offset);
+    }
+
+    .nook-popover {
+        --nook-side: block-end;
+        --nook-align: var(--nook-start);
+        margin-block-start: var(--nook-offset);
+    }
+
+    /* The offset is the margin on the side that faces the trigger. */
+    :is(.nook-tooltip, .nook-popover) {
+        &[data-side] {
+            margin: 0;
+        }
+
+        &[data-side='top'] {
+            --nook-side: block-start;
+            margin-block-end: var(--nook-offset);
+        }
+
+        &[data-side='bottom'] {
+            --nook-side: block-end;
+            margin-block-start: var(--nook-offset);
+        }
+
+        &[data-side='left'] {
+            --nook-side: inline-start;
+            margin-inline-end: var(--nook-offset);
+        }
+
+        &[data-side='right'] {
+            --nook-side: inline-end;
+            margin-inline-start: var(--nook-offset);
+        }
+
+        &:is([data-side='left'], [data-side='right']) {
+            --nook-start: span-block-end;
+            --nook-end: span-block-start;
+            --nook-align: center;
+        }
+
+        &[data-align='start'] {
+            --nook-align: var(--nook-start);
+        }
+
+        &[data-align='center'] {
+            --nook-align: center;
+        }
+
+        &[data-align='end'] {
+            --nook-align: var(--nook-end);
+        }
+    }
+}
+
+.nook-tooltip,
+.nook-popover {
+    opacity: 0;
+    scale: 0.96;
+    transition:
+        opacity var(--nook-duration) ease-out,
+        scale var(--nook-duration) ease-out,
+        display var(--nook-duration) allow-discrete,
+        overlay var(--nook-duration) allow-discrete;
+
+    &:popover-open {
+        opacity: 1;
+        scale: 1;
+
+        @starting-style {
+            opacity: 0;
+            scale: 0.96;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}

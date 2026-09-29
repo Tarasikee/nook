@@ -5,8 +5,7 @@ import HomePage from './components/HomePage.vue'
 import ReactDemo from './components/ReactDemo.vue'
 import SupportMatrix from './components/SupportMatrix.vue'
 import '@nook/ui/nook.css'
-import './custom.css'
-import './demo.css'
+import './theme.css'
 
 export default {
     extends: DefaultTheme,

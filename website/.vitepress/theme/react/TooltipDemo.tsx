@@ -1,6 +1,9 @@
 import { useTooltip } from '@nook/react'
 import { useState } from 'react'
-import { Demo, Icon, useUnsupported, type IconName } from './shared'
+import { Demo } from './Demo'
+import * as kit from './kit.css'
+import * as popover from './popover.css'
+import { Icon, useUnsupported, type IconName } from './shared'
 
 type ToolProps = {
     icon: IconName
@@ -16,14 +19,14 @@ function Tool({ icon, label, pressed, onToggle }: ToolProps) {
         <>
             <button
                 {...tooltip.triggerProps}
-                className="nk-icon-btn"
+                className={kit.iconButton}
                 type="button"
                 aria-pressed={pressed}
                 onClick={onToggle}
             >
                 <Icon name={icon} />
             </button>
-            <div {...tooltip.contentProps} className="nk-tooltip nk-animated">
+            <div {...tooltip.contentProps} className={`${popover.tooltip} ${popover.animated}`}>
                 {label}
             </div>
         </>
@@ -42,7 +45,7 @@ export function TooltipDemo() {
             hint="Hover or Tab to a button. The browser shows each tooltip through interestfor; the delay is the CSS interest-delay. The pressed-state handlers still run."
             unsupported={unsupported}
         >
-            <div className="nk-toolbar" role="toolbar" aria-label="Formatting">
+            <div className={`${kit.toolbar} ${popover.group}`} role="toolbar" aria-label="Formatting">
                 <Tool icon="bold" label="Bold" pressed={pressed.bold} onToggle={() => toggle('bold')} />
                 <Tool icon="italic" label="Italic" pressed={pressed.italic} onToggle={() => toggle('italic')} />
                 <Tool icon="link" label="Insert link" pressed={pressed.link} onToggle={() => toggle('link')} />

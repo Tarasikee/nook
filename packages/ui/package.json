@@ -9,9 +9,9 @@
         "*.css"
     ],
     "files": [
-        "nook.css"
+        "src"
     ],
     "exports": {
-        "./nook.css": "./nook.css"
+        "./*.css": "./src/*.css"
     }
 }

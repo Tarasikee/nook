@@ -41,8 +41,22 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.nk-island[data-pending] {
-    min-height: var(--nk-island-height);
-    margin: 1.5rem 0;
+/* A dotted placeholder that reserves the demo's height until React mounts it. */
+.nk-island {
+    display: block;
+
+    &:empty,
+    &[data-pending] {
+        border: 1px solid var(--vp-c-border);
+        border-radius: 14px;
+        background:
+            radial-gradient(var(--vp-c-divider) 1px, transparent 1px) 0 0 / 16px 16px,
+            var(--vp-c-bg);
+    }
+
+    &[data-pending] {
+        min-height: var(--nk-island-height);
+        margin: 1.5rem 0;
+    }
 }
 </style>

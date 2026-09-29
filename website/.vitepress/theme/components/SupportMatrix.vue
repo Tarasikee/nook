@@ -170,17 +170,17 @@ function tone(version: string) {
 .nk-support {
     margin: 1.25rem 0;
     overflow-x: auto;
-}
 
-.nk-support table {
-    margin: 0;
-}
+    & table {
+        margin: 0;
+    }
 
-.nk-support th[scope='row'] {
-    text-transform: none;
-    letter-spacing: 0;
-    font-size: 0.86rem;
-    white-space: nowrap;
+    & th[scope='row'] {
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 0.86rem;
+        white-space: nowrap;
+    }
 }
 
 .nk-support__used {
@@ -188,6 +188,7 @@ function tone(version: string) {
     font-size: 0.82rem;
 }
 
+/* Version and detection badges; data-tone picks the color. */
 .nk-version,
 .nk-detect {
     display: inline-block;
@@ -196,6 +197,16 @@ function tone(version: string) {
     font-family: var(--vp-font-family-mono);
     font-size: 0.78rem;
     white-space: nowrap;
+
+    &[data-tone='partial'] {
+        color: var(--vp-c-warning-1);
+        background: var(--vp-c-warning-soft);
+    }
+
+    &[data-tone='no'] {
+        color: var(--vp-c-danger-1);
+        background: var(--vp-c-danger-soft);
+    }
 }
 
 .nk-version[data-tone='yes'] {
@@ -203,24 +214,15 @@ function tone(version: string) {
     background: var(--vp-c-brand-soft);
 }
 
-[data-tone='partial'] {
-    color: var(--vp-c-warning-1);
-    background: var(--vp-c-warning-soft);
-}
+.nk-detect {
+    &[data-tone='yes'] {
+        color: var(--vp-c-success-1);
+        background: var(--vp-c-success-soft);
+    }
 
-[data-tone='no'] {
-    color: var(--vp-c-danger-1);
-    background: var(--vp-c-danger-soft);
-}
-
-.nk-detect[data-tone='yes'] {
-    color: var(--vp-c-success-1);
-    background: var(--vp-c-success-soft);
-}
-
-.nk-detect[data-tone='unknown'],
-.nk-detect[data-tone='pending'] {
-    color: var(--vp-c-text-3);
-    background: var(--vp-c-bg-soft);
+    &:is([data-tone='unknown'], [data-tone='pending']) {
+        color: var(--vp-c-text-3);
+        background: var(--vp-c-bg-soft);
+    }
 }
 </style>

@@ -1,5 +1,6 @@
 import { Button, Tooltip, TooltipGroup } from '@nook/ui-react'
-import { Demo, Icon, useUnsupported, type IconName } from '../shared'
+import { Demo } from '../Demo'
+import { Icon, useUnsupported, type IconName } from '../shared'
 
 const tools: { icon: IconName; label: string }[] = [
     { icon: 'bold', label: 'Bold' },

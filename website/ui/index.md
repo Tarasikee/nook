@@ -7,10 +7,10 @@ description: Ready-made components in Nook's design language, built on the primi
 
 <p class="nk-lead">The primitives, with opinions: styled, accessible components you can drop in. The primitives stay available when you need full control.</p>
 
-| Package          | What it is                                                                                                                             |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `@nook/ui`       | Nook's design language as one CSS file: tokens, button, tooltip, popover, placement, and motion. No JavaScript; works with plain HTML. |
-| `@nook/ui-react` | `Button`, `Tooltip`, `TooltipGroup`, `Popover`, and `PopoverClose`, built on `@nook/react` and `@nook/ui`.                             |
+| Package          | What it is                                                                                                                                                    |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@nook/ui`       | Nook's design language as plain CSS: `nook.css` for everything, or `button.css`, `tooltip.css`, or `popover.css` alone. No JavaScript; works with plain HTML. |
+| `@nook/ui-react` | `Button`, `Tooltip`, `TooltipGroup`, `Popover`, and `PopoverClose`, built on `@nook/react` and `@nook/ui`.                                                    |
 
 ## Setup
 

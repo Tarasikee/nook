@@ -1,5 +1,6 @@
 import { Button, Tooltip } from '@nook/ui-react'
-import { Demo, Icon } from '../shared'
+import { Demo } from '../Demo'
+import { Icon } from '../shared'
 
 export function ButtonDemo() {
     return (

@@ -1,5 +1,8 @@
 import { usePopover, useTooltip } from '@nook/react'
 import { useState, type CSSProperties } from 'react'
+import * as styles from './HeroDemo.css'
+import * as kit from './kit.css'
+import * as popover from './popover.css'
 import { Icon, useUnsupported } from './shared'
 
 const people = [
@@ -30,37 +33,37 @@ export function HeroDemo() {
     }
 
     return (
-        <div className="hero-demo">
-            <div className="hero-demo__window">
-                <div className="hero-demo__chrome" aria-hidden="true">
+        <div className={styles.hero}>
+            <div className={styles.appWindow}>
+                <div className={styles.chrome} aria-hidden="true">
                     <span />
                     <span />
                     <span />
                     <p>atlas.app / roadmap</p>
                 </div>
 
-                <div className="hero-demo__body">
-                    <div className="hero-demo__header">
+                <div className={styles.body}>
+                    <div className={styles.header}>
                         <div>
-                            <p className="hero-demo__crumb">Atlas · Q4</p>
-                            <p className="hero-demo__title">Product roadmap</p>
+                            <p className={styles.crumb}>Atlas · Q4</p>
+                            <p className={styles.title}>Product roadmap</p>
                         </div>
-                        <div className="hero-demo__actions">
+                        <div className={`${styles.actions} ${popover.group}`}>
                             <button
                                 {...star.triggerProps}
-                                className="nk-icon-btn"
+                                className={kit.iconButton}
                                 type="button"
                                 aria-pressed={starred}
                                 onClick={() => setStarred(!starred)}
                             >
                                 <Icon name="star" size={17} />
                             </button>
-                            <button {...archive.triggerProps} className="nk-icon-btn" type="button">
+                            <button {...archive.triggerProps} className={kit.iconButton} type="button">
                                 <Icon name="archive" size={17} />
                             </button>
                             <button
                                 {...share.triggerProps}
-                                className="nk-btn nk-btn--primary"
+                                className={kit.button({ variant: 'primary' })}
                                 type="button"
                                 onClick={() => setClicks(clicks + 1)}
                             >
@@ -70,69 +73,73 @@ export function HeroDemo() {
                         </div>
                     </div>
 
-                    <ul className="hero-demo__rows" aria-hidden="true">
+                    <ul className={styles.rows} aria-hidden="true">
                         <li>
-                            <i style={{ '--w': '72%' } as CSSProperties} />
-                            <b>In progress</b>
+                            <i className={styles.bar} style={{ '--w': '72%' } as CSSProperties} />
+                            <b className={styles.status.pending}>In progress</b>
                         </li>
                         <li>
-                            <i style={{ '--w': '54%' } as CSSProperties} />
-                            <b className="is-done">Shipped</b>
+                            <i className={styles.bar} style={{ '--w': '54%' } as CSSProperties} />
+                            <b className={styles.status.done}>Shipped</b>
                         </li>
                         <li>
-                            <i style={{ '--w': '64%' } as CSSProperties} />
-                            <b>Planned</b>
+                            <i className={styles.bar} style={{ '--w': '64%' } as CSSProperties} />
+                            <b className={styles.status.pending}>Planned</b>
                         </li>
                         <li>
-                            <i style={{ '--w': '40%' } as CSSProperties} />
-                            <b>Planned</b>
+                            <i className={styles.bar} style={{ '--w': '40%' } as CSSProperties} />
+                            <b className={styles.status.pending}>Planned</b>
                         </li>
                     </ul>
                 </div>
 
-                <div className="hero-demo__status" aria-live="polite">
-                    <span className="nk-state" data-open={share.open ? '' : undefined}>
+                <div className={styles.footer} aria-live="polite">
+                    <span className={kit.state} data-open={share.open ? '' : undefined}>
                         popover {share.open ? 'open' : 'closed'}
                     </span>
                     <span>your onClick ran {clicks}×</span>
-                    <span className="hero-demo__last">{last}</span>
+                    <span className={styles.last}>{last}</span>
                 </div>
 
                 {unsupported ? (
-                    <div className="hero-demo__unsupported" role="status">
+                    <div className={styles.unsupported} role="status">
                         {unsupported}
                     </div>
                 ) : null}
             </div>
 
-            <div {...star.contentProps} className="nk-tooltip nk-animated">
+            <div {...star.contentProps} className={`${popover.tooltip} ${popover.animated}`}>
                 {starred ? 'Unstar project' : 'Star project'}
             </div>
-            <div {...archive.contentProps} className="nk-tooltip nk-animated">
+            <div {...archive.contentProps} className={`${popover.tooltip} ${popover.animated}`}>
                 Archive project
             </div>
 
-            <div {...share.contentProps} className="nk-panel nk-animated hero-demo__panel">
-                <h3 {...share.titleProps} className="nk-panel__title">
+            <div {...share.contentProps} className={styles.sharePanel}>
+                <h3 {...share.titleProps} className={popover.title}>
                     Share “Product roadmap”
                 </h3>
-                <ul className="hero-demo__people">
+                <ul className={styles.people}>
                     {people.map((person) => (
                         <li key={person.initials}>
                             <span
-                                className="hero-demo__avatar"
+                                className={styles.avatar}
                                 style={{ '--hue': person.hue } as CSSProperties}
                                 aria-hidden="true"
                             >
                                 {person.initials}
                             </span>
-                            <span className="hero-demo__name">{person.name}</span>
-                            <span className="hero-demo__role">{person.role}</span>
+                            <span className={styles.name}>{person.name}</span>
+                            <span className={styles.role}>{person.role}</span>
                         </li>
                     ))}
                 </ul>
-                <div className="nk-panel__actions">
-                    <button className="nk-btn nk-btn--secondary nk-btn--small" type="button" onClick={copy}>
+                <div className={popover.actions}>
+                    <button
+                        className={kit.button({ variant: 'secondary', size: 'small' })}
+                        type="button"
+                        onClick={copy}
+                    >
                         <Icon name="link" size={14} />
                         {copyLabel}
                     </button>

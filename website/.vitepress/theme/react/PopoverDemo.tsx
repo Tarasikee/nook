@@ -1,6 +1,9 @@
 import { usePopover } from '@nook/react'
 import { useId, useState } from 'react'
-import { Demo, Icon, useUnsupported } from './shared'
+import { Demo } from './Demo'
+import * as kit from './kit.css'
+import * as popover from './popover.css'
+import { Icon, useUnsupported } from './shared'
 
 export function PopoverDemo() {
     const linkId = useId()
@@ -32,7 +35,7 @@ export function PopoverDemo() {
         >
             <button
                 {...share.triggerProps}
-                className="nk-btn nk-btn--primary"
+                className={kit.button({ variant: 'primary' })}
                 type="button"
                 onClick={() => setClicks(clicks + 1)}
             >
@@ -40,36 +43,37 @@ export function PopoverDemo() {
                 Share
             </button>
 
-            <ul className="nk-log" aria-label="Event log">
+            <ul className={kit.log} aria-label="Event log">
                 <li>your onClick ran {clicks}×</li>
                 {events.map((event, index) => (
-                    <li
-                        key={`${events.length - index}`}
-                        className={event.includes('true') ? 'nk-log__open' : undefined}
-                    >
+                    <li key={`${events.length - index}`} className={event.includes('true') ? kit.logOpen : undefined}>
                         {event}
                     </li>
                 ))}
-                {events.length === 0 ? <li className="nk-log__empty">waiting for a toggle…</li> : null}
+                {events.length === 0 ? <li className={kit.logEmpty}>waiting for a toggle…</li> : null}
             </ul>
 
-            <div {...share.contentProps} className="nk-panel nk-animated">
-                <span className="nk-panel__eyebrow">Atlas project</span>
-                <h3 {...share.titleProps} className="nk-panel__title">
+            <div {...share.contentProps} className={`${popover.panel} ${popover.animated}`}>
+                <span className={popover.eyebrow}>Atlas project</span>
+                <h3 {...share.titleProps} className={popover.title}>
                     Invite collaborators
                 </h3>
-                <p className="nk-panel__text">Anyone with this link can view the project.</p>
-                <div className="nk-field">
-                    <label className="nk-sr-only" htmlFor={linkId}>
+                <p className={popover.text}>Anyone with this link can view the project.</p>
+                <div className={kit.field}>
+                    <label className={kit.srOnly} htmlFor={linkId}>
                         Project link
                     </label>
                     <input id={linkId} readOnly value="nook.dev/p/atlas" />
-                    <button className="nk-btn nk-btn--primary nk-btn--small" type="button" onClick={copy}>
+                    <button className={kit.button({ variant: 'primary', size: 'small' })} type="button" onClick={copy}>
                         {copyLabel}
                     </button>
                 </div>
-                <div className="nk-panel__actions">
-                    <button {...share.closeProps} className="nk-btn nk-btn--ghost nk-btn--small" type="button">
+                <div className={popover.actions}>
+                    <button
+                        {...share.closeProps}
+                        className={kit.button({ variant: 'ghost', size: 'small' })}
+                        type="button"
+                    >
                         Done
                     </button>
                 </div>

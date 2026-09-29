@@ -1,59 +1,60 @@
 import { readFile } from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
 import { codeToHtml } from 'shiki'
 import type { Plugin } from 'vite'
 
 const prefix = '\0nook-source:'
 
-type Request = { file: string; region?: string }
+// The virtual id must not end in `.css`, `.ts`, or `.tsx`: in dev, Vite would treat it as a
+// stylesheet (appending `?import` and running its CSS pipeline) or as TypeScript. Encoding the
+// path and ending the id in `.js` keeps it a plain module in both dev and build.
+const encode = (file: string) => `${prefix}${Buffer.from(file).toString('base64url')}.js`
+const decode = (id: string) => Buffer.from(id.slice(prefix.length, -'.js'.length), 'base64url').toString('utf8')
 
-// The virtual id must not end in `.css` or `.tsx`: in dev, Vite would treat it as a stylesheet
-// (appending `?import` and running its CSS pipeline) or as TSX. Encoding the request and ending
-// the id in `.js` keeps it a plain module in both dev and build.
-const encode = (request: Request) => `${prefix}${Buffer.from(JSON.stringify(request)).toString('base64url')}.js`
-const decode = (id: string): Request =>
-    JSON.parse(Buffer.from(id.slice(prefix.length, -'.js'.length), 'base64url').toString('utf8'))
+const languages: [suffix: string, lang: string][] = [
+    ['.css', 'css'],
+    ['.tsx', 'tsx'],
+    ['.ts', 'ts']
+]
 
 /**
- * `import html from './File.tsx?source'` returns that file's source highlighted with Shiki at build
- * time, using the same themes and markup as VitePress code blocks. `?source=name` on a CSS file
- * returns only the `#region name` … `#endregion name` part.
+ * `import source from './File.tsx?source'` returns `{ lang, html }`: that file's source highlighted
+ * with Shiki at build time, using the same themes and markup as VitePress code blocks. The path
+ * resolves like any import, so aliases such as `@nook/ui/button.css?source` work.
  */
 export function sourcePlugin(): Plugin {
     return {
         name: 'nook-source',
         enforce: 'pre',
-        resolveId(id, importer) {
-            const match = /^(.*)\?source(?:=([\w-]+))?$/.exec(id)
+        async resolveId(id, importer) {
+            const match = /^(.*)\?source$/.exec(id)
             if (!match || !importer) {
                 return null
             }
-            return encode({ file: resolve(dirname(importer), match[1]), region: match[2] })
+            const resolved = await this.resolve(match[1], importer, { skipSelf: true })
+            if (!resolved) {
+                throw new Error(`Cannot resolve ${match[1]} from ${importer}`)
+            }
+            return encode(resolved.id)
         },
         async load(id) {
             if (!id.startsWith(prefix)) {
                 return null
             }
-            const { file, region } = decode(id)
+            const file = decode(id)
+            const lang = languages.find(([suffix]) => file.endsWith(suffix))?.[1]
+            if (!lang) {
+                throw new Error(`No highlighting language for ${file}`)
+            }
             this.addWatchFile(file)
             const source = await readFile(file, 'utf8')
-            const code = region ? extractRegion(source, region, file) : source
-            const html = await codeToHtml(code.trim(), {
-                lang: file.endsWith('.css') ? 'css' : 'tsx',
+            const html = await codeToHtml(source.trim(), {
+                lang,
                 themes: { light: 'github-light', dark: 'github-dark' },
                 defaultColor: false
             })
             // VitePress styles `.vp-code` blocks; drop Shiki's inline background.
-            return `export default ${JSON.stringify(html.replace(/^<pre class="([^"]*)" style="[^"]*"/, '<pre class="$1 vp-code"'))}`
+            const code = html.replace(/^<pre class="([^"]*)" style="[^"]*"/, '<pre class="$1 vp-code"')
+            return `export default ${JSON.stringify({ lang, html: code })}`
         }
     }
-}
-
-function extractRegion(source: string, region: string, file: string) {
-    const start = source.indexOf(`/* #region ${region}`)
-    const end = source.indexOf(`/* #endregion ${region} */`, start)
-    if (start < 0 || end < 0) {
-        throw new Error(`Region "${region}" not found in ${file}`)
-    }
-    return source.slice(source.indexOf('\n', start) + 1, end)
 }

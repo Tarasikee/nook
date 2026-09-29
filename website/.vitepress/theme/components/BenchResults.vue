@@ -90,19 +90,21 @@ const date = new Date(results.date).toISOString().slice(0, 10)
 </template>
 
 <style scoped>
+.nk-bench {
+    & h3 {
+        margin-top: 1.75rem;
+    }
+
+    & td {
+        font-family: var(--vp-font-family-mono);
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+}
+
 .nk-bench__meta {
     color: var(--vp-c-text-2);
     font-size: 0.88rem;
-}
-
-.nk-bench h3 {
-    margin-top: 1.75rem;
-}
-
-.nk-bench td {
-    font-family: var(--vp-font-family-mono);
-    font-size: 0.82rem;
-    white-space: nowrap;
 }
 
 .nk-bench__best {
