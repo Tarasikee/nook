@@ -1,0 +1,17 @@
+{
+    "name": "@nook/ui",
+    "version": "0.0.0",
+    "license": "MIT",
+    "private": true,
+    "description": "Nook's design language as plain CSS: tokens, button, tooltip, and popover styles for any framework.",
+    "type": "module",
+    "sideEffects": [
+        "*.css"
+    ],
+    "files": [
+        "nook.css"
+    ],
+    "exports": {
+        "./nook.css": "./nook.css"
+    }
+}

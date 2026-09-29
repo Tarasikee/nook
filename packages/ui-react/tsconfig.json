@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig.base.json",
+    "extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "noEmit": true,
         "jsx": "react-jsx",
@@ -11,11 +11,5 @@
             "@nook/ui-react": ["packages/ui-react/src/index.ts"]
         }
     },
-    "include": [
-        ".vitepress/**/*.ts",
-        ".vitepress/**/*.tsx",
-        ".vitepress/**/*.vue",
-        "tests/**/*.ts",
-        "playwright.config.ts"
-    ]
+    "include": ["src", "tests", "playwright.config.ts"]
 }

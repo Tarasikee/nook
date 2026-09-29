@@ -23,6 +23,7 @@ Nook is not a positioning engine, a component library, or a polyfill.
 | Check roles, labels, and what is verified      | [Accessibility](./accessibility)     |
 | Know which browsers work                       | [Browser support](./browser-support) |
 | Compare with Radix and Floating UI             | [Performance](./performance)         |
+| Use ready-made, styled components              | [Nook UI](../ui/)                    |
 | Look up an option or return value              | [API reference](../api/)             |
 | Copy a working pattern                         | [Examples](../examples/)             |
 

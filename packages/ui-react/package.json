@@ -1,9 +1,9 @@
 {
-    "name": "@nook/react",
+    "name": "@nook/ui-react",
     "version": "0.0.0",
     "license": "MIT",
     "private": true,
-    "description": "React hooks for Nook's native browser primitives.",
+    "description": "Opinionated React components in Nook's design language, built on @nook/react and @nook/ui.",
     "type": "module",
     "sideEffects": false,
     "files": [
@@ -18,7 +18,7 @@
         }
     },
     "scripts": {
-        "build": "babel src --out-dir dist --extensions .ts --delete-dir-on-start && tsc -p tsconfig.build.json",
+        "build": "babel src --out-dir dist --extensions .ts,.tsx --delete-dir-on-start && tsc -p tsconfig.build.json",
         "typecheck": "tsc --noEmit",
         "test": "playwright test"
     },
@@ -26,11 +26,13 @@
         "react": "^19.2.0"
     },
     "dependencies": {
-        "@nook/core": "workspace:*"
+        "@nook/react": "workspace:*",
+        "@nook/ui": "workspace:*"
     },
     "devDependencies": {
         "@babel/cli": "^7.28.0",
         "@babel/core": "^7.28.0",
+        "@babel/preset-react": "^7.27.0",
         "@babel/preset-typescript": "^7.27.0",
         "@playwright/test": "1.58.2",
         "@types/node": "^22.20.4",

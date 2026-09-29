@@ -13,6 +13,10 @@ const pages = [
     '/guide/browser-support',
     '/guide/performance',
     '/api/',
+    '/ui/',
+    '/ui/button',
+    '/ui/tooltip',
+    '/ui/popover',
     '/examples/'
 ]
 
@@ -194,7 +198,7 @@ test('client-side navigation cleans up demos', async ({ page }) => {
     await page.getByRole('button', { name: 'Share', exact: true }).click()
 
     await page.keyboard.press('Escape')
-    await page.locator('.VPSidebar').getByRole('link', { name: 'Tooltip', exact: true }).click()
+    await page.locator('.VPSidebar a[href="/guide/tooltip"]').click()
     await expect(page).toHaveURL(/\/guide\/tooltip$/)
     await expect(page.getByRole('heading', { name: 'Invite collaborators' })).toHaveCount(0)
     expect(errors).toEqual([])

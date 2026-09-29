@@ -156,3 +156,71 @@ test.describe('tooltip groups', () => {
         expect(again).toBeGreaterThan(450)
     })
 })
+
+test.describe('dialog', () => {
+    const dialogPage = `
+        <main style="padding: 40px">
+            <button id="open" commandfor="dialog" command="show-modal">Open</button>
+            <button id="outside">Outside</button>
+            <dialog id="dialog" aria-labelledby="dialog-title" style="width: 300px; padding: 20px">
+                <h2 id="dialog-title">Title</h2>
+                <button id="inside">Inside</button>
+                <button id="close" commandfor="dialog" command="close">Close</button>
+            </dialog>
+            <button id="open-any" commandfor="dismissible" command="show-modal">Open dismissible</button>
+            <dialog id="dismissible" closedby="any" style="width: 300px; padding: 20px">Dismissible</dialog>
+        </main>
+    `
+    const state = (page: import('@playwright/test').Page, id: string) =>
+        page.evaluate((selector) => {
+            const dialog = document.getElementById(selector) as HTMLDialogElement
+            return { open: dialog.open, modal: dialog.matches(':modal'), focus: document.activeElement?.id }
+        }, id)
+
+    test('command="show-modal" opens a modal dialog without script, and Escape returns focus', async ({ page }) => {
+        await page.setContent(dialogPage)
+        await page.click('#open')
+        expect(await state(page, 'dialog')).toMatchObject({ open: true, modal: true, focus: 'inside' })
+
+        await page.keyboard.press('Escape')
+        expect(await state(page, 'dialog')).toMatchObject({ open: false, focus: 'open' })
+    })
+
+    test('command="close" closes it and the page behind is inert while open', async ({ page }) => {
+        await page.setContent(dialogPage)
+        await page.click('#open')
+        expect(await page.locator('#outside').evaluate((button) => button.matches(':focus'))).toBe(false)
+        await page.locator('#outside').click({ force: true, timeout: 1000 }).catch(() => {})
+        expect(await state(page, 'dialog')).toMatchObject({ open: true })
+
+        await page.click('#close')
+        expect(await state(page, 'dialog')).toMatchObject({ open: false, focus: 'open' })
+    })
+
+    test('closedby="any" closes on a backdrop click; the default does not', async ({ page }) => {
+        await page.setContent(dialogPage)
+        await page.click('#open')
+        await page.mouse.click(5, 5)
+        expect(await state(page, 'dialog')).toMatchObject({ open: true })
+        await page.keyboard.press('Escape')
+
+        await page.click('#open-any')
+        await page.mouse.click(5, 5)
+        expect(await state(page, 'dismissible')).toMatchObject({ open: false })
+    })
+
+    test('the open attribute reflects state for a MutationObserver', async ({ page }) => {
+        await page.setContent(dialogPage)
+        await page.evaluate(() => {
+            const dialog = document.getElementById('dialog')!
+            ;(window as unknown as { seen: string[] }).seen = []
+            new MutationObserver(() =>
+                (window as unknown as { seen: string[] }).seen.push(String((dialog as HTMLDialogElement).open))
+            ).observe(dialog, { attributeFilter: ['open'] })
+        })
+        await page.click('#open')
+        await page.keyboard.press('Escape')
+        await expect.poll(() => page.evaluate(() => (window as unknown as { seen: string[] }).seen)).toEqual(['true', 'false'])
+    })
+})
+

@@ -32,6 +32,15 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         ]
     },
     {
+        text: 'Nook UI',
+        items: [
+            { text: 'Overview', link: '/ui/' },
+            { text: 'Button', link: '/ui/button' },
+            { text: 'Tooltip', link: '/ui/tooltip' },
+            { text: 'Popover', link: '/ui/popover' }
+        ]
+    },
+    {
         text: 'Reference',
         items: [
             { text: 'API', link: '/api/' },
@@ -68,6 +77,7 @@ export default defineConfig({
         logo: { src: '/logo.svg', width: 24, height: 24 },
         nav: [
             { text: 'Guide', link: '/guide/', activeMatch: '^/guide/' },
+            { text: 'Nook UI', link: '/ui/', activeMatch: '^/ui/' },
             { text: 'API', link: '/api/', activeMatch: '^/api/' },
             { text: 'Examples', link: '/examples/', activeMatch: '^/examples/' },
             {
@@ -82,7 +92,8 @@ export default defineConfig({
         sidebar: {
             '/guide/': sidebar,
             '/api/': sidebar,
-            '/examples/': sidebar
+            '/examples/': sidebar,
+            '/ui/': sidebar
         },
         outline: { level: [2, 3], label: 'On this page' },
         search: { provider: 'local' },
@@ -103,7 +114,9 @@ export default defineConfig({
         resolve: {
             alias: {
                 '@nook/core': fileURLToPath(new URL('../../packages/core/src/index.ts', import.meta.url)),
-                '@nook/react': fileURLToPath(new URL('../../packages/react/src/index.ts', import.meta.url))
+                '@nook/react': fileURLToPath(new URL('../../packages/react/src/index.ts', import.meta.url)),
+                '@nook/ui-react': fileURLToPath(new URL('../../packages/ui-react/src/index.ts', import.meta.url)),
+                '@nook/ui': fileURLToPath(new URL('../../packages/ui', import.meta.url))
             }
         }
     }

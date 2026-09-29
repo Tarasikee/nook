@@ -4,6 +4,21 @@ declare module '*?source' {
     export default html
 }
 
+declare module '*?source=button' {
+    const html: string
+    export default html
+}
+
+declare module '*?source=tooltip' {
+    const html: string
+    export default html
+}
+
+declare module '*?source=popover' {
+    const html: string
+    export default html
+}
+
 declare module '*?source=behavior' {
     const html: string
     export default html

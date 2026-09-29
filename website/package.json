@@ -15,6 +15,8 @@
     "dependencies": {
         "@nook/core": "workspace:*",
         "@nook/react": "workspace:*",
+        "@nook/ui": "workspace:*",
+        "@nook/ui-react": "workspace:*",
         "react": "^19.3.0",
         "react-dom": "^19.3.0"
     },
