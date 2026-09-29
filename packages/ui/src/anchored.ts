@@ -4,7 +4,6 @@ import { vars } from './tokens.css'
 
 type Side = 'top' | 'bottom' | 'left' | 'right'
 
-// Where each side puts the surface, and the margin that faces the trigger.
 const sides = {
     top: { area: 'block-start', offset: 'marginBlockEnd' },
     bottom: { area: 'block-end', offset: 'marginBlockStart' },
@@ -14,13 +13,6 @@ const sides = {
 
 const closed = { opacity: 0, scale: '0.95' }
 
-/**
- * Placement next to the trigger, and open/close motion, for tooltip and popover surfaces.
- *
- * The trigger is the implicit anchor (popovertarget / interestfor), so position-area is enough.
- * `data-side` (top | bottom | left | right) and `data-align` (start | center | end) override the
- * defaults. Browsers without anchor positioning keep the default centered popover.
- */
 export function anchored(defaults: { side: 'top' | 'bottom'; align: 'start' | 'center' }): StyleRule {
     const facing = (side: Side) => ({
         vars: { '--nook-side': sides[side].area },
@@ -43,7 +35,6 @@ export function anchored(defaults: { side: 'top' | 'bottom'; align: 'start' | 'c
         },
         '@supports': {
             '(position-area: block-end)': {
-                // What start and end mean along the edge that faces the trigger.
                 vars: {
                     '--nook-start': 'span-inline-end',
                     '--nook-end': 'span-inline-start',

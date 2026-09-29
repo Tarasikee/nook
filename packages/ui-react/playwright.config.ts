@@ -1,6 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
 
-/** Component tests run against the React Compiler output in `dist` and against uncompiled `src`. */
 export default defineConfig({
     testDir: './tests',
     fullyParallel: true,

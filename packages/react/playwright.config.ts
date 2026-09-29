@@ -1,10 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
 
-/**
- * React tests run twice: against the React Compiler output in `dist` and
- * against uncompiled `src`, as React recommends for compiled libraries.
- * Platform tests only need one run.
- */
 export default defineConfig({
     testDir: './tests',
     fullyParallel: true,

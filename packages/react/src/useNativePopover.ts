@@ -3,15 +3,6 @@ import { useEffect, useEffectEvent, useState, useSyncExternalStore } from 'react
 
 const getServerSnapshot = () => false
 
-/**
- * Subscribes to a popover's native open state.
- *
- * The browser is the source of truth, so there is no React state to keep in
- * sync: `useSyncExternalStore` reads `:popover-open` through the store, and no
- * effect ever sets state. `onOpenChange` is delivered from the native `toggle`
- * listener through an Effect Event, so it always sees the latest callback
- * without re-subscribing.
- */
 export function useNativePopover(onOpenChange: ((open: boolean) => void) | undefined): {
     store: PopoverStore
     open: boolean

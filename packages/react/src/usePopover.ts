@@ -5,15 +5,10 @@ import { useEffect, useEffectEvent, useId } from 'react'
 import { useNativePopover } from './useNativePopover.js'
 
 export type UsePopoverOptions = {
-    /** Native popover mode. `'auto'` light-dismisses; `'manual'` closes only through the trigger, a close button, or code. */
     mode?: 'auto' | 'manual'
-    /** Controlled open state. The browser can still close an `'auto'` popover; see `onOpenChange`. */
     open?: boolean
-    /** Opens the popover once after it mounts. Ignored when `open` is provided. */
     defaultOpen?: boolean
-    /** Called after every native state change, including Escape and light dismiss. */
     onOpenChange?: (open: boolean) => void
-    /** Overrides the generated id of the content element. */
     id?: string
 }
 
@@ -39,28 +34,16 @@ export type PopoverCloseProps = {
 }
 
 export type UsePopoverResult = {
-    /** The browser's actual open state. */
     open: boolean
     show(): void
     hide(): void
     toggle(): void
-    /** Spread onto a `<button>`. Contains attributes only: no event handlers or refs. */
     triggerProps: PopoverTriggerProps
-    /** Spread onto the popover surface. */
     contentProps: PopoverContentProps
-    /** Spread onto the element that names the popover, usually a heading. */
     titleProps: PopoverTitleProps
-    /** Spread onto a `<button>` inside the popover that closes it without JavaScript. */
     closeProps: PopoverCloseProps
 }
 
-/**
- * A click-triggered popover built on the native `popovertarget` relationship.
- *
- * The trigger, close button, Escape, and light dismiss work from server-rendered
- * HTML before hydration. After hydration the hook reads native state; it holds
- * no React state of its own.
- */
 export function usePopover({
     mode = 'auto',
     open: controlledOpen,
@@ -74,7 +57,6 @@ export function usePopover({
 
     const { store, open } = useNativePopover(onOpenChange)
 
-    // Synchronizes an external system (the browser) with a prop; sets no React state.
     useEffect(() => {
         store.control(controlledOpen)
     }, [store, controlledOpen])

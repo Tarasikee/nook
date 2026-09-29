@@ -4,7 +4,6 @@ import { vars } from './tokens.css'
 
 const closed = { opacity: 0, scale: '0.95' }
 
-/** A modal `<dialog>` opened by `command="show-modal"`. */
 export const dialog = style(
     {
         boxSizing: 'border-box',

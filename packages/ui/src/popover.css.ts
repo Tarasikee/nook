@@ -3,15 +3,6 @@ import { anchored } from './anchored'
 import { space, text, trackingTight, weight } from './scale'
 import { vars } from './tokens.css'
 
-/*
- * <button popovertarget="share">Share</button>
- * <div id="share" class="nook-popover" popover aria-labelledby="share-title">
- *     <h2 id="share-title" class="nook-popover__title">Invite collaborators</h2>
- *     <div class="nook-popover__actions">…</div>
- * </div>
- */
-
-/** Below and start-aligned unless `data-side` and `data-align` say otherwise. */
 export const popover = style(
     [
         {

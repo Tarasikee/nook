@@ -6,7 +6,6 @@ const transition = ['color', 'background-color', 'border-color', 'box-shadow']
     .map((property) => `${property} ${vars.duration} ${ease}`)
     .join(', ')
 
-/** `<button class="nook-button" data-variant="primary | secondary | ghost" data-size="small" data-icon>` */
 export const button = style(
     {
         boxSizing: 'border-box',

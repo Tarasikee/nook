@@ -1,7 +1,6 @@
 import { createGlobalTheme, createGlobalThemeContract, globalStyle } from '@vanilla-extract/css'
 import { duration, fontSans, radius, shadowLg, space } from './scale'
 
-/** Theme with these custom properties; add `.dark` or `data-theme="dark"` on an ancestor for dark mode. */
 export const vars = createGlobalThemeContract({
     font: 'nook-font',
     radius: 'nook-radius',
@@ -30,7 +29,6 @@ export const vars = createGlobalThemeContract({
     }
 })
 
-// Tailwind defaults (see scale.ts); colors are Tailwind's emerald, sky, and slate.
 createGlobalTheme(':root', vars, {
     font: fontSans,
     radius: radius.md,
@@ -38,39 +36,38 @@ createGlobalTheme(':root', vars, {
     offset: space(2),
     duration,
 
-    accent: '#047857', // emerald-700
-    accentStrong: '#065f46', // emerald-800
+    accent: '#047857',
+    accentStrong: '#065f46',
     accentText: '#fff',
-    secondary: '#0369a1', // sky-700
-    secondarySoft: 'rgb(56 189 248 / 0.14)', // sky-400
-    focus: '#38bdf8', // sky-400
+    secondary: '#0369a1',
+    secondarySoft: 'rgb(56 189 248 / 0.14)',
+    focus: '#38bdf8',
 
-    text: '#0f172a', // slate-900
-    textMuted: '#475569', // slate-600
+    text: '#0f172a',
+    textMuted: '#475569',
     surface: '#fff',
-    border: '#e2e8f0', // slate-200
+    border: '#e2e8f0',
     shadow: shadowLg,
 
     tooltip: {
-        surface: '#0f172a', // slate-900
+        surface: '#0f172a',
         text: '#fff',
         delay: '300ms',
         hideDelay: '100ms'
     }
 })
 
-// Only what changes in dark mode.
 globalStyle(".dark, [data-theme='dark']", {
     vars: {
-        [vars.secondary]: '#7dd3fc', // sky-300
+        [vars.secondary]: '#7dd3fc',
         [vars.secondarySoft]: 'rgb(56 189 248 / 0.16)',
 
-        [vars.text]: '#f8fafc', // slate-50
-        [vars.textMuted]: '#94a3b8', // slate-400
-        [vars.surface]: '#0f172a', // slate-900
-        [vars.border]: '#334155', // slate-700
+        [vars.text]: '#f8fafc',
+        [vars.textMuted]: '#94a3b8',
+        [vars.surface]: '#0f172a',
+        [vars.border]: '#334155',
 
-        [vars.tooltip.surface]: '#f1f5f9', // slate-100
+        [vars.tooltip.surface]: '#f1f5f9',
         [vars.tooltip.text]: '#0f172a'
     }
 })
