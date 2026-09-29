@@ -29,6 +29,7 @@ export default defineConfig({
         {
             command: 'pnpm exec vitepress dev --port 5174 --strictPort',
             url: 'http://localhost:5174',
+            env: { NOOK_CACHE_DIR: '.vitepress/cache/playwright' },
             reuseExistingServer: !process.env.CI,
             timeout: 60_000
         }

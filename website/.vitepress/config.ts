@@ -63,6 +63,9 @@ export default defineConfig({
     lang: 'en-US',
     cleanUrls: true,
     srcExclude: ['tests/**'],
+    // Playwright's dev server passes its own, so a test run never rewrites the dependency cache
+    // under a running `pnpm dev` (that serves two copies of Vue and breaks every demo).
+    cacheDir: process.env.NOOK_CACHE_DIR,
     head: [
         ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
         ['meta', { name: 'theme-color', content: '#047857' }],
