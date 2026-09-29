@@ -1,4 +1,5 @@
 import type { StyleRule } from '@vanilla-extract/css'
+import { ease } from './scale'
 import { vars } from './tokens.css'
 
 type Side = 'top' | 'bottom' | 'left' | 'right'
@@ -11,7 +12,7 @@ const sides = {
     right: { area: 'inline-end', offset: 'marginInlineStart' }
 } as const
 
-const closed = { opacity: 0, scale: '0.96' }
+const closed = { opacity: 0, scale: '0.95' }
 
 /**
  * Placement next to the trigger, and open/close motion, for tooltip and popover surfaces.
@@ -29,8 +30,8 @@ export function anchored(defaults: { side: 'top' | 'bottom'; align: 'start' | 'c
     return {
         ...closed,
         transition: [
-            `opacity ${vars.duration} ease-out`,
-            `scale ${vars.duration} ease-out`,
+            `opacity ${vars.duration} ${ease}`,
+            `scale ${vars.duration} ${ease}`,
             `display ${vars.duration} allow-discrete`,
             `overlay ${vars.duration} allow-discrete`
         ].join(', '),

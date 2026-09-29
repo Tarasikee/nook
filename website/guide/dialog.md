@@ -5,7 +5,7 @@ description: Modal dialogs with the native dialog element and command buttons, w
 
 # Dialog
 
-<p class="nk-lead">A modal dialog needs no hook. <code>&lt;dialog&gt;</code> with command buttons opens, closes, blocks the page behind, and returns focus, all in plain HTML. Nook does not wrap it.</p>
+<p class="nk-lead">A modal dialog needs no hook. Use native <code>&lt;dialog&gt;</code> and command buttons directly, or Nook's styled React <code>Dialog</code>. The browser handles focus, dismissal, and the inert background.</p>
 
 ## Markup
 
@@ -21,6 +21,26 @@ description: Modal dialogs with the native dialog element and command buttons, w
 ```
 
 Name the dialog with `aria-labelledby` on its heading, as `titleProps` does for a popover.
+
+## Styled React component
+
+Import `@nook/ui/nook.css` (or `@nook/ui/dialog.css` and `@nook/ui/button.css`), then use `Dialog` and `DialogClose` from `@nook/ui-react`:
+
+```tsx
+<Dialog
+  title="Delete project?"
+  content={
+    <>
+      <p>This removes the project for everyone.</p>
+      <DialogClose>Cancel</DialogClose>
+    </>
+  }
+>
+  <Button>Delete project</Button>
+</Dialog>
+```
+
+`children` is one button (or a button-forwarding component). `content` is the dialog body; `title` renders a heading and names the dialog. Without `title`, supply `aria-label` or `aria-labelledby` via `dialogProps`. Pass `closedby: 'any'` in `dialogProps` to enable backdrop dismissal; other native dialog props, such as `onClose` and `className`, also go there. The trigger and `DialogClose` work before hydration using native `commandfor`/`command` attributes. There is no controlled `open` prop: use `dialogProps.onClose` or observe the native `open` attribute when you need state.
 
 ## Behavior
 

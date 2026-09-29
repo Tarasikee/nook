@@ -7,10 +7,10 @@ description: Ready-made components in Nook's design language, built on the primi
 
 <p class="nk-lead">The primitives, with opinions: styled, accessible components you can drop in. The primitives stay available when you need full control.</p>
 
-| Package          | What it is                                                                                                                                                                                       |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `@nook/ui`       | Nook's design language as plain CSS: `nook.css` for everything, or `button.css`, `tooltip.css`, or `popover.css` alone. Works with plain HTML; the class names are also exported for TypeScript. |
-| `@nook/ui-react` | `Button`, `Tooltip`, `TooltipGroup`, `Popover`, and `PopoverClose`, built on `@nook/react` and `@nook/ui`.                                                                                       |
+| Package          | What it is                                                                                                                                                                                |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@nook/ui`       | Nook's design language as plain CSS: `nook.css` for everything, or component CSS (including `dialog.css`) alone. Works with plain HTML; the class names are also exported for TypeScript. |
+| `@nook/ui-react` | `Button`, `Tooltip`, `TooltipGroup`, `Popover`, `PopoverClose`, `Dialog`, and `DialogClose`, built on native elements, `@nook/react`, and `@nook/ui`.                                     |
 
 ## Setup
 
@@ -27,7 +27,7 @@ import { Button, Tooltip } from '@nook/ui-react'
 
 ## Principles
 
-- **Native first.** Buttons are `<button>`, popovers use `popovertarget`, tooltips use `interestfor`. Placement, delays, grouping, and motion are CSS; the components add no event handlers to your elements.
+- **Native first.** Buttons are `<button>`, popovers use `popovertarget`, tooltips use `interestfor`, and dialogs use native `commandfor`. Placement, delays, grouping, and motion are CSS; the components add no event handlers to your elements.
 - **Composes by wrapping.** `Tooltip` and `Popover` wrap one child and add only attributes to it, so they nest in either order on the same button.
 - **Accessible by default.** Tooltips describe or name their trigger before they open, popovers are named by their title, and focus rings, reduced motion, and forced colors are handled.
 
@@ -46,4 +46,4 @@ The CSS works on plain HTML:
 </div>
 ```
 
-Components: [Button](./button), [Tooltip](./tooltip), [Popover](./popover).
+Components: [Button](./button), [Tooltip](./tooltip), [Popover](./popover), [Dialog](../guide/dialog).

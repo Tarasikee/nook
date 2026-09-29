@@ -1,4 +1,4 @@
-import { Button, Popover, PopoverClose, Tooltip, TooltipGroup } from '@nook/ui-react'
+import { Button, Dialog, DialogClose, Popover, PopoverClose, Tooltip, TooltipGroup } from '@nook/ui-react'
 import { useState } from 'react'
 
 declare global {
@@ -57,7 +57,7 @@ function Tooltips() {
 function Groups() {
     return (
         <main>
-            <TooltipGroup>
+            <TooltipGroup role="toolbar" aria-label="Formatting" style={{ display: 'flex' }}>
                 {['Bold', 'Italic', 'Link'].map((label) => (
                     <Tooltip key={label} label={label} asLabel>
                         <Button icon>{label[0]}</Button>
@@ -140,13 +140,40 @@ function Controlled() {
     )
 }
 
+function Dialogs() {
+    return (
+        <main>
+            <Dialog
+                title="Delete project?"
+                dialogProps={{ onClose: () => record('dialog:close') }}
+                content={
+                    <>
+                        <p>This cannot be undone.</p>
+                        <DialogClose id="cancel">Cancel</DialogClose>
+                    </>
+                }
+            >
+                <Button id="open-dialog">Delete project</Button>
+            </Dialog>
+            <Dialog
+                content={<DialogClose>Done</DialogClose>}
+                dialogProps={{ 'aria-label': 'Dismissible', closedby: 'any', className: 'custom-dialog' }}
+            >
+                <Button id="open-dismissible">Open dismissible</Button>
+            </Dialog>
+            <Button id="outside">Outside</Button>
+        </main>
+    )
+}
+
 export const fixtures = {
     buttons: Buttons,
     tooltips: Tooltips,
     groups: Groups,
     popovers: Popovers,
     combinations: Combinations,
-    controlled: Controlled
+    controlled: Controlled,
+    dialogs: Dialogs
 }
 
 export type FixtureName = keyof typeof fixtures

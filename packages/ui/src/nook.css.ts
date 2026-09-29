@@ -3,9 +3,10 @@
  *
  *   <button class="nook-button" data-variant="primary">Save</button>
  *
- * Import `@nook/ui/nook.css` for everything, or `button.css`, `tooltip.css`, or `popover.css`
+ * Import `@nook/ui/nook.css` for everything, or `button.css`, `tooltip.css`, `popover.css`, or `dialog.css`
  * alone. Each file includes the tokens it needs. The class names are exported for TypeScript.
  */
 export { button } from './button.css'
+export { dialog, dialogTitle } from './dialog.css'
 export { popover, popoverActions, popoverTitle } from './popover.css'
 export { tooltip, tooltipGroup } from './tooltip.css'

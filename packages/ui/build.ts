@@ -6,7 +6,7 @@ import { vanillaExtractPlugin } from '@vanilla-extract/esbuild-plugin'
 import { build } from 'esbuild'
 import { nookIdentifier } from './identifiers.ts'
 
-const entries = ['nook', 'tokens', 'button', 'tooltip', 'popover']
+const entries = ['nook', 'tokens', 'button', 'tooltip', 'popover', 'dialog']
 
 const result = await build({
     entryPoints: Object.fromEntries(entries.map((name) => [name, `src/${name}.css.ts`])),

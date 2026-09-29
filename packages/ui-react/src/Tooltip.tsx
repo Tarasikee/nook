@@ -1,6 +1,6 @@
 import { useTooltip } from '@nook/react'
 import * as ui from '@nook/ui'
-import type { HTMLAttributes, ReactElement, ReactNode } from 'react'
+import type { HTMLAttributes, ReactElement, ReactNode, Ref } from 'react'
 import { classNames, withTriggerProps } from './merge.js'
 
 export type Side = 'top' | 'bottom' | 'left' | 'right'
@@ -45,10 +45,13 @@ export function Tooltip({
     )
 }
 
+export type TooltipGroupProps = HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> }
+
 /**
- * Once one tooltip inside shows, the next opens without the delay. Pure CSS (`:has(:interest-source)`);
- * renders a `display: contents` element, so it adds no layout. Don't give it a role.
+ * A `<div>` in which, once one tooltip shows, the next opens without the delay. Pure CSS
+ * (`:has(:interest-source)`) and unstyled, so make it the element that holds the triggers:
+ * `<TooltipGroup role="toolbar" aria-label="Formatting">`.
  */
-export function TooltipGroup({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+export function TooltipGroup({ className, ...props }: TooltipGroupProps) {
     return <div {...props} className={classNames(ui.tooltipGroup, className)} />
 }

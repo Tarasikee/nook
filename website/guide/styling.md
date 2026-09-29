@@ -5,7 +5,7 @@ description: Position and animate popovers and tooltips with CSS alone.
 
 # Styling
 
-<p class="nk-lead">Nook adds no styles and no positioning JavaScript. The trigger is the popover's implicit anchor, and modern CSS transitions across <code>display: none</code>, so placement and animation are a few lines of your own CSS.</p>
+<p class="nk-lead">Use CSS anchor positioning for placement and transitions for animation. The hooks add no styles.</p>
 
 ## Positioning
 

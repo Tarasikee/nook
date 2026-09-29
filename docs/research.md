@@ -87,6 +87,7 @@ Observed in Chromium 145 on 2026-09-29 (`packages/react/tests/platform.spec.ts`)
 - While open, the page behind could not be focused or clicked. `command="close"` closed it and returned focus to the invoker.
 - A backdrop click did not close a default dialog; with `closedby="any"` it did.
 - The `open` attribute tracked every open and close, including Escape, so a `MutationObserver` on it can mirror the state.
+- The `@nook/ui-react` Dialog's server-rendered `commandfor` buttons opened and closed a modal before hydration; its compiled and source builds also returned focus on close/Escape and honored `closedby="any"` after hydration (Chromium 145.0.7632.6, 2026-09-29; `packages/ui-react/tests/components.spec.ts`).
 
 ## Positioning, transitions, select, announcements
 

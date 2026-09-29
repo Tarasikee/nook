@@ -23,7 +23,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         items: [
             { text: 'Popover', link: '/guide/popover' },
             { text: 'Tooltip', link: '/guide/tooltip' },
-            { text: 'Dialog <span class="nk-soon">HTML only</span>', link: '/guide/dialog' },
+            { text: 'Dialog', link: '/guide/dialog' },
             { text: 'Menu <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' },
             { text: 'Select <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' }
         ]
@@ -43,7 +43,8 @@ const sidebar: DefaultTheme.SidebarItem[] = [
             { text: 'Overview', link: '/ui/' },
             { text: 'Button', link: '/ui/button' },
             { text: 'Tooltip', link: '/ui/tooltip' },
-            { text: 'Popover', link: '/ui/popover' }
+            { text: 'Popover', link: '/ui/popover' },
+            { text: 'Dialog', link: '/guide/dialog' }
         ]
     },
     {

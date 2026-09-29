@@ -18,16 +18,14 @@ export function TooltipDemo() {
             hint="Hover the toolbar: the first tooltip waits, the next one appears at once (TooltipGroup)."
             unsupported={unsupported}
         >
-            <TooltipGroup>
-                <div role="toolbar" aria-label="Formatting" style={{ display: 'flex', gap: 4 }}>
-                    {tools.map(({ icon, label }) => (
-                        <Tooltip key={label} label={label} asLabel>
-                            <Button icon variant="ghost">
-                                <Icon name={icon} />
-                            </Button>
-                        </Tooltip>
-                    ))}
-                </div>
+            <TooltipGroup role="toolbar" aria-label="Formatting" style={{ display: 'flex', gap: 4 }}>
+                {tools.map(({ icon, label }) => (
+                    <Tooltip key={label} label={label} asLabel>
+                        <Button icon variant="ghost">
+                            <Icon name={icon} />
+                        </Button>
+                    </Tooltip>
+                ))}
             </TooltipGroup>
             <Tooltip label="Visible to everyone in your workspace">
                 <Button variant="primary">Publish</Button>

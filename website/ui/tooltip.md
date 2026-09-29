@@ -10,7 +10,7 @@ description: Nook's styled tooltip and tooltip group.
 <ReactDemo name="ui-tooltip" :height="220" />
 
 ```tsx
-<TooltipGroup>
+<TooltipGroup role="toolbar" aria-label="Formatting">
   <Tooltip label="Bold" asLabel>
     <Button icon variant="ghost"><BoldIcon /></Button>
   </Tooltip>
@@ -25,7 +25,7 @@ description: Nook's styled tooltip and tooltip group.
 | `onOpenChange`  | Called when it shows or hides                                         |                 |
 | `children`      | One `<button>`, `<a>`, `Button`, or `Popover`                         | required        |
 
-**TooltipGroup:** once one tooltip inside it shows, the next opens without the delay. It is pure CSS and renders a `display: contents` element, so put roles such as `toolbar` on your own element inside it. How the grouping works is explained in the [Tooltip guide](../guide/tooltip#tooltip-groups).
+**TooltipGroup:** once one tooltip inside it shows, the next opens without the delay. It renders an unstyled `<div>` and passes every attribute through, so make it the element that holds the triggers: give it the `toolbar` role, a name, and your layout. In plain HTML, add the `nook-tooltip-group` class to that element. How the grouping works is explained in the [Tooltip guide](../guide/tooltip#tooltip-groups).
 
 - **Delays:** `--nook-tooltip-delay` (300ms) and `--nook-tooltip-hide-delay` (100ms).
 - **Accessibility:** the trigger is described (or named) by the label before the tooltip opens, and the tooltip has `role="tooltip"`. An existing `aria-describedby` on the child is kept.

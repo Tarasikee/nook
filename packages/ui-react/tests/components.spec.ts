@@ -16,6 +16,67 @@ test.describe('server rendering', () => {
         expect(html).toMatch(/class="nook-tooltip" data-side="top" data-align="center"/)
         expect(html).toMatch(/popover="auto"[^>]*class="nook-popover" data-side="bottom" data-align="start"/)
     })
+
+    test('Dialog connects native commands to a named dialog before hydration', async () => {
+        const html = await renderFixture('dialogs')
+        const id = html.match(/<dialog[^>]*id="([^"]+)"[^>]*aria-labelledby="([^"]+)"/)
+        expect(id).not.toBeNull()
+        expect(html).toContain(`commandfor="${id![1]}" command="show-modal"`)
+        expect(html).toContain(`commandfor="${id![1]}" command="close"`)
+        expect(html).toContain(`id="${id![2]}"`)
+        expect(html).toContain('closedby="any"')
+    })
+
+    test('Dialog opens and closes with only server HTML', async ({ page }) => {
+        await page.setContent(await renderFixture('dialogs'))
+        await page.locator('#open-dialog').click()
+        const dialog = page.getByRole('dialog', { name: 'Delete project?' })
+        await expect(dialog).toBeVisible()
+        expect(await dialog.evaluate((element) => element.matches(':modal'))).toBe(true)
+        await page.locator('#cancel').click()
+        await expect(dialog).toBeHidden()
+    })
+})
+
+test.describe('Dialog', () => {
+    test('opens modally, is named, closes declaratively, and returns focus', async ({ page }) => {
+        const messages = await mountFixture(page, 'dialogs')
+        const trigger = page.locator('#open-dialog')
+        const dialog = page.getByRole('dialog', { name: 'Delete project?' })
+
+        await trigger.click()
+        await expect(dialog).toBeVisible()
+        await expect(dialog).toHaveJSProperty('open', true)
+        await expect(dialog).toHaveCSS('border-radius', '8px')
+        expect(await dialog.evaluate((element) => getComputedStyle(element, '::backdrop').backgroundColor)).toBe(
+            'rgba(0, 0, 0, 0.5)'
+        )
+        expect(await dialog.evaluate((element) => element.matches(':modal'))).toBe(true)
+        await expect(page.locator('#cancel')).toBeFocused()
+        await page.locator('#outside').focus()
+        await expect(page.locator('#outside')).not.toBeFocused()
+        await page.locator('#cancel').click()
+        await expect(dialog).toBeHidden()
+        await expect(trigger).toBeFocused()
+        await expect.poll(() => events(page)).toContain('dialog:close')
+
+        await trigger.click()
+        await page.keyboard.press('Escape')
+        await expect(dialog).toBeHidden()
+        await expect(trigger).toBeFocused()
+        expect(messages).toEqual([])
+    })
+
+    test('passes closedby and className through for backdrop dismissal', async ({ page }) => {
+        const messages = await mountFixture(page, 'dialogs')
+        await page.locator('#open-dismissible').click()
+        const dialog = page.getByRole('dialog', { name: 'Dismissible' })
+        await expect(dialog).toBeVisible()
+        await expect(dialog).toHaveClass(/custom-dialog/)
+        await page.mouse.click(5, 5)
+        await expect(dialog).toBeHidden()
+        expect(messages).toEqual([])
+    })
 })
 
 test.describe('Button', () => {
@@ -55,11 +116,23 @@ test.describe('Tooltip', () => {
         const r = (await tooltip.boundingBox())!
         expect(Math.round(r.y + r.height)).toBe(Math.round(t.y - 8))
         expect(Math.abs(r.x + r.width / 2 - (t.x + t.width / 2))).toBeLessThan(1.5)
+        // Tailwind's text-xs.
+        await expect(tooltip).toHaveCSS('font-size', '12px')
+        await expect(tooltip).toHaveCSS('line-height', '16px')
         expect(await events(page)).toEqual(['tooltip:true'])
     })
 })
 
 test.describe('TooltipGroup', () => {
+    test('is the toolbar itself: role, name, and layout apply to it', async ({ page }) => {
+        const messages = await mountFixture(page, 'groups')
+        const toolbar = page.getByRole('toolbar', { name: 'Formatting' })
+        await expect(toolbar).toHaveClass(/nook-tooltip-group/)
+        await expect(toolbar).toHaveCSS('display', 'flex')
+        expect(await accessibilityNode(page, '.nook-tooltip-group')).toMatchObject({ name: 'Formatting' })
+        expect(messages).toEqual([])
+    })
+
     test('the next tooltip in a group opens without the delay', async ({ page }) => {
         await mountFixture(page, 'groups')
         expect(await tooltipDelay(page, 'button:has-text("B")', 'Bold')).toBeGreaterThan(200)

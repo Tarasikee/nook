@@ -15,7 +15,7 @@ export function classNames(...names: unknown[]): string {
  */
 export function withTriggerProps(child: ReactElement, injected: Props): ReactElement {
     if (!isValidElement(child)) {
-        throw new Error('Nook UI: Tooltip and Popover need a single element child as their trigger.')
+        throw new Error('Nook UI: Tooltip, Popover, and Dialog need a single element child as their trigger.')
     }
 
     const own = child.props as Props

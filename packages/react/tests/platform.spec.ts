@@ -190,7 +190,10 @@ test.describe('dialog', () => {
         await page.setContent(dialogPage)
         await page.click('#open')
         expect(await page.locator('#outside').evaluate((button) => button.matches(':focus'))).toBe(false)
-        await page.locator('#outside').click({ force: true, timeout: 1000 }).catch(() => {})
+        await page
+            .locator('#outside')
+            .click({ force: true, timeout: 1000 })
+            .catch(() => {})
         expect(await state(page, 'dialog')).toMatchObject({ open: true })
 
         await page.click('#close')
@@ -220,7 +223,8 @@ test.describe('dialog', () => {
         })
         await page.click('#open')
         await page.keyboard.press('Escape')
-        await expect.poll(() => page.evaluate(() => (window as unknown as { seen: string[] }).seen)).toEqual(['true', 'false'])
+        await expect
+            .poll(() => page.evaluate(() => (window as unknown as { seen: string[] }).seen))
+            .toEqual(['true', 'false'])
     })
 })
-

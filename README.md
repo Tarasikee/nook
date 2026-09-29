@@ -1,6 +1,6 @@
 # Nook
 
-Accessible, headless primitives built on native HTML. The browser does the behavior (`popovertarget`, `interestfor`, the top layer, CSS anchor positioning); Nook adds only what the platform leaves out. User documentation is the website in `website/`.
+Headless React hooks for native popovers and tooltips, plus optional styled components. See [the website](website/) for usage.
 
 Early implementation. All packages are private and their names are provisional.
 
@@ -26,7 +26,7 @@ pnpm bench     # performance comparison, several minutes
 pnpm clean     # remove build output and test artifacts
 ```
 
-Rules are enforced by tools rather than prose. Formatting is `.prettierrc.json`. Code rules are `eslint.config.js`: the Rules of React, no manual memoization, core never importing a framework, and no test IDs in demos. `packages/react/scripts/check-compiler.mjs` fails if an exported hook is not compiled.
+Formatting and lint rules are in `.prettierrc.json` and `eslint.config.js`; the compiler check is in `scripts/check-compiler.mjs`.
 
 ## Design decisions
 

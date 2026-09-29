@@ -5,11 +5,11 @@ description: What Nook is and where to find things.
 
 # Introduction
 
-<p class="nk-lead">Nook is a small set of headless React hooks for popovers and tooltips. The browser does the behavior; Nook adds what the platform leaves out.</p>
+<p class="nk-lead">Build popovers and tooltips with native HTML and headless React hooks.</p>
 
-Browsers already open, close, dismiss, layer, and anchor floating UI: `popovertarget` and `interestfor` connect a trigger to its content, light dismiss and <kbd>Esc</kbd> close it, the top layer renders it above everything, and CSS anchor positioning places it. Nook connects that native state to React, adds the accessibility relationships the platform lacks, and keeps popovers anchored when opened from code.
+`popovertarget` and `interestfor` link triggers to content. The browser handles opening, dismissal, and placement; Nook exposes the native state to React, adds ARIA relationships, and anchors popovers opened from code.
 
-Nook is not a positioning engine, a component library, or a polyfill.
+Use the hooks without styles, or use the optional [styled components](../ui/). Nook ships no polyfills.
 
 ## Where to look
 

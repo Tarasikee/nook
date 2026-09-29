@@ -16,7 +16,6 @@ export function useNativePopover(onOpenChange: ((open: boolean) => void) | undef
     store: PopoverStore
     open: boolean
 } {
-    // Lazy initializer: one store per hook instance, created once, no memoization needed.
     const [store] = useState(createPopoverStore)
     const open = useSyncExternalStore(store.subscribe, store.getSnapshot, getServerSnapshot)
 

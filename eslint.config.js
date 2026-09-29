@@ -66,7 +66,7 @@ export default tseslint.config(
             'no-restricted-syntax': [
                 'error',
                 {
-                    selector: 'JSXAttribute[name.name=\'data-testid\']',
+                    selector: "JSXAttribute[name.name='data-testid']",
                     message: 'Locate demo elements by role and accessible name.'
                 }
             ]
