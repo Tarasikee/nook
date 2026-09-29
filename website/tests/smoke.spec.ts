@@ -10,6 +10,7 @@ const pages = [
     '/guide/styling',
     '/guide/accessibility',
     '/guide/browser-support',
+    '/guide/performance',
     '/api/',
     '/api/use-popover',
     '/api/use-tooltip',
@@ -78,6 +79,31 @@ test('tooltip opens on keyboard focus and closes on blur', async ({ page }) => {
 
     await trigger.blur()
     await expect(tooltip).toBeHidden()
+})
+
+test('toolbar tooltips switch without the delay once one is showing', async ({ page }) => {
+    await page.goto('/guide/tooltip')
+
+    // Milliseconds from hover until the named tooltip opens, on the page clock.
+    const openDelay = async (name: string) => {
+        const tooltip = page.getByRole('tooltip', { includeHidden: true }).filter({ hasText: new RegExp(`^${name}$`) })
+        await tooltip.evaluate((element) => {
+            element.addEventListener(
+                'toggle',
+                (event) => {
+                    if ((event as ToggleEvent).newState === 'open') element.dataset.openedAt = String(performance.now())
+                },
+                { once: true }
+            )
+        })
+        const start = await page.evaluate(() => performance.now())
+        await page.getByRole('button', { name }).hover()
+        await expect(tooltip).toHaveAttribute('data-opened-at', /\d/)
+        return Number(await tooltip.getAttribute('data-opened-at')) - start
+    }
+
+    expect(await openDelay('Bold')).toBeGreaterThan(200) // interest-delay: 300ms
+    expect(await openDelay('Italic')).toBeLessThan(150)
 })
 
 test('controlled manual popover ignores Escape and closes from state', async ({ page }) => {

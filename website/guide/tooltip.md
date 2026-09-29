@@ -32,6 +32,18 @@ const tooltip = useTooltip() // role: 'description'
 
 Position `.tooltip` with the [positioning recipe](./styling#positioning), using `position-area: block-start`.
 
+## Tooltip groups
+
+In a toolbar, the first tooltip should wait, but moving to the next button should show its tooltip at once. That is CSS: while any trigger in the group has interest, drop the start delay for the others.
+
+```css
+.toolbar:has(:interest-source) [interestfor] {
+  interest-delay-start: 0s;
+}
+```
+
+The toolbar in the demo above uses this rule. The quick-switch window is the hide delay (`100ms` above). If the pointer takes longer than that to reach the next button, the group cools down and the full delay applies again. Opening the next hint closes the previous one, because `hint` popovers close unrelated hints. Use a wider scope, such as `:root:has(:interest-source)`, to group every tooltip on the page. Verified in Chromium 145 by timed tests.
+
 ## What the browser does, and what Nook adds
 
 The browser decides when the user shows interest, shows the `popover="hint"` target, hides it when interest ends or on <kbd>Esc</kbd>, and anchors it to the trigger. Nook installs no listeners or timers.

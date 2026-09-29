@@ -33,4 +33,4 @@ website/playwright-report
 # Tests
 test-results
 playwright-report
-
+bench/results

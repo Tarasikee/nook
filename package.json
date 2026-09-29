@@ -11,9 +11,10 @@
         "preview": "pnpm --filter @nook/website preview",
         "check": "prettier --check . && pnpm lint && pnpm -r typecheck && pnpm --filter @nook/react check:compiler",
         "test": "pnpm build && pnpm --filter @nook/react test && pnpm --filter @nook/website test",
-        "clean": "rm -rf packages/*/dist packages/*/test-results packages/*/node_modules/.cache website/test-results website/.vitepress/cache website/.vitepress/dist",
+        "clean": "rm -rf packages/*/dist packages/*/test-results packages/*/node_modules/.cache website/test-results website/.vitepress/cache website/.vitepress/dist bench/results",
         "lint": "eslint --max-warnings 0 .",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "bench": "pnpm --filter @nook/core build && pnpm --filter @nook/react build && node bench/check-compiled.mjs && node bench/run.mjs"
     },
     "devDependencies": {
         "eslint": "^9.39.5",

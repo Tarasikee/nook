@@ -80,3 +80,79 @@ test('showPopover() anchors to the trigger only when given a source', async ({ p
     expect(Math.round(anchored.x)).toBe(Math.round(trigger.x))
     expect(Math.round(anchored.y)).toBe(Math.round(trigger.y + trigger.height))
 })
+
+test.describe('tooltip groups', () => {
+    // A normal delay long enough to tell apart from an instant switch.
+    const groupPage = `
+        <style>
+            body { margin: 0; }
+            section { display: flex; gap: 8px; padding: 120px 200px 40px; }
+            [popover] { margin: 0; inset: auto; position-area: block-start; }
+            [interestfor] { interest-delay: 600ms 150ms; }
+            .group:has(:interest-source) [interestfor] { interest-delay-start: 0s; }
+        </style>
+        <section class="group">
+            <button id="a" interestfor="tip-a">A</button>
+            <button id="b" interestfor="tip-b">B</button>
+        </section>
+        <section class="solo">
+            <button id="c" interestfor="tip-c">C</button>
+            <button id="d" interestfor="tip-d">D</button>
+        </section>
+        <div id="tip-a" popover="hint">A</div>
+        <div id="tip-b" popover="hint">B</div>
+        <div id="tip-c" popover="hint">C</div>
+        <div id="tip-d" popover="hint">D</div>
+    `
+
+    /** Milliseconds from hovering `trigger` until `tip` opens, measured with the page clock. */
+    async function openDelay(page: import('@playwright/test').Page, trigger: string, tip: string) {
+        await page.evaluate((id) => {
+            const element = document.getElementById(id)!
+            element.addEventListener(
+                'toggle',
+                (event) => {
+                    if ((event as ToggleEvent).newState === 'open') {
+                        element.dataset.openedAt = String(performance.now())
+                    }
+                },
+                { once: true }
+            )
+        }, tip)
+        const start = await page.evaluate(() => performance.now())
+        await page.hover(trigger)
+        const opened = await page.waitForFunction((id) => document.getElementById(id)!.dataset.openedAt, tip)
+        return Number(await opened.jsonValue()) - start
+    }
+
+    test('an :interest-source group rule shows the next tooltip immediately', async ({ page }) => {
+        await page.setContent(groupPage)
+
+        const first = await openDelay(page, '#a', 'tip-a')
+        const next = await openDelay(page, '#b', 'tip-b')
+
+        expect(first).toBeGreaterThan(450)
+        expect(next).toBeLessThan(250)
+        await expect.poll(() => isOpen(page, '#tip-a')).toBe(false)
+    })
+
+    test('without the group rule, the next tooltip waits the full delay', async ({ page }) => {
+        await page.setContent(groupPage)
+
+        await openDelay(page, '#c', 'tip-c')
+        const next = await openDelay(page, '#d', 'tip-d')
+
+        expect(next).toBeGreaterThan(450)
+    })
+
+    test('the group cools down once interest has ended', async ({ page }) => {
+        await page.setContent(groupPage)
+
+        await openDelay(page, '#a', 'tip-a')
+        await page.mouse.move(5, 5)
+        await expect.poll(() => isOpen(page, '#tip-a')).toBe(false)
+        const again = await openDelay(page, '#b', 'tip-b')
+
+        expect(again).toBeGreaterThan(450)
+    })
+})

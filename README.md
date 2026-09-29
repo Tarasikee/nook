@@ -20,6 +20,7 @@ pnpm dev       # documentation site
 pnpm format    # Prettier
 pnpm check     # Prettier check, ESLint, typecheck, React Compiler check
 pnpm test      # build, then Playwright suites for the hooks and the website
+pnpm bench     # performance comparison, several minutes
 pnpm clean     # remove build output and test artifacts
 ```
 

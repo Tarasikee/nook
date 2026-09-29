@@ -17,7 +17,7 @@ export default tseslint.config(
     ...tseslint.configs.recommended,
     {
         // Rules of React, backed by React Compiler analysis.
-        files: ['packages/react/**/*.{ts,tsx}', 'website/.vitepress/theme/react/**/*.tsx'],
+        files: ['packages/react/**/*.{ts,tsx}', 'website/.vitepress/theme/react/**/*.tsx', 'bench/src/**/*.tsx'],
         plugins: { 'react-hooks': reactHooks },
         rules: {
             ...reactHooks.configs.flat['recommended-latest'].rules,

@@ -26,7 +26,8 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         items: [
             { text: 'Styling', link: '/guide/styling' },
             { text: 'Accessibility', link: '/guide/accessibility' },
-            { text: 'Browser support', link: '/guide/browser-support' }
+            { text: 'Browser support', link: '/guide/browser-support' },
+            { text: 'Performance', link: '/guide/performance' }
         ]
     },
     {

@@ -1,0 +1,223 @@
+{
+    "date": "2026-09-29T08:11:05.262Z",
+    "browser": "145.0.7632.6",
+    "cpu": 4,
+    "runs": 7,
+    "sizes": [
+        {
+            "lib": "nook",
+            "addedKB": "1.7"
+        },
+        {
+            "lib": "radix",
+            "addedKB": "25.8"
+        },
+        {
+            "lib": "floating",
+            "addedKB": "17.3"
+        }
+    ],
+    "results": [
+        {
+            "scenario": "mount",
+            "count": 200,
+            "rows": [
+                {
+                    "lib": "nook",
+                    "commitMs": 30.7,
+                    "commitMs range": "29–34",
+                    "firstFrameMs": 65.3,
+                    "firstFrameMs range": "62–74",
+                    "heapMB": 3.7,
+                    "domNodes": 1206
+                },
+                {
+                    "lib": "radix",
+                    "commitMs": 56.1,
+                    "commitMs range": "53–63",
+                    "firstFrameMs": 116.6,
+                    "firstFrameMs range": "112–127",
+                    "heapMB": 9.1,
+                    "domNodes": 406
+                },
+                {
+                    "lib": "floating",
+                    "commitMs": 51.7,
+                    "commitMs range": "49–57",
+                    "firstFrameMs": 119.5,
+                    "firstFrameMs range": "113–133",
+                    "heapMB": 12.6,
+                    "domNodes": 406
+                }
+            ]
+        },
+        {
+            "scenario": "mount",
+            "count": 1000,
+            "rows": [
+                {
+                    "lib": "nook",
+                    "commitMs": 59.7,
+                    "commitMs range": "57–66",
+                    "firstFrameMs": 129.9,
+                    "firstFrameMs range": "124–135",
+                    "heapMB": 8.6,
+                    "domNodes": 6006
+                },
+                {
+                    "lib": "radix",
+                    "commitMs": 150.8,
+                    "commitMs range": "148–155",
+                    "firstFrameMs": 324.7,
+                    "firstFrameMs range": "317–335",
+                    "heapMB": 32.8,
+                    "domNodes": 2006
+                },
+                {
+                    "lib": "floating",
+                    "commitMs": 144.7,
+                    "commitMs range": "135–159",
+                    "firstFrameMs": 365.9,
+                    "firstFrameMs range": "339–379",
+                    "heapMB": 51,
+                    "domNodes": 2006
+                }
+            ]
+        },
+        {
+            "scenario": "rerender",
+            "count": 1000,
+            "rows": [
+                {
+                    "lib": "nook",
+                    "rerenderMs": 29.2,
+                    "rerenderMs range": "29–34"
+                },
+                {
+                    "lib": "radix",
+                    "rerenderMs": 113.9,
+                    "rerenderMs range": "108–116"
+                },
+                {
+                    "lib": "floating",
+                    "rerenderMs": 84.5,
+                    "rerenderMs range": "78–89"
+                }
+            ]
+        },
+        {
+            "scenario": "open",
+            "count": 200,
+            "rows": [
+                {
+                    "lib": "nook",
+                    "openMs": 6.3,
+                    "openMs range": "5–7",
+                    "placed": true
+                },
+                {
+                    "lib": "radix",
+                    "openMs": 23,
+                    "openMs range": "22–24",
+                    "placed": true
+                },
+                {
+                    "lib": "floating",
+                    "openMs": 19.2,
+                    "openMs range": "19–21",
+                    "placed": true
+                }
+            ]
+        },
+        {
+            "scenario": "hover",
+            "count": 200,
+            "rows": [
+                {
+                    "lib": "nook",
+                    "hoverMs": 4.3,
+                    "hoverMs range": "4–5",
+                    "placed": true
+                },
+                {
+                    "lib": "radix",
+                    "hoverMs": 19.9,
+                    "hoverMs range": "18–45",
+                    "placed": true
+                },
+                {
+                    "lib": "floating",
+                    "hoverMs": 16.6,
+                    "hoverMs range": "16–18",
+                    "placed": true
+                }
+            ]
+        },
+        {
+            "scenario": "sweep",
+            "count": 200,
+            "rows": [
+                {
+                    "lib": "nook",
+                    "scriptMs": 46.4,
+                    "scriptMs range": "38–55",
+                    "styleLayoutMs": 30.5,
+                    "styleLayoutMs range": "28–37",
+                    "shown": true
+                },
+                {
+                    "lib": "radix",
+                    "scriptMs": 162.8,
+                    "scriptMs range": "157–179",
+                    "styleLayoutMs": 23.3,
+                    "styleLayoutMs range": "16–25",
+                    "shown": true
+                },
+                {
+                    "lib": "floating",
+                    "scriptMs": 141.5,
+                    "scriptMs range": "127–171",
+                    "styleLayoutMs": 14.7,
+                    "styleLayoutMs range": "13–20",
+                    "shown": true
+                }
+            ]
+        },
+        {
+            "scenario": "scroll",
+            "count": 200,
+            "rows": [
+                {
+                    "lib": "nook",
+                    "scriptMs": 0.1,
+                    "scriptMs range": "0–1",
+                    "styleLayoutMs": 0,
+                    "styleLayoutMs range": "0–0",
+                    "avgFrameMs": 8.3,
+                    "avgFrameMs range": "8–8",
+                    "placed": true
+                },
+                {
+                    "lib": "radix",
+                    "scriptMs": 5.9,
+                    "scriptMs range": "5–9",
+                    "styleLayoutMs": 5.1,
+                    "styleLayoutMs range": "4–6",
+                    "avgFrameMs": 8.3,
+                    "avgFrameMs range": "8–8",
+                    "placed": true
+                },
+                {
+                    "lib": "floating",
+                    "scriptMs": 3.6,
+                    "scriptMs range": "2–5",
+                    "styleLayoutMs": 0,
+                    "styleLayoutMs range": "0–0",
+                    "avgFrameMs": 8.3,
+                    "avgFrameMs range": "8–8",
+                    "placed": true
+                }
+            ]
+        }
+    ]
+}

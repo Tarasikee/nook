@@ -387,6 +387,12 @@
     interest-delay: 300ms 100ms;
 }
 
+/* Tooltip groups: once one tooltip in a group is showing, the next opens without the delay. */
+.nk-toolbar:has(:interest-source) [interestfor],
+.hero-demo__actions:has(:interest-source) [interestfor] {
+    interest-delay-start: 0s;
+}
+
 /* Entry and exit transitions */
 
 .nk-animated {

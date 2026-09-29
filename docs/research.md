@@ -75,6 +75,7 @@ Observed:
 - A plain-text `hint` target describes the invoker **only while open**; a rich target produced no description. This is why `useTooltip` adds `aria-describedby`.
 - With `aria-labelledby` pointing at the hint, the text was exposed as both name and description.
 - `interestfor` and `popovertarget` coexist on one button, and a hint does not close an open auto popover.
+- Tooltip groups work in CSS: with `interest-delay: 600ms 150ms` and `.group:has(:interest-source) [interestfor] { interest-delay-start: 0s }`, the first tooltip opened after more than 450 ms, and the next one in the group after less than 250 ms, closing the first. Without the rule, or after interest ended, the full delay applied.
 
 ## Positioning, transitions, select, announcements
 
