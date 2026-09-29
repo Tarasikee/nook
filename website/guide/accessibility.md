@@ -14,7 +14,7 @@ description: Who handles what, and what has been verified.
 | Tooltip described or named while closed                                           | Nook: `aria-describedby` or `aria-labelledby` |
 | Tooltip role, popover name from its title                                         | Nook: `role="tooltip"`, `aria-labelledby`     |
 | Content roles (menu, dialog, listbox) and their keyboard patterns                 | You                                           |
-| Focus trapping for modal tasks                                                    | You, with `<dialog>`                          |
+| Focus trapping for modal tasks                                                    | You, with [`<dialog>`](./dialog)              |
 | Visible focus styles                                                              | You                                           |
 
 ## Verified

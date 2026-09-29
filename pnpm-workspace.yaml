@@ -9,9 +9,3 @@ onlyBuiltDependencies:
   - esbuild
 allowBuilds:
   esbuild: true
-
-# One Vite for the whole tree: vanilla-extract's compiler runs on VitePress's Vite 5
-# instead of pulling in Vite 8 (and a vite-node that requires it).
-overrides:
-  vite: ^5.4.21
-  vite-node: ^3.2.4

@@ -4,10 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  vite: ^5.4.21
-  vite-node: ^3.2.4
-
 importers:
 
   .:
@@ -125,7 +121,23 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
-  packages/ui: {}
+  packages/ui:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.20.4
+        version: 22.20.4
+      '@vanilla-extract/css':
+        specifier: ^1.21.2
+        version: 1.21.2
+      '@vanilla-extract/esbuild-plugin':
+        specifier: ^2.3.22
+        version: 2.3.22(esbuild@0.25.12)
+      esbuild:
+        specifier: ^0.25.12
+        version: 0.25.12
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/ui-react:
     dependencies:
@@ -1427,6 +1439,14 @@ packages:
   '@vanilla-extract/css@1.21.2':
     resolution: {integrity: sha512-ehF/tmv2MxQwOJB1DicALUqnjZTnmY9Y7J2ccKB578JzZpYeL6sLAUqbaXo1taw1Erp0qBq0I4Kejs0uU/pBfg==}
 
+  '@vanilla-extract/esbuild-plugin@2.3.22':
+    resolution: {integrity: sha512-unxruCeuGR2BpmEuSV49++V4whdX7uPWADIiPwAe6zEOXwPrXQK+VtXjjZ/yN40vGfE7OJP/4WSDM5RuYX4LoQ==}
+    peerDependencies:
+      esbuild: '>=0.17.6'
+    peerDependenciesMeta:
+      esbuild:
+        optional: true
+
   '@vanilla-extract/integration@8.0.10':
     resolution: {integrity: sha512-01IB5gbrgTe8IIrtfRXXTmACl5D8Enzqp2cKbCWaMKXmnoilXXVCPbJoA96q88PXkNDXsXepCxUugMvEmL3c7A==}
 
@@ -1441,13 +1461,13 @@ packages:
   '@vanilla-extract/vite-plugin@5.2.6':
     resolution: {integrity: sha512-mGk0YEan+NyeoxEO51LfxOdtw2JBI+Yb840FGg+zvG6tVU3YfDgKGPiGuk5oT8jqzfsm7H89DyjOVCpl6Bnn0w==}
     peerDependencies:
-      vite: ^5.4.21
+      vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
 
   '@vitejs/plugin-vue@5.2.4':
     resolution: {integrity: sha512-7Yx/SXSOcQq5HiiV3orevHUFn+pmMB4cgbEkDYgnkUWb0WfeQ/wa2yFv6D5ICiCQOVpjA7vYDXrC7AGO8yjDHA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^5.4.21
+      vite: ^5.0.0 || ^6.0.0
       vue: ^3.2.25
 
   '@volar/language-core@2.4.15':
@@ -3753,6 +3773,15 @@ snapshots:
       picocolors: 1.1.1
     transitivePeerDependencies:
       - babel-plugin-macros
+
+  '@vanilla-extract/esbuild-plugin@2.3.22(esbuild@0.25.12)':
+    dependencies:
+      '@vanilla-extract/integration': 8.0.10
+    optionalDependencies:
+      esbuild: 0.25.12
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
 
   '@vanilla-extract/integration@8.0.10':
     dependencies:

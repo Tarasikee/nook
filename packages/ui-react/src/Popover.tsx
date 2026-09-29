@@ -1,4 +1,5 @@
 import { usePopover, type PopoverCloseProps } from '@nook/react'
+import * as ui from '@nook/ui'
 import { createContext, use, type HTMLAttributes, type ReactElement, type ReactNode } from 'react'
 import { Button, type ButtonProps } from './Button.js'
 import { classNames, withTriggerProps } from './merge.js'
@@ -50,12 +51,12 @@ export function Popover({
                 {...panelProps}
                 {...contentProps}
                 aria-labelledby={title ? titleId : panelProps?.['aria-labelledby']}
-                className={classNames('nook-popover', panelProps?.className)}
+                className={classNames(ui.popover, panelProps?.className)}
                 data-side={side}
                 data-align={align}
             >
                 {title ? (
-                    <h2 {...popover.titleProps} className="nook-popover__title">
+                    <h2 {...popover.titleProps} className={ui.popoverTitle}>
                         {title}
                     </h2>
                 ) : null}

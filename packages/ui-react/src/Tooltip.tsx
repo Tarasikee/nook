@@ -1,4 +1,5 @@
 import { useTooltip } from '@nook/react'
+import * as ui from '@nook/ui'
 import type { HTMLAttributes, ReactElement, ReactNode } from 'react'
 import { classNames, withTriggerProps } from './merge.js'
 
@@ -37,7 +38,7 @@ export function Tooltip({
     return (
         <>
             {withTriggerProps(children, { ...rest, ...tooltip.triggerProps })}
-            <div {...tooltip.contentProps} className="nook-tooltip" data-side={side} data-align={align}>
+            <div {...tooltip.contentProps} className={ui.tooltip} data-side={side} data-align={align}>
                 {label}
             </div>
         </>
@@ -49,5 +50,5 @@ export function Tooltip({
  * renders a `display: contents` element, so it adds no layout. Don't give it a role.
  */
 export function TooltipGroup({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-    return <div {...props} className={classNames('nook-tooltip-group', className)} />
+    return <div {...props} className={classNames(ui.tooltipGroup, className)} />
 }

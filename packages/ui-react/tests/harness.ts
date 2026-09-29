@@ -1,6 +1,6 @@
 import { test, type Page } from '@playwright/test'
 import { build } from 'esbuild'
-import { mkdirSync, rmSync } from 'node:fs'
+import { mkdirSync, readFileSync, rmSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import type { FixtureName } from './fixtures/fixtures'
 
@@ -10,17 +10,13 @@ const packageDir = fileURLToPath(new URL('..', import.meta.url))
 const packages = fileURLToPath(new URL('../../', import.meta.url))
 const cacheDir = `${packageDir}node_modules/.cache/nook-ui-tests/`
 
-// nook.css @imports one file per component; inline them like a consumer's bundler would.
-const css = build({
-    entryPoints: [`${packages}ui/src/nook.css`],
-    bundle: true,
-    write: false,
-    logLevel: 'silent'
-}).then((result) => result.outputFiles[0].text)
+// The built @nook/ui: nook.css, and nook.js with the class names the components import.
+const css = readFileSync(`${packages}ui/dist/nook.css`, 'utf8')
 
 const aliases = (variant: Variant) => ({
     '@nook/ui-react': variant === 'compiled' ? `${packageDir}dist/index.js` : `${packageDir}src/index.ts`,
     '@nook/react': `${packages}react/src/index.ts`,
+    '@nook/ui': `${packages}ui/dist/nook.js`,
     '@nook/core': `${packages}core/src/index.ts`
 })
 
@@ -89,7 +85,7 @@ export async function mountFixture(page: Page, name: FixtureName) {
 
     const html = await renderFixture(name)
     await page.setContent(
-        `<!doctype html><html><head><style>${await css} main { padding: 120px 200px; display: flex; gap: 12px; }</style></head><body><div id="root">${html}</div></body></html>`
+        `<!doctype html><html><head><style>${css} main { padding: 120px 200px; display: flex; gap: 12px; }</style></head><body><div id="root">${html}</div></body></html>`
     )
     await page.evaluate((fixture) => (window.nookFixture = fixture as FixtureName), name)
     await page.addScriptTag({ content: await clientBundle(variant()) })

@@ -4,13 +4,13 @@ Accessible, headless primitives built on native HTML. The browser does the behav
 
 Early implementation. All packages are private and their names are provisional.
 
-| Package             | Contents                                                                                            |
-| ------------------- | --------------------------------------------------------------------------------------------------- |
-| `packages/core`     | Framework-agnostic DOM helpers and a popover store. No dependencies, never imports a binding.       |
-| `packages/react`    | `usePopover()` and `useTooltip()` for React 19.2+, shipped compiled by React Compiler.              |
-| `packages/ui`       | Nook's design language as plain CSS, one file per component in `src/`; `nook.css` imports them all. |
-| `packages/ui-react` | Opinionated components on the hooks and `nook.css`: `Button`, `Tooltip`, `TooltipGroup`, `Popover`. |
-| `website`           | VitePress documentation with live React demos.                                                      |
+| Package             | Contents                                                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------- |
+| `packages/core`     | Framework-agnostic DOM helpers and a popover store. No dependencies, never imports a binding.         |
+| `packages/react`    | `usePopover()` and `useTooltip()` for React 19.2+, shipped compiled by React Compiler.                |
+| `packages/ui`       | Nook's design language in vanilla-extract (`src/*.css.ts`), built to plain CSS and typed class names. |
+| `packages/ui-react` | Opinionated components on the hooks and `nook.css`: `Button`, `Tooltip`, `TooltipGroup`, `Popover`.   |
+| `website`           | VitePress documentation with live React demos.                                                        |
 
 ## Develop
 

@@ -8,6 +8,7 @@ const pages = [
     '/guide/concepts',
     '/guide/popover',
     '/guide/tooltip',
+    '/guide/dialog',
     '/guide/styling',
     '/guide/accessibility',
     '/guide/browser-support',

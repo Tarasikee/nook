@@ -3,15 +3,30 @@
     "version": "0.0.0",
     "license": "MIT",
     "private": true,
-    "description": "Nook's design language as plain CSS: tokens, button, tooltip, and popover styles for any framework.",
+    "description": "Nook's design language as plain CSS, authored in vanilla-extract: tokens, button, tooltip, and popover styles for any framework.",
     "type": "module",
     "sideEffects": [
         "*.css"
     ],
     "files": [
-        "src"
+        "dist"
     ],
     "exports": {
-        "./*.css": "./src/*.css"
+        ".": {
+            "types": "./dist/nook.css.d.ts",
+            "import": "./dist/nook.js"
+        },
+        "./*.css": "./dist/*.css"
+    },
+    "scripts": {
+        "build": "node build.ts && tsc -p tsconfig.build.json",
+        "typecheck": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@types/node": "^22.20.4",
+        "@vanilla-extract/css": "^1.21.2",
+        "@vanilla-extract/esbuild-plugin": "^2.3.22",
+        "esbuild": "^0.25.12",
+        "typescript": "^5.9.3"
     }
 }

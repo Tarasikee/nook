@@ -77,11 +77,21 @@ Observed:
 - `interestfor` and `popovertarget` coexist on one button, and a hint does not close an open auto popover.
 - Tooltip groups work in CSS: with `interest-delay: 600ms 150ms` and `.group:has(:interest-source) [interestfor] { interest-delay-start: 0s }`, the first tooltip opened after more than 450 ms, and the next one in the group after less than 250 ms, closing the first. Without the rule, or after interest ended, the full delay applied.
 
+## Dialog
+
+`<button commandfor="id" command="show-modal">` opens a `<dialog>` as modal and `command="close"` closes it, without script (`commandfor` support is in the table above). A modal dialog is in the top layer and makes the rest of the page inert. `closedby` sets what light-dismisses it: `any`, `closerequest`, or `none`. [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog)
+
+Observed in Chromium 145 on 2026-09-29 (`packages/react/tests/platform.spec.ts`):
+
+- `command="show-modal"` opened the dialog as `:modal` and moved focus to the first focusable element inside. Escape closed it and returned focus to the invoker.
+- While open, the page behind could not be focused or clicked. `command="close"` closed it and returned focus to the invoker.
+- A backdrop click did not close a default dialog; with `closedby="any"` it did.
+- The `open` attribute tracked every open and close, including Escape, so a `MutationObserver` on it can mirror the state.
+
 ## Positioning, transitions, select, announcements
 
 - **Anchor positioning:** an implicit invoker anchor needs only `position-area`; reset the default popover `inset` and `margin` first. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning/Using)
 - **Transitions:** `@starting-style` gives the entry style; `display` and `overlay` with `allow-discrete` keep the exit visible and in the top layer. Closing must work with animations disabled. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overlay)
-- **CSS nesting** (`@nook/ui` ships it unprocessed): Chrome 112, Firefox 117, Safari 16.5 when every nested selector starts with `&`, as ours do; below the Popover API baseline. Nested `@media`, `@supports`, and `@starting-style` work inside rules. Verified 2026-09-29 in Chromium 145: the split, nested stylesheets computed the same styles as the old flat `nook.css` for every `data-side` × `data-align` combination and each button variant, and the `@nook/ui-react` suite passed. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting)
 - **Customizable select:** `appearance: base-select`, `::picker(select)`, `<selectedcontent>`. The picker has an implicit popover and anchor. No support baseline is established. [MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select)
 - **`ariaNotify(text, { priority })`** on `Element` or `Document`: announcements without a live region. Caveats: often only the latest is spoken, so combine messages; VoiceOver can drop one that coincides with another accessibility event such as a focus move; ChromeOS never speaks them; live regions take precedence; a Permissions Policy can block it. [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaNotify)
 
@@ -92,3 +102,4 @@ Observed:
 - Nested popovers and hints against the current `hint` stack rules.
 - Placement fallbacks in scroll containers, writing modes, and zoom.
 - `ariaNotify` timing relative to focus changes, for toasts.
+- `closedby` support outside Chromium; it is not in the BCD snapshot above.

@@ -1,8 +1,0 @@
-/*
- * @nook/ui — Nook's design language as plain CSS. Works with any framework or none.
- * This file is everything; import a single component file (button.css, tooltip.css,
- * popover.css) to take only that one. Each file imports the tokens and shared rules it needs.
- */
-@import './button.css';
-@import './tooltip.css';
-@import './popover.css';

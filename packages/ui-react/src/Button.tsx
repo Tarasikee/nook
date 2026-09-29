@@ -1,3 +1,4 @@
+import * as ui from '@nook/ui'
 import type { ButtonHTMLAttributes, Ref } from 'react'
 import { classNames } from './merge.js'
 
@@ -24,7 +25,7 @@ export function Button({
         <button
             type={type}
             {...props}
-            className={classNames('nook-button', className)}
+            className={classNames(ui.button, className)}
             data-variant={variant}
             data-size={size}
             data-icon={icon ? '' : undefined}

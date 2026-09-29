@@ -40,7 +40,7 @@ async function deploy() {
 
 ## Keyboard and focus
 
-All native: <kbd>Enter</kbd> or <kbd>Space</kbd> toggles, <kbd>Tab</kbd> from the open trigger moves into the popover, and <kbd>Esc</kbd> closes an auto popover and returns focus to the trigger. Popovers are non-modal; for a modal task use `<dialog>`.
+All native: <kbd>Enter</kbd> or <kbd>Space</kbd> toggles, <kbd>Tab</kbd> from the open trigger moves into the popover, and <kbd>Esc</kbd> closes an auto popover and returns focus to the trigger. Popovers are non-modal; for a modal task use a [`<dialog>`](./dialog).
 
 ## Good to know
 

@@ -1,9 +1,13 @@
 import { fileURLToPath, URL } from 'node:url'
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 import { defineConfig, postcssIsolateStyles, type DefaultTheme } from 'vitepress'
+import { nookIdentifier } from '../../packages/ui/identifiers'
 import { sourcePlugin } from './source-plugin'
 
 const repository = 'https://github.com/Tarasikee/nook'
+
+/** A path inside `packages/`. */
+const source = (path: string) => fileURLToPath(new URL(`../../packages/${path}`, import.meta.url))
 
 const sidebar: DefaultTheme.SidebarItem[] = [
     {
@@ -19,6 +23,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
         items: [
             { text: 'Popover', link: '/guide/popover' },
             { text: 'Tooltip', link: '/guide/tooltip' },
+            { text: 'Dialog <span class="nk-soon">HTML only</span>', link: '/guide/dialog' },
             { text: 'Menu <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' },
             { text: 'Select <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' }
         ]
@@ -111,18 +116,33 @@ export default defineConfig({
     },
     vite: {
         esbuild: { jsx: 'automatic', jsxImportSource: 'react' },
-        plugins: [sourcePlugin(), vanillaExtractPlugin()],
+        plugins: [
+            sourcePlugin(),
+            vanillaExtractPlugin({
+                // @nook/ui keeps the class names it ships (nook-button); the site's own stay short
+                // hashes, prefixed like vanilla-extract's default when they start with a digit.
+                identifiers: ({ hash, ...params }) =>
+                    params.filePath.includes('packages/ui/src/') ? nookIdentifier(params) : hash.replace(/^(?=\d)/, '_')
+            })
+        ],
         css: {
             // Markdown styles (.vp-doc h2, p, code…) skip elements inside .vp-raw, such as demo previews.
             postcss: { plugins: [postcssIsolateStyles({ includeFiles: [/vp-doc\.css/] })] }
         },
+        optimizeDeps: {
+            // Demos load React lazily and recipes compile to this runtime, so the dev server's scan
+            // misses them; finding them later re-optimizes and reloads pages mid-load.
+            include: ['react', 'react/jsx-dev-runtime', 'react-dom/client', '@vanilla-extract/recipes/createRuntimeFn']
+        },
         resolve: {
-            alias: {
-                '@nook/core': fileURLToPath(new URL('../../packages/core/src/index.ts', import.meta.url)),
-                '@nook/react': fileURLToPath(new URL('../../packages/react/src/index.ts', import.meta.url)),
-                '@nook/ui-react': fileURLToPath(new URL('../../packages/ui-react/src/index.ts', import.meta.url)),
-                '@nook/ui': fileURLToPath(new URL('../../packages/ui/src', import.meta.url))
-            }
+            // Workspace packages from source. `@nook/ui/nook.css` resolves to `src/nook.css.ts`.
+            alias: [
+                { find: '@nook/core', replacement: source('core/src/index.ts') },
+                { find: '@nook/react', replacement: source('react/src/index.ts') },
+                { find: '@nook/ui-react', replacement: source('ui-react/src/index.ts') },
+                { find: /^@nook\/ui$/, replacement: source('ui/src/nook.css.ts') },
+                { find: '@nook/ui', replacement: source('ui/src') }
+            ]
         }
     }
 })
