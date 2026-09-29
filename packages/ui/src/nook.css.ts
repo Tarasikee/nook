@@ -6,6 +6,8 @@
  * Import `@nook/ui/nook.css` for everything, or `button.css`, `tooltip.css`, `popover.css`, or `dialog.css`
  * alone. Each file includes the tokens it needs. The class names are exported for TypeScript.
  */
+import type {} from './csstype'
+
 export { button } from './button.css'
 export { dialog, dialogTitle } from './dialog.css'
 export { popover, popoverActions, popoverTitle } from './popover.css'

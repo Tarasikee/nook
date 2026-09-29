@@ -9,3 +9,7 @@ onlyBuiltDependencies:
   - esbuild
 allowBuilds:
   esbuild: true
+minimumReleaseAgeExclude:
+  - esbuild@0.24.3
+  - vite@6.4.2
+  - vite@6.4.3

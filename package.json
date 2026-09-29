@@ -9,7 +9,8 @@
         "build": "pnpm --filter @nook/core build && pnpm --filter @nook/react build && pnpm --filter @nook/ui build && pnpm --filter @nook/ui-react build && pnpm --filter @nook/website build",
         "dev": "pnpm --filter @nook/website dev",
         "preview": "pnpm --filter @nook/website preview",
-        "check": "prettier --check . && pnpm lint && pnpm -r typecheck && node scripts/check-compiler.mjs packages/react packages/ui-react",
+        "check": "prettier --check . && pnpm check:workspace-deps && pnpm lint && pnpm -r typecheck && node scripts/check-compiler.mjs packages/react packages/ui-react",
+        "check:workspace-deps": "node scripts/check-workspace-dependencies.mjs",
         "test": "pnpm build && pnpm --filter @nook/react test && pnpm --filter @nook/ui-react test && pnpm --filter @nook/website test",
         "clean": "rm -rf packages/*/dist packages/*/test-results packages/*/node_modules/.cache website/test-results website/.vitepress/cache website/.vitepress/dist bench/results",
         "lint": "eslint --max-warnings 0 .",
@@ -17,12 +18,27 @@
         "bench": "pnpm --filter @nook/core build && pnpm --filter @nook/react build && node bench/check-compiled.mjs && node bench/run.mjs"
     },
     "devDependencies": {
-        "eslint": "^9.39.5",
+        "@babel/cli": "^7.29.7",
+        "@babel/core": "^7.29.7",
+        "@babel/preset-typescript": "^7.29.7",
+        "@nook/core": "workspace:*",
+        "@nook/react": "workspace:*",
+        "@nook/ui": "workspace:*",
+        "@playwright/test": "1.63.0",
+        "@types/node": "^26.6.3",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "@vanilla-extract/css": "^1.21.2",
+        "babel-plugin-react-compiler": "1.0.0",
+        "esbuild": "^0.28.2",
+        "eslint": "^10.11.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react-hooks": "7.1.1",
         "prettier": "^3.9.9",
-        "typescript": "^5.7.3",
-        "typescript-eslint": "^8.70.1"
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.71.0"
     },
     "devEngines": {
         "packageManager": {

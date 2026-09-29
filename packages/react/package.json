@@ -24,22 +24,5 @@
     },
     "peerDependencies": {
         "react": "^19.2.0"
-    },
-    "dependencies": {
-        "@nook/core": "workspace:*"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.28.0",
-        "@babel/core": "^7.28.0",
-        "@babel/preset-typescript": "^7.27.0",
-        "@playwright/test": "1.58.2",
-        "@types/node": "^22.20.4",
-        "@types/react": "^19.2.0",
-        "@types/react-dom": "^19.2.0",
-        "babel-plugin-react-compiler": "1.0.0",
-        "esbuild": "^0.25.0",
-        "react": "^19.2.0",
-        "react-dom": "^19.2.0",
-        "typescript": "^5.7.3"
     }
 }
