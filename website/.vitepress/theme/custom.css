@@ -202,6 +202,10 @@
     background: rgba(56, 189, 248, 0.14);
     font-size: 0.75rem;
     font-weight: 700;
+    /* Inside a heading, don't inherit its tall line-height or tight tracking. */
+    line-height: 1.6;
+    letter-spacing: 0;
+    vertical-align: middle;
 }
 
 .dark .vp-doc .nk-pill {
