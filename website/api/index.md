@@ -1,64 +1,61 @@
 ---
 title: API reference
-description: Every export of @nook/react and @nook/core.
+description: Every option and return value of @nook/react and @nook/core.
 ---
 
 # API reference
 
-<p class="nk-lead"><code>@nook/react</code> exports two hooks. Both return plain attribute objects you spread onto your own elements. <code>@nook/core</code> holds the framework-agnostic pieces they are built on.</p>
+<p class="nk-lead">Both hooks return plain attribute objects to spread onto your own elements. Trigger props contain no event handlers and no ref.</p>
 
 ```ts
 import { usePopover, useTooltip } from '@nook/react'
 ```
 
-<div class="nk-cards">
-  <a class="nk-card" href="./use-popover"><code>usePopover(options?)</code><span>A click popover on <code>popovertarget</code>: auto or manual, controlled or not.</span></a>
-  <a class="nk-card" href="./use-tooltip"><code>useTooltip(options?)</code><span>A hover and focus tooltip on <code>interestfor</code>, with an ARIA link that exists while closed.</span></a>
-  <a class="nk-card" href="./core"><code>@nook/core</code><span>The popover store and DOM helpers, for other bindings.</span></a>
-</div>
+## usePopover
 
-## At a glance
+A click popover on `popovertarget`. Guide: [Popover](../guide/popover).
 
-|                  | `usePopover`                | `useTooltip`                      |
-| ---------------- | --------------------------- | --------------------------------- |
-| Opens on         | Trigger activation (native) | Hover, focus, long press (native) |
-| Native attribute | `popovertarget`             | `interestfor`                     |
-| Popover mode     | `'auto'` or `'manual'`      | `'hint'`                          |
-| Trigger element  | `<button>`                  | `<button>`, `<a>`, `<area>`       |
-| Controlled       | `open`, `defaultOpen`       | No                                |
-| Browser          | Popover API                 | Chromium 142+                     |
+| Option         | Type                      | Default   | Description                                                                                  |
+| -------------- | ------------------------- | --------- | -------------------------------------------------------------------------------------------- |
+| `mode`         | `'auto' \| 'manual'`      | `'auto'`  | `'auto'` light-dismisses; `'manual'` closes only through the trigger, `closeProps`, or code. |
+| `open`         | `boolean`                 |           | Controlled state. The browser can still close an `'auto'` popover.                           |
+| `defaultOpen`  | `boolean`                 | `false`   | Opens once after mount. Ignored when `open` is set.                                          |
+| `onOpenChange` | `(open: boolean) => void` |           | Called after every native state change.                                                      |
+| `id`           | `string`                  | `useId()` | Content element id.                                                                          |
 
-Both hooks return `open`, the browser's actual state read with `useSyncExternalStore`, and accept `onOpenChange` and `id`.
+| Returns                        | Spread onto / type | Contents                                                         |
+| ------------------------------ | ------------------ | ---------------------------------------------------------------- |
+| `triggerProps`                 | `<button>`         | `popoverTarget`, `data-open` while open                          |
+| `contentProps`                 | popover surface    | `id`, `popover`, `aria-labelledby`, `ref`                        |
+| `titleProps`                   | its heading        | `id`                                                             |
+| `closeProps`                   | `<button>` inside  | `popoverTarget`, `popoverTargetAction: 'hide'`                   |
+| `open`                         | `boolean`          | The browser's actual state; `false` on the server                |
+| `show()`, `hide()`, `toggle()` | `() => void`       | Drive the native popover; showing passes the trigger as `source` |
 
-## Core helpers
+## useTooltip
 
-<p class="nk-lead"><code>@nook/core</code> is framework-agnostic and has no dependencies. <code>@nook/react</code> is built on it, and other bindings can be too.</p>
+A tooltip on `interestfor` (Chromium 142+). Delays are CSS. Guide: [Tooltip](../guide/tooltip).
 
-## createPopoverStore()
+| Option         | Type                       | Default         | Description                                                             |
+| -------------- | -------------------------- | --------------- | ----------------------------------------------------------------------- |
+| `role`         | `'description' \| 'label'` | `'description'` | Renders `aria-describedby`, or `aria-labelledby` for icon-only buttons. |
+| `onOpenChange` | `(open: boolean) => void`  |                 | Called after the tooltip shows or hides.                                |
+| `id`           | `string`                   | `useId()`       | Tooltip element id.                                                     |
 
-A popover's native state as an external store. The browser stays the source of truth: `getSnapshot()` reads `:popover-open`.
+| Returns        | Spread onto / type          | Contents                                               |
+| -------------- | --------------------------- | ------------------------------------------------------ |
+| `triggerProps` | `<button>`, `<a>`, `<area>` | `interestfor`, `aria-describedby` or `aria-labelledby` |
+| `contentProps` | tooltip element             | `id`, `popover: 'hint'`, `role: 'tooltip'`, `ref`      |
+| `open`         | `boolean`                   | The browser's actual state                             |
 
-```ts
-const store = createPopoverStore()
-const detach = store.attach(panel)       // also usable as a React 19 ref callback
-const stop = store.subscribe(() => render(store.getSnapshot()))
-store.setOpen(true)                      // deferred until attached
-```
+## Core
 
-| Method                | Description                                                                        |
-| --------------------- | ---------------------------------------------------------------------------------- |
-| `attach(element)`     | Starts observing the element; returns a detach function.                           |
-| `subscribe(listener)` | Called on state changes and on attach or detach.                                   |
-| `getSnapshot()`       | Current open state; `false` when detached.                                         |
-| `onChange(listener)`  | Called with the new state on native changes only.                                  |
-| `setOpen(open)`       | Requests a state now, or once attached.                                            |
-| `control(open)`       | Applies a controlled state now and on every later attach; `undefined` releases it. |
+`@nook/core` is framework-agnostic and has no dependencies. The hooks are built on it; use it for other bindings.
 
-## Helpers
-
-| Function                                 | Description                                                                                                                   |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `observePopover(popover, onChange)`      | Reports native state changes; skips coalesced events that end where they started. Returns a cleanup function.                 |
-| `setPopoverOpen(popover, open, source?)` | Shows or hides; a no-op if already in that state. When showing, passes the invoker as `source` so the popover stays anchored. |
-| `findPopoverInvoker(popover)`            | The first element with `popovertarget`, `commandfor`, or `interestfor` pointing at the popover.                               |
-| `isPopoverOpen(element)`                 | Whether it matches `:popover-open`.                                                                                           |
+| Export                                   | Description                                                                                                                                                                                        |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createPopoverStore()`                   | Native popover state as an external store: `attach` (a React 19 ref callback), `subscribe`, `getSnapshot`, `onChange`, `setOpen` (deferred until attached), `control` (reapplied on every attach). |
+| `observePopover(popover, onChange)`      | Reports native state changes; skips merged events that end where they started. Returns a cleanup function.                                                                                         |
+| `setPopoverOpen(popover, open, source?)` | Shows or hides; when showing, passes the invoker as `source` so the popover stays anchored.                                                                                                        |
+| `findPopoverInvoker(popover)`            | First element with `popovertarget`, `commandfor`, or `interestfor` pointing at the popover.                                                                                                        |
+| `isPopoverOpen(element)`                 | Whether it matches `:popover-open`.                                                                                                                                                                |

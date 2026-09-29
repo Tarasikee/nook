@@ -1,47 +1,38 @@
 ---
-title: Core concepts
+title: Concepts
 description: The ideas behind Nook's hooks.
 ---
 
-# Core concepts
+# Concepts
 
 <p class="nk-lead">When the browser already provides a behavior, render the HTML that asks for it instead of recreating it in JavaScript.</p>
 
 ## Hooks render relationships
 
-A click popover is a relationship between a trigger and its content, and HTML already has one:
-
-```html
-<button popovertarget="share">Share</button>
-<div id="share" popover>…</div>
-```
-
-`usePopover()` returns these attributes with a stable id; `useTooltip()` does the same with `interestfor`. The browser then handles activation, dismissal, focus, and anchoring.
+`usePopover()` returns `popovertarget` and `popover` attributes; `useTooltip()` returns `interestfor` and `popover="hint"`. Once they are in the DOM, the browser handles activation, dismissal, focus order, focus return, and the implicit anchor.
 
 ## Attributes, not handlers
 
-Nook adds no `onClick`, `onPointerEnter`, or ref to your trigger. So there is nothing to merge: spread several hooks on one element, in any order, next to your own handlers.
+Trigger props contain no event handlers and no ref. Spread several hooks on one element, in any order, next to your own handlers, with no Slot or prop merging:
 
 ```tsx
 <button {...actions.triggerProps} {...hint.triggerProps} onClick={track}>…</button>
 ```
 
-This also works with your design system's `<Button>`, as long as it forwards props to a native button. A live example is on the [Tooltip](./tooltip#with-a-popover-on-the-same-button) page.
+Your design system's `<Button>` works if it forwards props to a native button.
 
 ## The browser owns the state
 
-An auto popover can close without React knowing: an outside click, <kbd>Esc</kbd>, or another popover opening. So Nook keeps no copy of the open state. The hooks read `:popover-open` through `useSyncExternalStore`, subscribed to the native `toggle` event. `open` is always the browser's actual state, and `onOpenChange` fires whatever caused the change.
-
-Browsers can merge rapid changes into one `toggle` event. An event that ends in the state it started from is not reported.
+A popover can close without React knowing, for example on an outside click or <kbd>Esc</kbd>. So Nook keeps no copy of the state: the hooks read `:popover-open` through `useSyncExternalStore`, and `onOpenChange` fires on every native change. When the browser merges a quick open and close into one event, nothing is reported.
 
 ## Server rendering
 
-Because relationships are attributes with ids from `useId`, the server renders working HTML. Before hydration the trigger, close button, <kbd>Esc</kbd>, and outside clicks already work, and `popover` keeps content hidden, so nothing flashes. After hydration `open` reads the real state, so a popover opened before hydration is reported as open. The package entry is marked `'use client'`: call the hooks in client components.
+Relationships are attributes with ids from `useId`, so server-rendered HTML already works before hydration, and `popover` keeps content hidden so nothing flashes. After hydration, `open` reads the real state, including a popover opened before hydration. Call the hooks in client components; the package is marked `'use client'`.
 
-## Top layer instead of portals
+## Top layer, no portals
 
-Open popovers render in the top layer, above `overflow: hidden` and stacking contexts. The element stays where you rendered it, so React context, event bubbling, and CSS inheritance keep working without a portal.
+Open popovers render in the top layer, above `overflow: hidden` and stacking contexts. The element stays where you rendered it, so context, events, and CSS inheritance keep working.
 
 ## Styleless
 
-The hooks add attributes, never classes or styles. See [Positioning](./styling#positioning) and [Animation](./styling#animation). Semantics beyond what the hooks render, such as menu roles or focus trapping, are yours; see [Accessibility](./accessibility).
+The hooks add no classes or styles. Placement and animation are your CSS; see [Styling](./styling). Semantics beyond what the hooks render are yours; see [Accessibility](./accessibility).

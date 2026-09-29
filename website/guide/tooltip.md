@@ -1,40 +1,40 @@
 ---
 title: Tooltip
-description: Hover and focus tooltips with useTooltip() on native interest invokers.
+description: Tooltips on native interest invokers, their delays, groups, and accessibility.
 ---
 
 # Tooltip <span class="nk-pill">Chromium 142+</span>
 
-<p class="nk-lead">A short, non-interactive hint the browser shows on hover, focus, or long press through <code>interestfor</code>. Timing is CSS.</p>
-
-<div class="nk-meta">
-  <span><strong>Hook</strong> <code>useTooltip</code></span>
-  <span><strong>Native feature</strong> <code>interestfor</code>, <code>popover="hint"</code></span>
-  <span><strong>API</strong> <a href="../api/use-tooltip">useTooltip()</a></span>
-</div>
+<p class="nk-lead">A short, non-interactive hint the browser shows on hover, focus, or long press through <code>interestfor</code>. Props are in the <a href="../api/#usetooltip">API reference</a>.</p>
 
 <ReactDemo name="tooltip" :height="260" />
 
-## Usage
-
 ```tsx
-const tooltip = useTooltip() // role: 'description'
+const tooltip = useTooltip({ role: 'label' })
 
-<button {...tooltip.triggerProps}>Publish</button>
-<div {...tooltip.contentProps} className="tooltip">Visible to everyone in your workspace</div>
+<button {...tooltip.triggerProps}><BoldIcon aria-hidden /></button>
+<div {...tooltip.contentProps} className="tooltip">Bold</div>
 ```
+
+## What the browser does, and what Nook adds
+
+The browser decides when the user shows interest, shows the `popover="hint"` target, hides it when interest ends or on <kbd>Esc</kbd>, and anchors it to the trigger. Nook installs no listeners or timers.
+
+Chromium exposes the tooltip text to assistive technology only **while the tooltip is open**, so a screen reader hears nothing until the delay passes. The hook adds a relationship that always exists: `role: 'description'` (default) renders `aria-describedby` for extra text, and `role: 'label'` renders `aria-labelledby` for icon-only buttons.
+
+## Delays
+
+Delays are CSS, not options:
 
 ```css
 [interestfor] {
-  interest-delay: 300ms 100ms; /* show, hide */
+  interest-delay: 300ms 100ms; /* show after 300ms, hide after 100ms */
 }
 ```
 
-Position `.tooltip` with the [positioning recipe](./styling#positioning), using `position-area: block-start`.
-
 ## Tooltip groups
 
-In a toolbar, the first tooltip should wait, but moving to the next button should show its tooltip at once. That is CSS: while any trigger in the group has interest, drop the start delay for the others.
+In a toolbar, the first tooltip should wait, but the next should appear at once. Add one rule:
 
 ```css
 .toolbar:has(:interest-source) [interestfor] {
@@ -42,33 +42,23 @@ In a toolbar, the first tooltip should wait, but moving to the next button shoul
 }
 ```
 
-The toolbar in the demo above uses this rule. The quick-switch window is the hide delay (`100ms` above). If the pointer takes longer than that to reach the next button, the group cools down and the full delay applies again. Opening the next hint closes the previous one, because `hint` popovers close unrelated hints. Use a wider scope, such as `:root:has(:interest-source)`, to group every tooltip on the page. Verified in Chromium 145 by timed tests.
+How it works:
 
-## What the browser does, and what Nook adds
+1. The first hover waits the normal delay, because nothing in the toolbar has interest yet.
+2. While a tooltip shows, its trigger matches `:interest-source`, so the toolbar matches the rule and every trigger in it opens with no delay.
+3. Moving to the next button keeps the toolbar matched for the length of the hide delay, so the next tooltip opens at once. Opening a hint closes the previous one.
+4. Once the pointer has been away longer than the hide delay, the rule stops matching and the full delay returns.
 
-The browser decides when the user shows interest, shows the `popover="hint"` target, hides it when interest ends or on <kbd>Esc</kbd>, and anchors it to the trigger. Nook installs no listeners or timers.
-
-In Chromium 145, `interestfor` exposes the tooltip text to assistive technology **only while the tooltip is open**. So the hook adds a relationship that always exists:
-
-| `role`                      | Renders            | Use for                                          |
-| --------------------------- | ------------------ | ------------------------------------------------ |
-| `'description'` _(default)_ | `aria-describedby` | Extra text on a labeled control                  |
-| `'label'`                   | `aria-labelledby`  | Icon-only buttons, where the tooltip is the name |
-
-With `'label'`, Chromium also exposes the text as a description. Whether screen readers read it twice is unverified.
+The hide delay is the switching window: longer means more forgiving, but tooltips also linger longer. Use `:root:has(:interest-source)` to group every tooltip on the page. Verified in Chromium 145 with timed tests; the toolbar above uses this rule.
 
 ## With a popover on the same button
 
-A `hint` doesn't close an open auto popover, and both hooks return attributes only:
-
-```tsx
-<button {...actions.triggerProps} {...hint.triggerProps}>…</button>
-```
+A `hint` does not close an open auto popover, and both hooks return attributes only:
 
 <ReactDemo name="combined" :height="280" />
 
-## Guidelines
+## Good to know
 
-- Keep tooltips short and non-interactive; use a [popover](./popover) for interactive content.
 - Triggers must be `<button>`, `<a>`, or `<area>`.
-- In browsers without `interestfor`, the tooltip never appears, but its ARIA relationship remains. See [Browser support](./browser-support).
+- Keep tooltips short and non-interactive; use a [popover](./popover) for interactive content.
+- Without `interestfor` support, tooltips never appear, but the ARIA relationship still gives their text to assistive technology.

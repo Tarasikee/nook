@@ -1,75 +1,32 @@
 ---
 title: Examples
-description: Live, copy-ready Nook patterns.
+description: Live patterns; each Code tab shows the exact source that runs it.
 outline: [2, 2]
 ---
 
 # Examples
 
-<p class="nk-lead">Every preview runs on <code>@nook/react</code>. Only the CSS is specific to this site; see <a href="../guide/styling#positioning">Positioning</a> and <a href="../guide/styling#animation">Animation</a> for the recipes.</p>
+<p class="nk-lead">Every demo runs on <code>@nook/react</code>. Open a demo's <strong>Code</strong> tab for the exact source, and its <strong>CSS</strong> tab for the styles it relies on.</p>
 
 ## Share popover
 
 <ReactDemo name="popover" :height="330" />
 
-```tsx
-const share = usePopover({ onOpenChange: (open) => log(open) })
-
-<button {...share.triggerProps} onClick={trackClick}>Share</button>
-<div {...share.contentProps} className="panel">
-  <h3 {...share.titleProps}>Invite collaborators</h3>
-  <p>Anyone with this link can view the project.</p>
-  <button {...share.closeProps}>Done</button>
-</div>
-```
-
-## Toolbar tooltips
+## Toolbar tooltips with a group
 
 <ReactDemo name="tooltip" :height="260" />
 
-```tsx
-function Tool({ icon, label, pressed, onToggle }) {
-  const tooltip = useTooltip({ role: 'label' })
-  return (
-    <>
-      <button {...tooltip.triggerProps} aria-pressed={pressed} onClick={onToggle}>{icon}</button>
-      <div {...tooltip.contentProps} className="tooltip">{label}</div>
-    </>
-  )
-}
-```
-
-## Popover and tooltip on one button
+## Tooltip and popover on one button
 
 <ReactDemo name="combined" :height="280" />
-
-```tsx
-const actions = usePopover()
-const hint = useTooltip({ role: 'label' })
-
-<button {...actions.triggerProps} {...hint.triggerProps} onClick={track}>…</button>
-```
 
 ## Controlled manual panel
 
 <ReactDemo name="controlled" :height="300" />
 
-```tsx
-const [open, setOpen] = useState(false)
-const status = usePopover({ mode: 'manual', open, onOpenChange: setOpen })
-```
-
 ## Placement playground
 
 <ReactDemo name="placement" :height="420" />
-
-```css
-.popover {
-  inset: auto;
-  margin: 8px;
-  position-area: var(--placement, bottom);
-}
-```
 
 ## Animated popover
 

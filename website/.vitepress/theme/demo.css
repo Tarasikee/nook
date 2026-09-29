@@ -56,6 +56,63 @@
     font-size: 0.72rem;
 }
 
+.nk-demo__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.nk-demo__tabs {
+    display: inline-flex;
+    gap: 0.15rem;
+    padding: 0.15rem;
+    border: 1px solid var(--vp-c-border);
+    border-radius: 8px;
+    background: var(--vp-c-bg);
+}
+
+.nk-demo__tabs button {
+    padding: 0.2rem 0.6rem;
+    border: 0;
+    border-radius: 6px;
+    color: var(--vp-c-text-2);
+    background: transparent;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.nk-demo__tabs button:hover {
+    color: var(--vp-c-text-1);
+}
+
+.nk-demo__tabs button[aria-selected='true'] {
+    color: var(--vp-c-brand-1);
+    background: var(--vp-c-brand-soft);
+}
+
+.nk-demo__tabs button:focus-visible {
+    outline: 2px solid var(--nk-sky-400);
+    outline-offset: 1px;
+}
+
+/* Author display rules would otherwise override the hidden attribute on tab panels. */
+.nk-demo [role='tabpanel'][hidden] {
+    display: none;
+}
+
+.vp-doc .nk-demo__code div[class*='language-'] {
+    margin: 0;
+    border-radius: 0;
+}
+
+.vp-doc .nk-demo__code pre {
+    max-height: 460px;
+    overflow: auto;
+}
+
 .nk-stage {
     position: relative;
     display: flex;
@@ -348,6 +405,7 @@
     background: var(--nk-green-100);
 }
 
+/* #region behavior: shown in each demo's CSS tab */
 /*
  * Anchor placement. popovertarget and interestfor make the trigger the
  * popover's implicit anchor, so no anchor-name is needed. Without anchor
@@ -426,6 +484,7 @@
         transition: none;
     }
 }
+/* #endregion behavior */
 
 /* Event log and state readouts */
 

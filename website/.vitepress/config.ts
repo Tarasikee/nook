@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, type DefaultTheme } from 'vitepress'
+import { sourcePlugin } from './source-plugin'
 
 const repository = 'https://github.com/Tarasikee/nook'
 
@@ -33,9 +34,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
     {
         text: 'Reference',
         items: [
-            { text: 'API overview', link: '/api/' },
-            { text: 'usePopover', link: '/api/use-popover' },
-            { text: 'useTooltip', link: '/api/use-tooltip' },
+            { text: 'API', link: '/api/' },
             { text: 'Examples', link: '/examples/' }
         ]
     }
@@ -100,6 +99,7 @@ export default defineConfig({
     },
     vite: {
         esbuild: { jsx: 'automatic', jsxImportSource: 'react' },
+        plugins: [sourcePlugin()],
         resolve: {
             alias: {
                 '@nook/core': fileURLToPath(new URL('../../packages/core/src/index.ts', import.meta.url)),

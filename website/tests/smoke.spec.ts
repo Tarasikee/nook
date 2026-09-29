@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { expect, test, type Page } from '@playwright/test'
 
 const pages = [
@@ -12,8 +13,6 @@ const pages = [
     '/guide/browser-support',
     '/guide/performance',
     '/api/',
-    '/api/use-popover',
-    '/api/use-tooltip',
     '/examples/'
 ]
 
@@ -104,6 +103,55 @@ test('toolbar tooltips switch without the delay once one is showing', async ({ p
 
     expect(await openDelay('Bold')).toBeGreaterThan(200) // interest-delay: 300ms
     expect(await openDelay('Italic')).toBeLessThan(150)
+})
+
+test.describe('demo source tabs', () => {
+    test('the Code tab shows the exact file that runs the demo', async ({ page }) => {
+        await page.goto('/guide/getting-started')
+        const demo = page.locator('.nk-demo').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
+
+        await demo.getByRole('tab', { name: 'Code' }).click()
+        const code = demo.getByRole('tabpanel', { name: 'Code' })
+        await expect(code).toBeVisible()
+        await expect(demo.getByRole('tabpanel', { name: 'Preview' })).toBeHidden()
+
+        const source = readFileSync(new URL('../.vitepress/theme/react/PopoverDemo.tsx', import.meta.url), 'utf8')
+        expect(await code.locator('pre code').textContent()).toBe(source.trim())
+        await expect(code.locator('span[style*="--shiki-light"]').first()).toBeVisible()
+        await expect(code.locator('button.copy')).toHaveCount(1)
+    })
+
+    test('tabs follow the keyboard pattern and the CSS tab shows the behavior styles', async ({ page }) => {
+        await page.goto('/guide/getting-started')
+        const demo = page.locator('.nk-demo').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
+        const preview = demo.getByRole('tab', { name: 'Preview' })
+
+        await expect(preview).toHaveAttribute('aria-selected', 'true')
+        await preview.focus()
+        await page.keyboard.press('ArrowRight')
+        await page.keyboard.press('ArrowRight')
+        const css = demo.getByRole('tab', { name: 'CSS' })
+        await expect(css).toBeFocused()
+        await expect(css).toHaveAttribute('aria-selected', 'true')
+        await expect(demo.getByRole('tabpanel', { name: 'CSS' })).toContainText('position-area')
+
+        await page.keyboard.press('Home')
+        await expect(preview).toBeFocused()
+        await expect(demo.getByRole('tabpanel', { name: 'Preview' })).toBeVisible()
+    })
+
+    test('the preview keeps its state while another tab is shown', async ({ page }) => {
+        await page.goto('/guide/getting-started')
+        const demo = page.locator('.nk-demo').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
+
+        await demo.getByRole('button', { name: 'Share', exact: true }).click()
+        await page.keyboard.press('Escape')
+        await expect(demo.getByText('your onClick ran 1×')).toBeVisible()
+
+        await demo.getByRole('tab', { name: 'Code' }).click()
+        await demo.getByRole('tab', { name: 'Preview' }).click()
+        await expect(demo.getByText('your onClick ran 1×')).toBeVisible()
+    })
 })
 
 test('controlled manual popover ignores Escape and closes from state', async ({ page }) => {

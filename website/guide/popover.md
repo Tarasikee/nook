@@ -1,37 +1,18 @@
 ---
 title: Popover
-description: Click-triggered, light-dismissible popovers with usePopover().
+description: Modes, controlled state, and opening from code with usePopover().
 ---
 
 # Popover
 
-<p class="nk-lead">A click-triggered surface connected to your button through <code>popovertarget</code>. It opens in the top layer and closes on outside clicks and Escape.</p>
-
-<div class="nk-meta">
-  <span><strong>Hook</strong> <code>usePopover</code></span>
-  <span><strong>Native feature</strong> <code>popovertarget</code></span>
-  <span><strong>API</strong> <a href="../api/use-popover">usePopover()</a></span>
-</div>
-
-The [quick start](./getting-started) shows the basic usage and result. This page covers the rest.
-
-## Anatomy
-
-| Props          | Spread onto               | Renders                                           |
-| -------------- | ------------------------- | ------------------------------------------------- |
-| `triggerProps` | a `<button>`              | `popovertarget`, plus `data-open` while open      |
-| `contentProps` | the popover surface       | `id`, `popover`, `aria-labelledby`, `ref`         |
-| `titleProps`   | the heading that names it | `id`                                              |
-| `closeProps`   | a `<button>` inside       | `popovertarget` with `popovertargetaction="hide"` |
-
-Only buttons support `popovertarget`. Style `[data-open]` to highlight the trigger while open.
+<p class="nk-lead">A click-triggered surface linked to your button through <code>popovertarget</code>. Basic usage is in the <a href="./getting-started">quick start</a>; props are in the <a href="../api/#usepopover">API reference</a>.</p>
 
 ## Modes
 
-| Mode                 | Light dismiss and Escape | Other popovers                       |
-| -------------------- | ------------------------ | ------------------------------------ |
-| `'auto'` _(default)_ | Yes                      | An unrelated auto popover closes it. |
-| `'manual'`           | No                       | Independent; any number can be open. |
+| Mode                 | Outside click and <kbd>Esc</kbd> | Other popovers                      |
+| -------------------- | -------------------------------- | ----------------------------------- |
+| `'auto'` _(default)_ | Close it                         | An unrelated auto popover closes it |
+| `'manual'`           | Ignored                          | Independent; any number can be open |
 
 ## Controlled state
 
@@ -43,14 +24,12 @@ const status = usePopover({ mode: 'manual', open, onOpenChange: setOpen })
 <ReactDemo name="controlled" :height="300" />
 
 ::: warning The browser has the final say
-In `'auto'` mode, <kbd>Esc</kbd> and outside clicks close the popover even when `open` is `true`: the platform can cancel opening but not closing. The close is reported through `onOpenChange(false)`. Use `'manual'` when your app must decide when it closes.
+In `'auto'` mode, <kbd>Esc</kbd> and outside clicks close the popover even when `open` is `true`, because the platform cannot cancel closing. The close is reported through `onOpenChange(false)`. Use `'manual'` when your app decides when it closes. For uncontrolled popovers, `defaultOpen: true` opens it once after mount.
 :::
-
-For uncontrolled popovers, `defaultOpen: true` opens it once after mount.
 
 ## Opening from code
 
-Call `show()`, `hide()`, or `toggle()` from event handlers. `show()` passes the trigger as the native `source`, so the popover stays anchored:
+Call `show()`, `hide()`, or `toggle()` from event handlers; for state-driven opening, use `open`. `show()` passes the trigger as the native `source`: without it, Chromium does not anchor a popover opened from script.
 
 ```tsx
 async function deploy() {
@@ -59,21 +38,13 @@ async function deploy() {
 }
 ```
 
-For state-driven opening, use `open` rather than calling `show()` from an effect.
+## Keyboard and focus
 
-## Keyboard
+All native: <kbd>Enter</kbd> or <kbd>Space</kbd> toggles, <kbd>Tab</kbd> from the open trigger moves into the popover, and <kbd>Esc</kbd> closes an auto popover and returns focus to the trigger. Popovers are non-modal; for a modal task use `<dialog>`.
 
-All native:
+## Good to know
 
-| Key                                                | Behavior                                                 |
-| -------------------------------------------------- | -------------------------------------------------------- |
-| <kbd>Enter</kbd> / <kbd>Space</kbd> on the trigger | Toggles the popover.                                     |
-| <kbd>Tab</kbd> from the open trigger               | Moves focus into the popover.                            |
-| <kbd>Esc</kbd>                                     | Closes an auto popover and returns focus to the trigger. |
-
-Popovers are non-modal. For a modal task, use `<dialog>` with `showModal()`.
-
-## Caveats
-
-- Changing `mode` while open closes the popover (native behavior).
-- If you don't render `titleProps`, the popover is unnamed; name it another way if it is a meaningful region.
+- Only `<button>` elements can use `popovertarget`.
+- Style the open trigger with `[data-open]`, and the open popover with `:popover-open`.
+- Changing `mode` while open closes the popover.
+- Render `titleProps` on a heading, or the popover has no accessible name.

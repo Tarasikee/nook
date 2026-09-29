@@ -1,55 +1,32 @@
 ---
 title: Browser support
-description: Native capabilities Nook uses, their availability, and the no-fallback policy.
+description: What each hook needs, and what happens without it.
 ---
 
 # Browser support
 
-<p class="nk-lead">Nook uses native features directly and ships no polyfills or fallbacks. This page lists every capability the hooks and recipes rely on, so you can choose a browser baseline deliberately.</p>
+<p class="nk-lead">Nook uses native features directly and ships no polyfills. Features that only one engine supports are acceptable when documented.</p>
 
-## Policy
-
-- **Native first.** Features are built on native capabilities, even when only one engine supports them. Chromium-only, experimental, and flag-gated features are acceptable when documented with browser, version, and flag.
-- **No polyfills.** Missing features are documented, not emulated.
-- **Degrade honestly.** Without `interestfor`, tooltips don't appear, but their ARIA relationship still gives the text to assistive technology.
-
-## Support matrix
-
-The version columns are the first stable release recorded for each capability. **This browser** runs a live check in the browser you're using now.
+- **`usePopover()`** needs the Popover API: Chrome 114, Firefox 125, Safari 17.
+- **`useTooltip()`** needs `interestfor`: Chromium 142+, experimental. Current `hint` behavior needs Chrome 151 or Firefox 153.
+- **Positioning** needs `position-area` and the implicit invoker anchor: Chrome 133, Firefox 147, Safari 26.
 
 <SupportMatrix />
 
-<p style="font-size: 0.85rem; color: var(--vp-c-text-3)">Source: MDN browser-compat-data (revision <a href="https://github.com/mdn/browser-compat-data/tree/a2d2a599a78df7885f57bfe21880d21821036dc5"><code>a2d2a59</code></a> and <code>main</code>), checked September 28, 2026. Version data is evidence, not a substitute for testing on your target devices.</p>
+<p style="font-size: 0.85rem; color: var(--vp-c-text-3)">Versions are the first stable release in MDN browser-compat-data, checked September 28, 2026. "This browser" is a live check.</p>
 
-## By hook
+## Without support
 
-| Hook                | Needs                                   | Effectively                                     |
-| ------------------- | --------------------------------------- | ----------------------------------------------- |
-| `usePopover()`      | Popover API, `popovertarget`            | Chrome 114, Firefox 125, Safari 17              |
-| `useTooltip()`      | `interestfor`, current `popover="hint"` | Chromium 142+ (hint semantics current from 151) |
-| Positioning recipes | `position-area`, implicit anchor        | Chrome 133, Firefox 147, Safari 26              |
+| Missing                      | Effect                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------ |
+| Popover API                  | Content is not shown as a popover.                                       |
+| `interestfor`                | Tooltips never appear; their ARIA relationship remains.                  |
+| Anchor positioning           | With `@supports`, popovers keep the default centered placement.          |
+| `@starting-style`, `overlay` | Popovers open and close without animation, or leave the top layer early. |
 
-## Caveats
+Other caveats: older `hint` engines (Chrome 133–150, Firefox 149–152) behave differently; iOS did not dismiss on outside taps before 18.3; older browsers may not anchor popovers opened from code.
 
-::: warning interestfor is experimental
-Compat data marks `interestfor` experimental and not on the standards track. It is in Chromium 142 and later only.
-:::
-
-- **`hint` semantics changed.** Chrome 133–150 and Firefox 149–152 implement an older `hint`. Current behavior starts at Chrome 151 and Firefox 153.
-- **iOS light dismiss.** Outside taps did not dismiss popovers on iOS before 18.3.
-- **`source` when opening from code.** Browsers without full support show the popover but may not anchor it.
-- **CSS features ship separately.** `@starting-style` does not imply the `overlay` transition.
-
-## What happens without support
-
-| Missing                                  | Effect                                                                             |
-| ---------------------------------------- | ---------------------------------------------------------------------------------- |
-| Popover API                              | Content is not hidden or shown as a popover. The demos on this site show a notice. |
-| `interestfor`                            | Tooltips never appear; the ARIA relationship remains.                              |
-| Anchor positioning                       | With `@supports`, popovers keep the default centered placement.                    |
-| `@starting-style`, `transition-behavior` | Popovers open and close instantly.                                                 |
-
-## Feature detection
+## Detect support
 
 ```ts
 const hasPopover = 'showPopover' in HTMLElement.prototype
@@ -57,4 +34,4 @@ const hasInterest = Object.hasOwn(HTMLButtonElement.prototype, 'interestForEleme
 const hasAnchorPositioning = CSS.supports('position-area', 'top')
 ```
 
-The repository's [browser research](https://github.com/Tarasikee/nook/blob/main/docs/research.md) records the sources and observed behavior behind this page.
+Sources and observed behavior: [browser research](https://github.com/Tarasikee/nook/blob/main/docs/research.md).
