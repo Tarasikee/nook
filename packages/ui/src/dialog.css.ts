@@ -7,6 +7,8 @@ const closed = { opacity: 0, scale: '0.95' }
 export const dialog = style(
     {
         boxSizing: 'border-box',
+        // The browser centers a modal dialog with margin: auto; resets such as Tailwind's Preflight remove it.
+        margin: 'auto',
         width: `min(${containerLg}, calc(100vw - ${space(8)}))`,
         maxHeight: `calc(100vh - ${space(8)})`,
         padding: space(6),
@@ -40,4 +42,9 @@ globalStyle(`${dialog}::backdrop`, { background: 'rgb(0 0 0 / 0.5)' })
 export const dialogTitle = style(
     { margin: `0 0 ${space(2)}`, ...text.lg, fontWeight: weight.semibold, letterSpacing: trackingTight },
     'dialog__title'
+)
+
+export const dialogActions = style(
+    { display: 'flex', justifyContent: 'flex-end', gap: space(2), marginTop: space(6) },
+    'dialog__actions'
 )

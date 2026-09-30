@@ -18,6 +18,7 @@ const pages = [
     '/ui/button',
     '/ui/tooltip',
     '/ui/popover',
+    '/ui/dialog',
     '/examples/'
 ]
 
@@ -71,6 +72,31 @@ test('popover demo light-dismisses on outside click', async ({ page }) => {
 
     await page.mouse.click(5, 300)
     await expect(title).toBeHidden()
+})
+
+test('UI dialog demo opens modally, closes from Cancel and the backdrop', async ({ page }) => {
+    await page.goto('/ui/dialog')
+    const trigger = page.getByRole('button', { name: 'Delete project' })
+    const dialog = page.getByRole('dialog', { name: 'Delete “Atlas”?' })
+
+    await trigger.click()
+    await expect(dialog).toBeVisible()
+    expect(await dialog.evaluate((element) => element.matches(':modal'))).toBe(true)
+    // VitePress ships Tailwind's Preflight, which removes the browser's centering margin.
+    await dialog.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)))
+    const viewport = page.viewportSize()!
+    const box = (await dialog.boundingBox())!
+    expect(Math.abs(box.x + box.width / 2 - viewport.width / 2)).toBeLessThan(1.5)
+    expect(Math.abs(box.y + box.height / 2 - viewport.height / 2)).toBeLessThan(1.5)
+    await dialog.getByRole('button', { name: 'Cancel' }).click()
+    await expect(dialog).toBeHidden()
+    await expect(trigger).toBeFocused()
+
+    const shortcuts = page.getByRole('dialog', { name: 'Keyboard shortcuts' })
+    await page.getByRole('button', { name: 'Shortcuts' }).click()
+    await expect(shortcuts).toBeVisible()
+    await page.mouse.click(5, 5)
+    await expect(shortcuts).toBeHidden()
 })
 
 test('tooltip opens on keyboard focus and closes on blur', async ({ page }) => {

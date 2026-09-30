@@ -46,4 +46,4 @@ The CSS works on plain HTML:
 </div>
 ```
 
-Components: [Button](./button), [Tooltip](./tooltip), [Popover](./popover), [Dialog](../guide/dialog).
+Components: [Button](./button), [Tooltip](./tooltip), [Popover](./popover), [Dialog](./dialog).

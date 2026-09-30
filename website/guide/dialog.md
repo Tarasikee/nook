@@ -24,23 +24,7 @@ Name the dialog with `aria-labelledby` on its heading, as `titleProps` does for 
 
 ## Styled React component
 
-Import `@nook/ui/nook.css` (or `@nook/ui/dialog.css` and `@nook/ui/button.css`), then use `Dialog` and `DialogClose` from `@nook/ui-react`:
-
-```tsx
-<Dialog
-  title="Delete project?"
-  content={
-    <>
-      <p>This removes the project for everyone.</p>
-      <DialogClose>Cancel</DialogClose>
-    </>
-  }
->
-  <Button>Delete project</Button>
-</Dialog>
-```
-
-`children` is one button (or a button-forwarding component). `content` is the dialog body; `title` renders a heading and names the dialog. Without `title`, supply `aria-label` or `aria-labelledby` via `dialogProps`. Pass `closedby: 'any'` in `dialogProps` to enable backdrop dismissal; other native dialog props, such as `onClose` and `className`, also go there. The trigger and `DialogClose` work before hydration using native `commandfor`/`command` attributes. There is no controlled `open` prop: use `dialogProps.onClose` or observe the native `open` attribute when you need state.
+For a styled version, use `Dialog` and `DialogClose` from `@nook/ui-react`, described with a live demo in [Nook UI: Dialog](../ui/dialog).
 
 ## Behavior
 

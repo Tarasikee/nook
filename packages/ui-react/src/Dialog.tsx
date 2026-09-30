@@ -1,7 +1,7 @@
 import * as ui from '@nook/ui'
 import { createContext, type DialogHTMLAttributes, type ReactElement, type ReactNode, use, useId } from 'react'
-import { Button, type ButtonProps } from './Button.js'
-import { classNames, withTriggerProps } from './merge.js'
+import { Button, type ButtonProps } from './Button'
+import { classNames, withTriggerProps } from './merge'
 
 export type DialogProps = {
     content: ReactNode

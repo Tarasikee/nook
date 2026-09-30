@@ -39,6 +39,21 @@ test.describe('server rendering', () => {
 })
 
 test.describe('Dialog', () => {
+    test('stays centered under a margin reset such as Tailwind Preflight', async ({ page }) => {
+        await mountFixture(page, 'dialogs')
+        await page.addStyleTag({
+            content: '*, ::before, ::after, ::backdrop { margin: 0; padding: 0; border: 0 solid; }'
+        })
+        await page.locator('#open-dialog').click()
+        const dialog = page.getByRole('dialog', { name: 'Delete project?' })
+        await expect(dialog).toBeVisible()
+        await dialog.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)))
+
+        const viewport = page.viewportSize()!
+        const box = (await dialog.boundingBox())!
+        expect(Math.abs(box.x + box.width / 2 - viewport.width / 2)).toBeLessThan(1.5)
+        expect(Math.abs(box.y + box.height / 2 - viewport.height / 2)).toBeLessThan(1.5)
+    })
     test('opens modally, is named, closes declaratively, and returns focus', async ({ page }) => {
         const messages = await mountFixture(page, 'dialogs')
         const trigger = page.locator('#open-dialog')

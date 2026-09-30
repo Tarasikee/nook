@@ -1,7 +1,7 @@
 import { useTooltip } from '@nook/react'
 import * as ui from '@nook/ui'
 import type { HTMLAttributes, ReactElement, ReactNode, Ref } from 'react'
-import { classNames, withTriggerProps } from './merge.js'
+import { classNames, withTriggerProps } from './merge'
 
 export type Side = 'top' | 'bottom' | 'left' | 'right'
 export type Align = 'start' | 'center' | 'end'

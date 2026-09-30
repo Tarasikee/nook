@@ -1,9 +1,9 @@
 import { type PopoverCloseProps, usePopover } from '@nook/react'
 import * as ui from '@nook/ui'
 import { createContext, type HTMLAttributes, type ReactElement, type ReactNode, use } from 'react'
-import { Button, type ButtonProps } from './Button.js'
-import { classNames, withTriggerProps } from './merge.js'
-import type { Align, Side } from './Tooltip.js'
+import { Button, type ButtonProps } from './Button'
+import { classNames, withTriggerProps } from './merge'
+import type { Align, Side } from './Tooltip'
 
 export type PopoverProps = {
     content: ReactNode

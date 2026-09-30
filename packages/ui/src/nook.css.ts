@@ -9,6 +9,6 @@
 import type {} from './csstype'
 
 export { button } from './button.css'
-export { dialog, dialogTitle } from './dialog.css'
+export { dialog, dialogActions, dialogTitle } from './dialog.css'
 export { popover, popoverActions, popoverTitle } from './popover.css'
 export { tooltip, tooltipGroup } from './tooltip.css'

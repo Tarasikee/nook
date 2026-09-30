@@ -2,6 +2,17 @@ import prettier from 'eslint-config-prettier'
 import reactHooks from 'eslint-plugin-react-hooks'
 import tseslint from 'typescript-eslint'
 
+const extensionlessImports = [
+    'ImportDeclaration > Literal',
+    'ExportNamedDeclaration > Literal',
+    'ExportAllDeclaration > Literal',
+    'ImportExpression > Literal',
+    'CallExpression[callee.name="require"] > Literal'
+].map((selector) => ({
+    selector: `${selector}[value=/[.](js|jsx|mjs|cjs|ts|tsx|mts|cts)($|[?])/]`,
+    message: 'Omit JavaScript and TypeScript file extensions from imports.'
+}))
+
 // Project rules live here instead of in prose. Reports are evidence to triage:
 // a justified exception needs an inline comment with the reason.
 export default tseslint.config(
@@ -15,6 +26,14 @@ export default tseslint.config(
         ]
     },
     ...tseslint.configs.recommended,
+    {
+        files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+        // The UI build script runs directly in Node and requires its .ts extension.
+        ignores: ['packages/ui/build.ts'],
+        rules: {
+            'no-restricted-syntax': ['error', ...extensionlessImports]
+        }
+    },
     {
         // Rules of React, backed by React Compiler analysis.
         files: [
@@ -65,6 +84,7 @@ export default tseslint.config(
         rules: {
             'no-restricted-syntax': [
                 'error',
+                ...extensionlessImports,
                 {
                     selector: "JSXAttribute[name.name='data-testid']",
                     message: 'Locate demo elements by role and accessible name.'

@@ -2,7 +2,7 @@
 
 import type { RefCallback } from 'react'
 import { useEffect, useEffectEvent, useId } from 'react'
-import { useNativePopover } from './useNativePopover.js'
+import { useNativePopover } from './useNativePopover'
 
 export type UsePopoverOptions = {
     mode?: 'auto' | 'manual'

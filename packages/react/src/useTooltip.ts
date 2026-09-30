@@ -2,7 +2,7 @@
 
 import type { RefCallback } from 'react'
 import { useId } from 'react'
-import { useNativePopover } from './useNativePopover.js'
+import { useNativePopover } from './useNativePopover'
 
 export type UseTooltipOptions = {
     role?: 'description' | 'label'

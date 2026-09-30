@@ -1,6 +1,6 @@
 import * as ui from '@nook/ui'
 import type { ButtonHTMLAttributes, Ref } from 'react'
-import { classNames } from './merge.js'
+import { classNames } from './merge'
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     variant?: 'primary' | 'secondary' | 'ghost'

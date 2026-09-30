@@ -21,6 +21,8 @@ export function anchored(defaults: { side: 'top' | 'bottom'; align: 'start' | 'c
 
     return {
         ...closed,
+        // The browser's centered popover default, which resets such as Tailwind's Preflight remove.
+        margin: 'auto',
         transition: [
             `opacity ${vars.duration} ${ease}`,
             `scale ${vars.duration} ${ease}`,

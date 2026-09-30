@@ -1,15 +1,17 @@
 import { useSyncExternalStore } from 'react'
 
-type Requirement = 'popover' | 'interest'
+type Requirement = 'popover' | 'interest' | 'command'
 
 const messages: Record<Requirement, string> = {
     popover: 'This demo needs the native Popover API, which this browser does not provide.',
-    interest: 'Tooltips use the interestfor attribute, currently available only in Chromium 142 and later.'
+    interest: 'Tooltips use the interestfor attribute, currently available only in Chromium 142 and later.',
+    command: 'Dialogs open through the command and commandfor attributes: Chrome 135, Firefox 144, or Safari 26.2.'
 }
 
 const supported: Record<Requirement, () => boolean> = {
     popover: () => 'showPopover' in HTMLElement.prototype,
-    interest: () => Object.hasOwn(HTMLButtonElement.prototype, 'interestForElement')
+    interest: () => Object.hasOwn(HTMLButtonElement.prototype, 'interestForElement'),
+    command: () => 'commandForElement' in HTMLButtonElement.prototype
 }
 
 // Feature support never changes during a session, so there is nothing to subscribe to.

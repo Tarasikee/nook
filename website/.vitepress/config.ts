@@ -44,7 +44,7 @@ const sidebar: DefaultTheme.SidebarItem[] = [
             { text: 'Button', link: '/ui/button' },
             { text: 'Tooltip', link: '/ui/tooltip' },
             { text: 'Popover', link: '/ui/popover' },
-            { text: 'Dialog', link: '/guide/dialog' }
+            { text: 'Dialog', link: '/ui/dialog' }
         ]
     },
     {

@@ -8,7 +8,7 @@ export {
     type PopoverTriggerProps,
     type UsePopoverOptions,
     type UsePopoverResult
-} from './usePopover.js'
+} from './usePopover'
 
 export {
     useTooltip,
@@ -16,4 +16,4 @@ export {
     type TooltipTriggerProps,
     type UseTooltipOptions,
     type UseTooltipResult
-} from './useTooltip.js'
+} from './useTooltip'
