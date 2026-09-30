@@ -28,18 +28,18 @@ export function DialogDemo() {
             </Dialog>
 
             <Dialog
-                title="Keyboard shortcuts"
+                title="What’s new"
                 dialogProps={{ closedby: 'any' }}
                 content={
                     <>
-                        <p style={{ margin: 0 }}>Press ? anywhere to open this list.</p>
+                        <p style={{ margin: 0 }}>This one also closes when you click outside it.</p>
                         <div className="nook-dialog__actions">
                             <DialogClose>Close</DialogClose>
                         </div>
                     </>
                 }
             >
-                <Button variant="ghost">Shortcuts</Button>
+                <Button variant="ghost">What’s new</Button>
             </Dialog>
         </Demo>
     )

@@ -32,6 +32,7 @@ For a styled version, use `Dialog` and `DialogClose` from `@nook/ui-react`, desc
 - While it is open, the rest of the page cannot be focused or clicked.
 - <kbd>Esc</kbd> or `command="close"` closes it and returns focus to the button that opened it.
 - A backdrop click does not close it. Add `closedby="any"` to close on a backdrop click.
+- Inert does not stop key listeners on `window` or `document`. Skip app-wide shortcuts while `document.querySelector('dialog:modal')` matches, or they act on the page behind the dialog.
 
 For content that should not block the page, use a [popover](./popover) instead.
 

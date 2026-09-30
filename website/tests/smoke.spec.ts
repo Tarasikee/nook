@@ -92,11 +92,15 @@ test('UI dialog demo opens modally, closes from Cancel and the backdrop', async 
     await expect(dialog).toBeHidden()
     await expect(trigger).toBeFocused()
 
-    const shortcuts = page.getByRole('dialog', { name: 'Keyboard shortcuts' })
-    await page.getByRole('button', { name: 'Shortcuts' }).click()
-    await expect(shortcuts).toBeVisible()
+    const news = page.getByRole('dialog', { name: 'What’s new' })
+    await page.getByRole('button', { name: 'What’s new' }).click()
+    await expect(news).toBeVisible()
+    // Site search hotkeys would open search, unusable, underneath the modal.
+    await page.keyboard.press('/')
+    await page.keyboard.press('ControlOrMeta+k')
+    await expect(page.locator('.VPLocalSearchBox')).toHaveCount(0)
     await page.mouse.click(5, 5)
-    await expect(shortcuts).toBeHidden()
+    await expect(news).toBeHidden()
 })
 
 test('tooltip opens on keyboard focus and closes on blur', async ({ page }) => {
