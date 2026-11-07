@@ -1,4 +1,4 @@
-import { Button, Tooltip, TooltipGroup } from '@nook/ui-react'
+import { Button, Tooltip, TooltipGroup } from '@nook/ui'
 import { Demo } from '../Demo'
 import { Icon, useUnsupported, type IconName } from '../shared'
 

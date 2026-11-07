@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
+import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, postcssIsolateStyles, type DefaultTheme } from 'vitepress'
-import { nookIdentifier } from '../../packages/ui/identifiers'
 import { sourcePlugin } from './source-plugin'
 
 const repository = 'https://github.com/Tarasikee/nook'
@@ -9,23 +9,13 @@ const repository = 'https://github.com/Tarasikee/nook'
 /** A path inside `packages/`. */
 const source = (path: string) => fileURLToPath(new URL(`../../packages/${path}`, import.meta.url))
 
-const sidebar: DefaultTheme.SidebarItem[] = [
+const guideSidebar: DefaultTheme.SidebarItem[] = [
     {
         text: 'Getting started',
         items: [
             { text: 'Introduction', link: '/guide/' },
             { text: 'Quick start', link: '/guide/getting-started' },
             { text: 'Core concepts', link: '/guide/concepts' }
-        ]
-    },
-    {
-        text: 'Primitives',
-        items: [
-            { text: 'Popover', link: '/guide/popover' },
-            { text: 'Tooltip', link: '/guide/tooltip' },
-            { text: 'Dialog', link: '/guide/dialog' },
-            { text: 'Menu <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' },
-            { text: 'Select <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' }
         ]
     },
     {
@@ -36,7 +26,23 @@ const sidebar: DefaultTheme.SidebarItem[] = [
             { text: 'Browser support', link: '/guide/browser-support' },
             { text: 'Performance', link: '/guide/performance' }
         ]
-    },
+    }
+]
+
+const nookSidebar: DefaultTheme.SidebarItem[] = [
+    {
+        text: 'Primitives',
+        items: [
+            { text: 'Popover', link: '/guide/popover' },
+            { text: 'Tooltip', link: '/guide/tooltip' },
+            { text: 'Dialog', link: '/guide/dialog' },
+            { text: 'Menu <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' },
+            { text: 'Select <span class="nk-soon">planned</span>', link: '/guide/#status-and-roadmap' }
+        ]
+    }
+]
+
+const uiSidebar: DefaultTheme.SidebarItem[] = [
     {
         text: 'Nook UI',
         items: [
@@ -46,12 +52,32 @@ const sidebar: DefaultTheme.SidebarItem[] = [
             { text: 'Popover', link: '/ui/popover' },
             { text: 'Dialog', link: '/ui/dialog' }
         ]
-    },
+    }
+]
+
+const apiSidebar: DefaultTheme.SidebarItem[] = [
     {
-        text: 'Reference',
+        text: 'API',
         items: [
-            { text: 'API', link: '/api/' },
-            { text: 'Examples', link: '/examples/' }
+            { text: 'Overview', link: '/api/' },
+            { text: 'usePopover', link: '/api/#usepopover' },
+            { text: 'useTooltip', link: '/api/#usetooltip' },
+            { text: 'Core', link: '/api/#core' }
+        ]
+    }
+]
+
+const examplesSidebar: DefaultTheme.SidebarItem[] = [
+    {
+        text: 'Examples',
+        items: [
+            { text: 'Overview', link: '/examples/' },
+            { text: 'Share popover', link: '/examples/#share-popover' },
+            { text: 'Toolbar tooltips with a group', link: '/examples/#toolbar-tooltips-with-a-group' },
+            { text: 'Tooltip and popover on one button', link: '/examples/#tooltip-and-popover-on-one-button' },
+            { text: 'Controlled manual panel', link: '/examples/#controlled-manual-panel' },
+            { text: 'Placement playground', link: '/examples/#placement-playground' },
+            { text: 'Animated popover', link: '/examples/#animated-popover' }
         ]
     }
 ]
@@ -86,7 +112,12 @@ export default defineConfig({
     themeConfig: {
         logo: { src: '/logo.svg', width: 24, height: 24 },
         nav: [
-            { text: 'Guide', link: '/guide/', activeMatch: '^/guide/' },
+            {
+                text: 'Guide',
+                link: '/guide/',
+                activeMatch: '^/guide/(?!popover(?:$|[.#/])|tooltip(?:$|[.#/])|dialog(?:$|[.#/]))'
+            },
+            { text: 'Nook', link: '/guide/popover', activeMatch: '^/guide/(popover|tooltip|dialog)(?:$|[.#/])' },
             { text: 'Nook UI', link: '/ui/', activeMatch: '^/ui/' },
             { text: 'API', link: '/api/', activeMatch: '^/api/' },
             { text: 'Examples', link: '/examples/', activeMatch: '^/examples/' },
@@ -100,10 +131,14 @@ export default defineConfig({
             }
         ],
         sidebar: {
-            '/guide/': sidebar,
-            '/api/': sidebar,
-            '/examples/': sidebar,
-            '/ui/': sidebar
+            // Equal-depth matches keep insertion order; primitive pages precede the Guide fallback.
+            '/guide/popover': nookSidebar,
+            '/guide/tooltip': nookSidebar,
+            '/guide/dialog': nookSidebar,
+            '/guide/': guideSidebar,
+            '/api/': apiSidebar,
+            '/examples/': examplesSidebar,
+            '/ui/': uiSidebar
         },
         outline: { level: [2, 3], label: 'On this page' },
         search: { provider: 'local' },
@@ -121,12 +156,10 @@ export default defineConfig({
     vite: {
         esbuild: { jsx: 'automatic', jsxImportSource: 'react' },
         plugins: [
+            tailwindcss(),
             sourcePlugin(),
             vanillaExtractPlugin({
-                // @nook/ui keeps the class names it ships (nook-button); the site's own stay short
-                // hashes, prefixed like vanilla-extract's default when they start with a digit.
-                identifiers: ({ hash, ...params }) =>
-                    params.filePath.includes('packages/ui/src/') ? nookIdentifier(params) : hash.replace(/^(?=\d)/, '_')
+                identifiers: ({ hash }) => hash.replace(/^(?=\d)/, '_')
             })
         ],
         css: {
@@ -139,12 +172,9 @@ export default defineConfig({
             include: ['react', 'react/jsx-dev-runtime', 'react-dom/client', '@vanilla-extract/recipes/createRuntimeFn']
         },
         resolve: {
-            // Workspace packages from source. `@nook/ui/nook.css` resolves to `src/nook.css.ts`.
             alias: [
-                { find: '@nook/core', replacement: source('core/src/index.ts') },
-                { find: '@nook/react', replacement: source('react/src/index.ts') },
-                { find: '@nook/ui-react', replacement: source('ui-react/src/index.ts') },
-                { find: /^@nook\/ui$/, replacement: source('ui/src/nook.css.ts') },
+                { find: '@nook/ui/hooks', replacement: source('ui/src/hooks.ts') },
+                { find: /^@nook\/ui$/, replacement: source('ui/src/index.ts') },
                 { find: '@nook/ui', replacement: source('ui/src') }
             ]
         }

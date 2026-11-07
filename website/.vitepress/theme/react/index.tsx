@@ -1,7 +1,4 @@
-import nookButtonStyles from '@nook/ui/button.css?source'
-import nookDialogStyles from '@nook/ui/dialog.css?source'
-import nookPopoverStyles from '@nook/ui/popover.css?source'
-import nookTooltipStyles from '@nook/ui/tooltip.css?source'
+import tailwindStyles from '../tailwind.css?source'
 import { StrictMode, type ComponentType } from 'react'
 import { createRoot } from 'react-dom/client'
 import { AnimationDemo } from './AnimationDemo'
@@ -43,10 +40,10 @@ export const demos = {
     placement: { component: PlacementDemo, code: placementCode, styles: placementStyles },
     popover: { component: PopoverDemo, code: popoverCode },
     tooltip: { component: TooltipDemo, code: tooltipCode },
-    'ui-button': { component: UiButtonDemo, code: uiButtonCode, styles: nookButtonStyles },
-    'ui-dialog': { component: UiDialogDemo, code: uiDialogCode, styles: nookDialogStyles },
-    'ui-popover': { component: UiPopoverDemo, code: uiPopoverCode, styles: nookPopoverStyles },
-    'ui-tooltip': { component: UiTooltipDemo, code: uiTooltipCode, styles: nookTooltipStyles }
+    'ui-button': { component: UiButtonDemo, code: uiButtonCode, styles: tailwindStyles },
+    'ui-dialog': { component: UiDialogDemo, code: uiDialogCode, styles: tailwindStyles },
+    'ui-popover': { component: UiPopoverDemo, code: uiPopoverCode, styles: tailwindStyles },
+    'ui-tooltip': { component: UiTooltipDemo, code: uiTooltipCode, styles: tailwindStyles }
 } satisfies Record<string, Entry>
 
 export type DemoName = keyof typeof demos

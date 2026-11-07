@@ -1,4 +1,4 @@
-import { usePopover, useTooltip } from '@nook/react'
+import { usePopover, useTooltip } from '@nook/ui/hooks'
 import { useState, type CSSProperties } from 'react'
 import * as styles from './HeroDemo.css'
 import * as kit from './kit.css'

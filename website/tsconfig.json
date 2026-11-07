@@ -4,19 +4,12 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "lib": ["ES2022", "DOM", "DOM.Iterable"],
-        "types": ["node"],
-        "paths": {
-            "@nook/core": ["packages/core/src/index.ts"],
-            "@nook/react": ["packages/react/src/index.ts"],
-            "@nook/ui": ["packages/ui/src/nook.css.ts"],
-            "@nook/ui-react": ["packages/ui-react/src/index.ts"]
-        }
+        "types": ["node"]
     },
     "include": [
         ".vitepress/**/*.ts",
         ".vitepress/**/*.tsx",
         ".vitepress/**/*.vue",
-        "../packages/ui/src/csstype.d.ts",
         "tests/**/*.ts",
         "playwright.config.ts"
     ]

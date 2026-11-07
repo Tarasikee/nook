@@ -45,6 +45,59 @@ for (const path of pages) {
     })
 }
 
+const sections = [
+    { name: 'Guide', path: '/guide/', groups: ['Getting started', 'Guides'], prefix: '/guide/' },
+    { name: 'Nook', path: '/guide/popover', groups: ['Primitives'], prefix: '/guide/' },
+    { name: 'Nook UI', path: '/ui/', groups: ['Nook UI'], prefix: '/ui/' },
+    { name: 'API', path: '/api/', groups: ['API'], prefix: '/api/' },
+    { name: 'Examples', path: '/examples/', groups: ['Examples'], prefix: '/examples/' }
+]
+
+test('header tabs switch to their own sidebars', async ({ page }) => {
+    await page.goto('/guide/')
+    const header = page.getByRole('navigation', { name: 'Main Navigation' })
+    const sidebar = page.getByRole('navigation', { name: 'Sidebar Navigation' })
+
+    await expect(header.locator('a.VPNavBarMenuLink')).toHaveText(sections.map(({ name }) => name))
+    for (const section of sections) {
+        await header.getByRole('link', { name: section.name, exact: true }).click()
+        await expect(page).toHaveURL(new RegExp(`${section.path}$`))
+        await expect(header.locator('a.active')).toHaveText(section.name)
+        await expect(sidebar.getByRole('heading')).toHaveText(section.groups)
+        const links = await sidebar
+            .getByRole('link')
+            .evaluateAll((elements) => elements.map((element) => element.getAttribute('href')!))
+        expect(links.every((link) => link.startsWith(section.prefix))).toBe(true)
+        if (section.name === 'Guide') {
+            expect(links).not.toContain('/guide/popover')
+            expect(links).not.toContain('/guide/tooltip')
+            expect(links).not.toContain('/guide/dialog')
+        }
+    }
+})
+
+for (const path of ['/guide/popover', '/guide/tooltip', '/guide/dialog']) {
+    test(`${path} belongs to the Nook tab`, async ({ page }) => {
+        await page.goto(path)
+        await expect(page.locator('.VPNavBarMenu a.active')).toHaveText('Nook')
+        await expect(page.locator('.VPSidebar h2')).toHaveText(['Primitives'])
+    })
+}
+
+for (const path of ['/api/', '/examples/']) {
+    test(`${path} sidebar anchors target existing headings`, async ({ page }) => {
+        await page.goto(path)
+        const anchors = page.locator('.VPSidebar a[href*="#"]')
+        expect(await anchors.count()).toBeGreaterThan(0)
+        for (const anchor of await anchors.all()) {
+            const hash = new URL((await anchor.getAttribute('href'))!, page.url()).hash
+            await anchor.click()
+            await expect(page).toHaveURL(new RegExp(`${hash}$`))
+            await expect(page.locator(hash)).toHaveCount(1)
+        }
+    })
+}
+
 // Demos are located by role and accessible name, like a user would find them.
 const panel = (page: Page, title: string) =>
     page.locator('[popover]').filter({ has: page.getByRole('heading', { name: title }) })
@@ -231,6 +284,10 @@ test('client-side navigation cleans up demos', async ({ page }) => {
     await page.getByRole('button', { name: 'Share', exact: true }).click()
 
     await page.keyboard.press('Escape')
+    await page
+        .getByRole('navigation', { name: 'Main Navigation' })
+        .getByRole('link', { name: 'Nook', exact: true })
+        .click()
     await page.locator('.VPSidebar a[href="/guide/tooltip"]').click()
     await expect(page).toHaveURL(/\/guide\/tooltip$/)
     await expect(page.getByRole('heading', { name: 'Invite collaborators' })).toHaveCount(0)
@@ -245,6 +302,25 @@ test('every React demo island mounts', async ({ page }) => {
 
 test.describe('mobile layout', () => {
     test.use({ viewport: { width: 375, height: 740 } })
+
+    test('mobile header tabs open section-specific sidebars', async ({ page }) => {
+        await page.goto('/guide/')
+        for (const section of sections) {
+            await page.getByRole('button', { name: 'Menu', exact: true }).first().click()
+            const menu = page.locator('.VPNavScreen')
+            await expect(menu.getByRole('link').filter({ hasText: /^(Guide|Nook|Nook UI|API|Examples)$/ })).toHaveText(
+                sections.map(({ name }) => name)
+            )
+            await menu.getByRole('link', { name: section.name, exact: true }).click()
+            await expect(page).toHaveURL(new RegExp(`${section.path}$`))
+            await page.locator('.VPLocalNav').getByRole('button', { name: 'Menu', exact: true }).click()
+            const sidebar = page.getByRole('navigation', { name: 'Sidebar Navigation' })
+            await expect(sidebar).toBeVisible()
+            await expect(sidebar.getByRole('heading')).toHaveText(section.groups)
+            await page.locator('.VPBackdrop').click({ position: { x: 365, y: 400 } })
+            await expect(page.locator('.VPSidebar')).not.toHaveClass(/open/)
+        }
+    })
 
     for (const path of ['/', '/guide/getting-started', '/guide/browser-support', '/examples/']) {
         test(`${path} has no horizontal page overflow`, async ({ page }) => {

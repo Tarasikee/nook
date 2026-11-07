@@ -1,0 +1,25 @@
+{
+    "name": "@nook/cli",
+    "version": "0.0.0",
+    "private": true,
+    "license": "MIT",
+    "description": "Build and install Nook source components with the shadcn registry workflow.",
+    "type": "module",
+    "bin": {
+        "nook": "./src/index.mjs"
+    },
+    "files": [
+        "src",
+        "dist/r"
+    ],
+    "scripts": {
+        "build": "node src/index.mjs build registry.json --cwd ../.. --output packages/cli/dist/r",
+        "prepack": "pnpm build",
+        "test": "node --test tests/*.test.mjs",
+        "check:compiler": "node scripts/check-compiler.mjs ../ui",
+        "check:workspace-deps": "node scripts/check-workspace-dependencies.mjs"
+    },
+    "dependencies": {
+        "shadcn": "^4.23.0"
+    }
+}

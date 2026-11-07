@@ -28,20 +28,13 @@ export default tseslint.config(
     ...tseslint.configs.recommended,
     {
         files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
-        // The UI build script runs directly in Node and requires its .ts extension.
-        ignores: ['packages/ui/build.ts'],
         rules: {
             'no-restricted-syntax': ['error', ...extensionlessImports]
         }
     },
     {
         // Rules of React, backed by React Compiler analysis.
-        files: [
-            'packages/react/**/*.{ts,tsx}',
-            'packages/ui-react/**/*.{ts,tsx}',
-            'website/.vitepress/theme/react/**/*.tsx',
-            'bench/src/**/*.tsx'
-        ],
+        files: ['packages/ui/**/*.{ts,tsx}', 'website/.vitepress/theme/react/**/*.tsx', 'bench/src/**/*.tsx'],
         plugins: { 'react-hooks': reactHooks },
         rules: {
             ...reactHooks.configs.flat['recommended-latest'].rules,
@@ -62,8 +55,8 @@ export default tseslint.config(
         }
     },
     {
-        // Core is framework-independent and never depends on a binding.
-        files: ['packages/core/**/*.ts'],
+        // The native state helper has no React dependency.
+        files: ['packages/ui/src/popover-store.ts'],
         rules: {
             'no-restricted-imports': [
                 'error',
@@ -71,7 +64,7 @@ export default tseslint.config(
                     patterns: [
                         {
                             group: ['react', 'react-*', 'vue', '@nook/*'],
-                            message: 'Core must stay framework-independent.'
+                            message: 'Native state helpers must stay framework-independent.'
                         }
                     ]
                 }

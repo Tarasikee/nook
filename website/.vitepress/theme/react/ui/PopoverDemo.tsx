@@ -1,4 +1,4 @@
-import { Button, Popover, PopoverClose, Tooltip } from '@nook/ui-react'
+import { Button, Popover, PopoverClose, Tooltip } from '@nook/ui'
 import { Demo } from '../Demo'
 import { Icon, useUnsupported } from '../shared'
 
@@ -17,7 +17,7 @@ export function PopoverDemo() {
                 content={
                     <>
                         <p style={{ margin: 0 }}>Anyone with the link can view this project.</p>
-                        <div className="nook-popover__actions">
+                        <div className="nook-popover__actions mt-4 flex justify-end gap-2">
                             <PopoverClose>Done</PopoverClose>
                         </div>
                     </>

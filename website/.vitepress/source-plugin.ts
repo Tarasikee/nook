@@ -19,7 +19,7 @@ const languages: [suffix: string, lang: string][] = [
 /**
  * `import source from './File.tsx?source'` returns `{ lang, html }`: that file's source highlighted
  * with Shiki at build time, using the same themes and markup as VitePress code blocks. The path
- * resolves like any import, so aliases such as `@nook/ui/button.css?source` work.
+ * resolves like any import, so aliases such as `@nook/ui/Button?source` work.
  */
 export function sourcePlugin(): Plugin {
     return {

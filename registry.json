@@ -1,0 +1,136 @@
+{
+    "$schema": "https://ui.shadcn.com/schema/registry.json",
+    "name": "nook",
+    "homepage": "https://github.com/Tarasikee/nook",
+    "items": [
+        {
+            "name": "button",
+            "type": "registry:ui",
+            "title": "Button",
+            "description": "Native button with CVA variants.",
+            "dependencies": ["class-variance-authority@^0.7.1", "clsx@^2.1.1", "tailwind-merge@^3.7.0"],
+            "files": [
+                {
+                    "path": "packages/ui/src/Button.tsx",
+                    "type": "registry:ui",
+                    "target": "@ui/Button.tsx"
+                },
+                {
+                    "path": "packages/ui/src/cn.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/cn.ts"
+                }
+            ],
+            "docs": "Requires Tailwind CSS v4.3+. Styles are included as utility classes; no component CSS imports."
+        },
+        {
+            "name": "dialog",
+            "type": "registry:ui",
+            "title": "Dialog",
+            "description": "Native modal dialog with declarative open and close commands.",
+            "dependencies": ["class-variance-authority@^0.7.1", "clsx@^2.1.1", "tailwind-merge@^3.7.0"],
+            "files": [
+                {
+                    "path": "packages/ui/src/Dialog.tsx",
+                    "type": "registry:ui",
+                    "target": "@ui/Dialog.tsx"
+                },
+                {
+                    "path": "packages/ui/src/Button.tsx",
+                    "type": "registry:ui",
+                    "target": "@ui/Button.tsx"
+                },
+                {
+                    "path": "packages/ui/src/utils.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/utils.ts"
+                },
+                {
+                    "path": "packages/ui/src/cn.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/cn.ts"
+                }
+            ],
+            "docs": "Requires Tailwind CSS v4.3+. Styles are included as utility classes; no component CSS imports."
+        },
+        {
+            "name": "popover",
+            "type": "registry:ui",
+            "title": "Popover",
+            "description": "Native popover with controlled state, light dismissal, and anchor positioning.",
+            "dependencies": ["class-variance-authority@^0.7.1", "clsx@^2.1.1", "tailwind-merge@^3.7.0"],
+            "files": [
+                {
+                    "path": "packages/ui/src/Popover.tsx",
+                    "type": "registry:ui",
+                    "target": "@ui/Popover.tsx"
+                },
+                {
+                    "path": "packages/ui/src/Button.tsx",
+                    "type": "registry:ui",
+                    "target": "@ui/Button.tsx"
+                },
+                {
+                    "path": "packages/ui/src/utils.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/utils.ts"
+                },
+                {
+                    "path": "packages/ui/src/use-popover.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/use-popover.ts"
+                },
+                {
+                    "path": "packages/ui/src/use-native-popover.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/use-native-popover.ts"
+                },
+                {
+                    "path": "packages/ui/src/popover-store.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/popover-store.ts"
+                },
+                {
+                    "path": "packages/ui/src/cn.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/cn.ts"
+                }
+            ],
+            "docs": "Requires Tailwind CSS v4.3+. Styles are included as utility classes; no component CSS imports."
+        },
+        {
+            "name": "tooltip",
+            "type": "registry:ui",
+            "title": "Tooltip",
+            "description": "Native interest-invoker tooltip and tooltip group.",
+            "files": [
+                {
+                    "path": "packages/ui/src/Tooltip.tsx",
+                    "type": "registry:ui",
+                    "target": "@ui/Tooltip.tsx"
+                },
+                {
+                    "path": "packages/ui/src/utils.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/utils.ts"
+                },
+                {
+                    "path": "packages/ui/src/use-tooltip.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/use-tooltip.ts"
+                },
+                {
+                    "path": "packages/ui/src/use-native-popover.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/use-native-popover.ts"
+                },
+                {
+                    "path": "packages/ui/src/popover-store.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/popover-store.ts"
+                }
+            ],
+            "docs": "Requires Tailwind CSS v4.3+. Styles are included as utility classes; no component CSS imports."
+        }
+    ]
+}

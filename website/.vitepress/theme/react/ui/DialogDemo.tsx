@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogClose } from '@nook/ui-react'
+import { Button, Dialog, DialogClose } from '@nook/ui'
 import { Demo } from '../Demo'
 import { useUnsupported } from '../shared'
 
@@ -17,7 +17,7 @@ export function DialogDemo() {
                 content={
                     <>
                         <p style={{ margin: 0 }}>This removes the project and its history for everyone.</p>
-                        <div className="nook-dialog__actions">
+                        <div className="nook-dialog__actions mt-6 flex justify-end gap-2">
                             <DialogClose>Cancel</DialogClose>
                             <DialogClose variant="primary">Delete</DialogClose>
                         </div>
@@ -33,7 +33,7 @@ export function DialogDemo() {
                 content={
                     <>
                         <p style={{ margin: 0 }}>This one also closes when you click outside it.</p>
-                        <div className="nook-dialog__actions">
+                        <div className="nook-dialog__actions mt-6 flex justify-end gap-2">
                             <DialogClose>Close</DialogClose>
                         </div>
                     </>

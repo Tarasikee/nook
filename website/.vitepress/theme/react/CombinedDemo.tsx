@@ -1,4 +1,4 @@
-import { usePopover, useTooltip } from '@nook/react'
+import { usePopover, useTooltip } from '@nook/ui/hooks'
 import { useState } from 'react'
 import { Demo } from './Demo'
 import * as kit from './kit.css'

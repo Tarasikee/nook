@@ -5,7 +5,8 @@
         "moduleResolution": "bundler",
         "baseUrl": ".",
         "paths": {
-            "@nook/core": ["packages/core/src/index.ts"]
+            "@nook/ui": ["packages/ui/src/index.ts"],
+            "@nook/ui/hooks": ["packages/ui/src/hooks.ts"]
         },
         "strict": true,
         "skipLibCheck": true,

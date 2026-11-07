@@ -2,7 +2,7 @@
 
 Dated research on the browser features Nook builds on, verified **2026-09-28**. It is evidence, not a support promise; the policy is in the [README](../README.md#browser-support-policy). Recheck sources and record the date and browser version when updating.
 
-"Observed" facts come from Playwright's bundled Chromium 145.0.7632.6. Accessibility observations use Chromium's own tree over CDP (`Accessibility.getPartialAXTree`), not Playwright's DOM approximation. They are guarded by `packages/react/tests/platform.spec.ts`.
+"Observed" facts come from Playwright's bundled Chromium 145.0.7632.6. Accessibility observations use Chromium's own tree over CDP (`Accessibility.getPartialAXTree`), not Playwright's DOM approximation. They are guarded by `packages/ui/tests/hooks/platform.spec.ts`.
 
 ## Compatibility
 
@@ -64,6 +64,10 @@ Observed:
 - `showPopover()` then `hidePopover()` in one task produced a single `toggle` event from `closed` to `closed`. A click then an immediate outside click also coalesced.
 - `ToggleEvent.source` reported the invoking button.
 
+Verified 2026-10-03 in Chromium 153.0.8010.12 (`packages/ui/tests/hooks/hooks.spec.ts`, source and compiled builds under StrictMode): `defaultOpen` reports the initial opening once when initialized after callback subscription. Opening during the first ref attachment instead lost that notification before the subscription was installed. Defaults also survive delayed content attachment, are consumed only once, and yield to controlled state and pending imperative requests; hydration preserves an already-open uncontrolled popover.
+
+Verified 2026-11-07 in Chromium 153.0.8010.12 after consolidating components and native helpers in `packages/ui/src`: source and compiled builds preserve the above behavior with a stable store ref and layout-effect subscription. Component tests also verify CVA button styling, tooltip placement and group delays, popover dismissal, and modal focus behavior using Tailwind CSS v4.3.5 utilities. Tailwind is compiled from the actual component sources in tests, including Preflight. Left/right placements preserve the 8px gap for start, center, and end alignment; reduced-motion preferences disable transitions, and consumer utility classes override CVA defaults. The component, hook, and platform suites now share one UI package; the website resolves those sources directly.
+
 ## Interest invokers
 
 `interestfor` on `<a>`, `<button>`, `<area>`, or SVG `<a>` targets an element that the browser shows on hover, focus, or long press; Escape cancels all interest. It supplies an implicit anchor. `interest-delay` (one value, or start and end) sets timing; `:interest-source` and `:interest-target` style the pair. `interest` and `loseinterest` fire on the target with `InterestEvent.source`. Detect with `Object.hasOwn(HTMLButtonElement.prototype, 'interestForElement')`. [MDN guide](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using_interest_invokers)
@@ -81,13 +85,13 @@ Observed:
 
 `<button commandfor="id" command="show-modal">` opens a `<dialog>` as modal and `command="close"` closes it, without script (`commandfor` support is in the table above). A modal dialog is in the top layer and makes the rest of the page inert. `closedby` sets what light-dismisses it: `any`, `closerequest`, or `none`. [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog)
 
-Observed in Chromium 145 on 2026-09-29 (`packages/react/tests/platform.spec.ts`):
+Observed in Chromium 145 on 2026-09-29 (`packages/ui/tests/hooks/platform.spec.ts`):
 
 - `command="show-modal"` opened the dialog as `:modal` and moved focus to the first focusable element inside. Escape closed it and returned focus to the invoker.
 - While open, the page behind could not be focused or clicked. `command="close"` closed it and returned focus to the invoker.
 - A backdrop click did not close a default dialog; with `closedby="any"` it did.
 - The `open` attribute tracked every open and close, including Escape, so a `MutationObserver` on it can mirror the state.
-- The `@nook/ui-react` Dialog's server-rendered `commandfor` buttons opened and closed a modal before hydration; its compiled and source builds also returned focus on close/Escape and honored `closedby="any"` after hydration (Chromium 145.0.7632.6, 2026-09-29; `packages/ui-react/tests/components.spec.ts`).
+- The `@nook/ui` Dialog's server-rendered `commandfor` buttons opened and closed a modal before hydration; its compiled and source builds also returned focus on close/Escape and honored `closedby="any"` after hydration (Chromium 145.0.7632.6, 2026-09-29; `packages/ui/tests/components/components.spec.ts`).
 
 ## Positioning, transitions, select, announcements
 
@@ -95,6 +99,10 @@ Observed in Chromium 145 on 2026-09-29 (`packages/react/tests/platform.spec.ts`)
 - **Transitions:** `@starting-style` gives the entry style; `display` and `overlay` with `allow-discrete` keep the exit visible and in the top layer. Closing must work with animations disabled. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overlay)
 - **Customizable select:** `appearance: base-select`, `::picker(select)`, `<selectedcontent>`. The picker has an implicit popover and anchor. No support baseline is established. [MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select)
 - **`ariaNotify(text, { priority })`** on `Element` or `Document`: announcements without a live region. Caveats: often only the latest is spoken, so combine messages; VoiceOver can drop one that coincides with another accessibility event such as a focus move; ChromeOS never speaks them; live regions take precedence; a Permissions Policy can block it. [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaNotify)
+
+## Documentation navigation
+
+Verified 2026-09-30 in Chromium 153.0.8010.12 (`website/tests/smoke.spec.ts`): header tabs switch to section-specific sidebars, primitive pages activate only the Nook tab, API and Examples sidebar anchors target existing headings, and mobile menus expose the same sections. Client-side navigation still cleans up React demos.
 
 ## Open questions
 

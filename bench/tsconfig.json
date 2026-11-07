@@ -4,11 +4,7 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "lib": ["ES2022", "DOM", "DOM.Iterable"],
-        "types": ["node"],
-        "paths": {
-            "@nook/core": ["packages/core/src/index.ts"],
-            "@nook/react": ["packages/react/src/index.ts"]
-        }
+        "types": ["node"]
     },
     "include": ["src"]
 }

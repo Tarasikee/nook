@@ -1,4 +1,4 @@
-import { usePopover, useTooltip } from '@nook/react'
+import { usePopover, useTooltip } from '@nook/ui/hooks'
 import type { ReactNode } from 'react'
 
 export type ItemProps = { index: number; label: string }

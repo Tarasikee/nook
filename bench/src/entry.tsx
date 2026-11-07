@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 // Resolved per library by run.mjs.
 import { Item, Provider } from 'bench-lib'
@@ -21,14 +21,11 @@ function App() {
     useLayoutEffect(() => {
         window.benchCommitted = performance.now()
         if (tick === 0) {
+            window.benchRerender = () => setTick((value) => value + 1)
             window.benchMounted = window.benchCommitted
             requestAnimationFrame(() => setTimeout(() => (window.benchPainted = performance.now())))
         }
     }, [tick])
-
-    useEffect(() => {
-        window.benchRerender = () => setTick((value) => value + 1)
-    }, [])
 
     return (
         <Provider>
