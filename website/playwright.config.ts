@@ -16,7 +16,7 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'], baseURL: 'http://localhost:5174' },
             // The dev server compiles each page on first request, so allow a cold start.
             expect: { timeout: 15_000 },
-            grep: /renders without errors|every React demo island mounts|the Code tab shows the exact file/
+            grep: /renders and hydrates without errors|all examples render|source tabs show the running TSX/
         }
     ],
     webServer: [
@@ -27,9 +27,8 @@ export default defineConfig({
             timeout: 180_000
         },
         {
-            command: 'pnpm exec vitepress dev --port 5174 --strictPort',
+            command: 'pnpm dev --port 5174 --strictPort',
             url: 'http://localhost:5174',
-            env: { NOOK_CACHE_DIR: '.vitepress/cache/playwright' },
             reuseExistingServer: !process.env.CI,
             timeout: 60_000
         }

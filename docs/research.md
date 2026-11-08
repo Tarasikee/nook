@@ -64,9 +64,9 @@ Observed:
 - `showPopover()` then `hidePopover()` in one task produced a single `toggle` event from `closed` to `closed`. A click then an immediate outside click also coalesced.
 - `ToggleEvent.source` reported the invoking button.
 
-Verified 2026-10-03 in Chromium 153.0.8010.12 (`packages/ui/tests/hooks/hooks.spec.ts`, source and compiled builds under StrictMode): `defaultOpen` reports the initial opening once when initialized after callback subscription. Opening during the first ref attachment instead lost that notification before the subscription was installed. Defaults also survive delayed content attachment, are consumed only once, and yield to controlled state and pending imperative requests; hydration preserves an already-open uncontrolled popover.
+Verified 2026-11-08 in Chromium 153.0.8010.12 (source and compiled builds under StrictMode): default hooks generate native attributes without subscribing or re-rendering on popover or tooltip toggles. Explicit trigger props connect one button to both bodies. Native open, close, and Escape work before hydration; optional observation picks up a popover opened before hydration and follows element replacement and subscription removal. The separate controlled synchronization hook opens initially once, applies the current request when delayed or replacement content attaches, passes an explicit source for anchoring, and leaves native dismissal intact when inputs are unchanged. Callers receive native `onToggle` events. The former store, `defaultOpen`, deferred imperative requests, trigger cloning, and close contexts were removed. See `packages/ui/tests/hooks/hooks.spec.ts` and `packages/ui/tests/components/components.spec.ts`.
 
-Verified 2026-11-07 in Chromium 153.0.8010.12 after consolidating components and native helpers in `packages/ui/src`: source and compiled builds preserve the above behavior with a stable store ref and layout-effect subscription. Component tests also verify CVA button styling, tooltip placement and group delays, popover dismissal, and modal focus behavior using Tailwind CSS v4.3.5 utilities. Tailwind is compiled from the actual component sources in tests, including Preflight. Left/right placements preserve the 8px gap for start, center, and end alignment; reduced-motion preferences disable transitions, and consumer utility classes override CVA defaults. The component, hook, and platform suites now share one UI package; the website resolves those sources directly.
+The component tests also verify native body refs and handlers through controlled opening and dismissal, CVA button styling, modal focus behavior, tooltip group delays, and Tailwind CSS v4.3.5 utilities compiled from component sources with Preflight. Left/right placements preserve the 8px gap for start, center, and end alignment; reduced-motion preferences disable transitions, and consumer button utility classes override CVA defaults.
 
 ## Interest invokers
 
@@ -103,6 +103,8 @@ Observed in Chromium 145 on 2026-09-29 (`packages/ui/tests/hooks/platform.spec.t
 ## Documentation navigation
 
 Verified 2026-09-30 in Chromium 153.0.8010.12 (`website/tests/smoke.spec.ts`): header tabs switch to section-specific sidebars, primitive pages activate only the Nook tab, API and Examples sidebar anchors target existing headings, and mobile menus expose the same sections. Client-side navigation still cleans up React demos.
+
+Verified 2026-11-08 in Chromium 153.0.8010.12 (`website/tests/smoke.spec.ts`, `website/tests/export.spec.ts`): the React-only website pregenerates complete page HTML and hydrates a single root without replacing its markup. Native popover and dialog commands work with JavaScript disabled. Controls that require JavaScript stay disabled until hydration, avoiding lost clicks during a cold development load. Checks cover the generated search index, highlighted source tabs, theme persistence, heading links, static 404 responses, and mobile navigation; 375px layouts keep wide tables and code blocks within their own scroll containers.
 
 ## Open questions
 

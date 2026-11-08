@@ -25,8 +25,8 @@ dist-ssr
 *.sw?
 
 # Website
-website/.vitepress/cache
-website/.vitepress/dist
+website/node_modules/.cache
+website/dist
 website/test-results
 website/playwright-report
 

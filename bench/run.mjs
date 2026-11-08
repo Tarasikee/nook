@@ -287,7 +287,7 @@ await browser.close()
 await mkdir(`${here}results`, { recursive: true })
 await writeFile(`${here}results/latest.json`, JSON.stringify(report, null, 2))
 if (process.argv.includes('--publish')) {
-    await writeFile(`${here}../website/.vitepress/theme/bench-results.json`, JSON.stringify(report, null, 2) + '\n')
-    console.log('Published to website/.vitepress/theme/bench-results.json')
+    await writeFile(`${here}../website/src/bench-results.json`, JSON.stringify(report, null, 2) + '\n')
+    console.log('Published to website/src/bench-results.json')
 }
 console.log(`\nChromium ${report.browser}. Full results: bench/results/latest.json`)

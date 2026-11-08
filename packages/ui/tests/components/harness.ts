@@ -24,6 +24,7 @@ const scanner = new Scanner({
 const css = tailwind.build(scanner.scan())
 
 const aliases = (variant: Variant) => ({
+    '@nook/ui/hooks': variant === 'compiled' ? `${packageDir}dist/hooks.js` : `${packageDir}src/hooks.ts`,
     '@nook/ui': variant === 'compiled' ? `${packageDir}dist/index.js` : `${packageDir}src/index.ts`
 })
 

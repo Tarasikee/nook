@@ -6,23 +6,18 @@
     "description": "Documentation and interactive examples for Nook.",
     "type": "module",
     "scripts": {
-        "dev": "vitepress dev",
-        "build": "vue-tsc --noEmit && vitepress build",
-        "preview": "vitepress preview --port 4173",
-        "typecheck": "vue-tsc --noEmit",
+        "dev": "vite --host 127.0.0.1",
+        "build": "tsc --noEmit && node scripts/build.mjs",
+        "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
+        "typecheck": "tsc --noEmit",
         "test": "playwright test"
     },
     "dependencies": {
         "@nook/ui": "workspace:*"
     },
     "devDependencies": {
-        "@vanilla-extract/recipes": "^0.5.7",
-        "@vanilla-extract/vite-plugin": "^5.2.6",
         "shiki": "^4.4.3",
         "vite": "^8.3.1",
-        "vitepress": "2.0.0-alpha.20",
-        "vue": "^3.5.43",
-        "vue-tsc": "^2.2.12",
         "@tailwindcss/vite": "^4.3.5"
     }
 }

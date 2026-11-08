@@ -12,7 +12,7 @@
         "check": "prettier --check . && pnpm check:workspace-deps && pnpm lint && pnpm -r typecheck && pnpm check:compiler",
         "check:workspace-deps": "pnpm --filter @nook/cli check:workspace-deps",
         "test": "pnpm build && pnpm test:registry && pnpm --filter @nook/ui test && pnpm --filter @nook/website test",
-        "clean": "rm -rf dist packages/*/dist packages/*/test-results packages/*/node_modules/.cache website/test-results website/.vitepress/cache website/.vitepress/dist bench/results",
+        "clean": "rm -rf dist packages/*/dist packages/*/test-results packages/*/node_modules/.cache website/test-results website/dist website/node_modules/.cache bench/results",
         "lint": "eslint --max-warnings 0 .",
         "format": "prettier --write .",
         "bench": "pnpm build:components && node bench/check-compiled.mjs && node bench/run.mjs",
@@ -29,7 +29,6 @@
         "@types/node": "^26.6.3",
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
-        "@vanilla-extract/css": "^1.21.2",
         "babel-plugin-react-compiler": "1.0.0",
         "esbuild": "^0.28.2",
         "eslint": "^10.11.0",
@@ -45,7 +44,8 @@
         "@nook/cli": "workspace:*",
         "tailwindcss": "^4.3.5",
         "@tailwindcss/node": "^4.3.5",
-        "@tailwindcss/oxide": "^4.3.5"
+        "@tailwindcss/oxide": "^4.3.5",
+        "@babel/preset-react": "^7.29.7"
     },
     "devEngines": {
         "packageManager": {

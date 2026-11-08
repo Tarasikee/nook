@@ -3,6 +3,6 @@ pnpm-lock.yaml
 **/node_modules
 **/test-results
 **/playwright-report
-website/.vitepress/cache
-website/.vitepress/dist
+website/node_modules/.cache
+website/dist
 

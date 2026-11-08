@@ -10,13 +10,18 @@ test.describe('server rendering', () => {
         expect(html).toMatch(/<button type="submit" aria-label="Send"[^>]*data-icon=""/)
     })
 
-    test('Tooltip and Popover add only attributes to one real button', async () => {
-        const html = await renderFixture('combinations')
-        const buttons = [...html.matchAll(/<button[^>]*>/g)].map((match) => match[0])
-        const both = buttons.filter((tag) => /popoverTarget=/i.test(tag) && /interestfor=/.test(tag))
-        expect(both).toHaveLength(2)
-        expect(html).toMatch(/class="nook-tooltip [^"]+" data-side="top" data-align="center"/)
-        expect(html).toMatch(/popover="auto"[^>]*class="nook-popover [^"]+" data-side="bottom" data-align="start"/)
+    test('explicit props connect one real button to both native bodies', async ({ page }) => {
+        await page.setContent(await renderFixture('combinations'))
+        const button = page.getByRole('button', { name: 'Project actions' })
+        const panel = page.locator('.nook-popover')
+        const tooltip = page.locator('.nook-tooltip')
+        await expect(page.locator('button')).toHaveCount(1)
+        await expect(button).toHaveAttribute('popovertarget', (await panel.getAttribute('id'))!)
+        await expect(button).toHaveAttribute('interestfor', (await tooltip.getAttribute('id'))!)
+        await expect(panel).toHaveAttribute('popover', 'auto')
+        await expect(panel).toHaveAttribute('data-side', 'bottom')
+        await expect(tooltip).toHaveAttribute('popover', 'hint')
+        await expect(tooltip).toHaveAttribute('data-side', 'top')
     })
 
     test('Dialog connects native commands to a named dialog before hydration', async () => {
@@ -114,7 +119,7 @@ test.describe('Button', () => {
 })
 
 test.describe('Tooltip', () => {
-    test('describes, labels, and merges existing descriptions', async ({ page }) => {
+    test('describes, labels, and accepts explicitly composed descriptions', async ({ page }) => {
         const messages = await mountFixture(page, 'tooltips')
 
         expect(await accessibilityNode(page, '#publish')).toMatchObject({
@@ -262,23 +267,16 @@ test.describe('Popover', () => {
 })
 
 test.describe('Tooltip with Popover', () => {
-    for (const [order, name, title] of [
-        ['Tooltip outside', 'Project actions', 'Actions'],
-        ['Popover outside', 'More options', 'More']
-    ] as const) {
-        test(`${order}: one button gets both behaviors`, async ({ page }) => {
-            const messages = await mountFixture(page, 'combinations')
-            const trigger = page.getByRole('button', { name, exact: true })
-
-            await trigger.hover()
-            await expect(page.getByRole('tooltip').filter({ hasText: name })).toBeVisible()
-            await trigger.click()
-            const panel = page.locator('.nook-popover').filter({ has: page.getByRole('heading', { name: title }) })
-            await expect(panel).toBeVisible()
-            await expect(page.getByRole('tooltip').filter({ hasText: name })).toBeVisible()
-            expect(messages).toEqual([])
-        })
-    }
+    test('explicit trigger props put both behaviors on one button', async ({ page }) => {
+        const messages = await mountFixture(page, 'combinations')
+        const trigger = page.getByRole('button', { name: 'Project actions', exact: true })
+        await trigger.hover()
+        await expect(page.getByRole('tooltip').filter({ hasText: 'Project actions' })).toBeVisible()
+        await trigger.click()
+        await expect(page.locator('.nook-popover')).toBeVisible()
+        await expect(page.getByRole('tooltip').filter({ hasText: 'Project actions' })).toBeVisible()
+        expect(messages).toEqual([])
+    })
 
     test('the trigger keeps its own click handler', async ({ page }) => {
         await mountFixture(page, 'combinations')

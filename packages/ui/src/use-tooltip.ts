@@ -1,17 +1,15 @@
 'use client'
 
-import type { RefCallback } from 'react'
 import { useId } from 'react'
-import { useNativePopover } from './use-native-popover'
 
 export type UseTooltipOptions = {
     role?: 'description' | 'label'
-    onOpenChange?: (open: boolean) => void
     id?: string
 }
 
 export type TooltipTriggerProps = {
     interestfor: string
+    className: string
     'aria-describedby'?: string
     'aria-labelledby'?: string
 }
@@ -20,33 +18,26 @@ export type TooltipContentProps = {
     id: string
     popover: 'hint'
     role: 'tooltip'
-    ref: RefCallback<HTMLElement>
 }
 
 export type UseTooltipResult = {
-    open: boolean
     triggerProps: TooltipTriggerProps
     contentProps: TooltipContentProps
 }
 
-export function useTooltip({
-    role = 'description',
-    onOpenChange,
-    id: providedId
-}: UseTooltipOptions = {}): UseTooltipResult {
+export function useTooltip({ role = 'description', id: providedId }: UseTooltipOptions = {}): UseTooltipResult {
     const generatedId = useId()
     const id = providedId ?? generatedId
-    const { open, ref } = useNativePopover(onOpenChange)
-
     return {
-        open,
-        triggerProps:
-            role === 'label' ? { interestfor: id, 'aria-labelledby': id } : { interestfor: id, 'aria-describedby': id },
+        triggerProps: {
+            interestfor: id,
+            className: '[interest-delay:var(--nook-tooltip-delay,300ms)_var(--nook-tooltip-hide-delay,100ms)]',
+            ...(role === 'label' ? { 'aria-labelledby': id } : { 'aria-describedby': id })
+        },
         contentProps: {
             id,
             popover: 'hint',
-            role: 'tooltip',
-            ref
+            role: 'tooltip'
         }
     }
 }

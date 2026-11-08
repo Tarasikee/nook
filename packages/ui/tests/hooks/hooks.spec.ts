@@ -20,8 +20,8 @@ test.describe('server rendering', () => {
     test('tooltip markup carries interestfor and an explicit relationship', async () => {
         const html = await renderFixture('tooltips')
 
-        expect(html).toMatch(/<button interestfor="([^"]+)" aria-describedby="\1" id="described"/)
-        expect(html).toMatch(/<button interestfor="([^"]+)" aria-labelledby="\1" id="labelled"/)
+        expect(html).toMatch(/<button interestfor="([^"]+)"[^>]*aria-describedby="\1" id="described"/)
+        expect(html).toMatch(/<button interestfor="([^"]+)"[^>]*aria-labelledby="\1" id="labelled"/)
         expect(html).toMatch(/popover="hint" role="tooltip"/)
     })
 })
@@ -46,7 +46,6 @@ test.describe('before hydration', () => {
 
         await hydrateFixture(page, 'uncontrolled')
         await expect(page.locator('#state')).toHaveText('true')
-        await expect(page.locator('#trigger')).toHaveAttribute('data-open', '')
     })
 })
 
@@ -57,12 +56,10 @@ test.describe('usePopover', () => {
         await page.click('#trigger')
         await expect(page.locator('.panel')).toBeVisible()
         await expect(page.locator('#state')).toHaveText('true')
-        await expect(page.locator('#trigger')).toHaveAttribute('data-open', '')
         await expect(page.locator('#clicks')).toHaveText('1')
 
         await page.keyboard.press('Escape')
         await expect(page.locator('#state')).toHaveText('false')
-        await expect(page.locator('#trigger')).not.toHaveAttribute('data-open')
 
         await page.click('#trigger')
         await expect(page.locator('#state')).toHaveText('true')
@@ -95,7 +92,7 @@ test.describe('usePopover', () => {
         expect(await accessibilityNode(page, '.panel')).toMatchObject({ name: 'Invite collaborators' })
     })
 
-    test('show() anchors the popover to its trigger', async ({ page }) => {
+    test('native showPopover with an explicit source anchors the popover to its trigger', async ({ page }) => {
         await mountFixture(page, 'uncontrolled')
 
         await page.click('#show')
@@ -113,6 +110,11 @@ test.describe('usePopover', () => {
         await page.click('#external-open')
         await expect(page.locator('.panel')).toBeVisible()
         await expect(page.locator('#state')).toHaveText('true')
+
+        const trigger = (await page.locator('#trigger').boundingBox())!
+        const panel = (await page.locator('.panel').boundingBox())!
+        expect(Math.round(panel.x)).toBe(Math.round(trigger.x))
+        expect(Math.round(panel.y)).toBe(Math.round(trigger.y + trigger.height + 8))
 
         await page.keyboard.press('Escape')
         await expect(page.locator('.panel')).toBeHidden()
@@ -135,105 +137,35 @@ test.describe('usePopover', () => {
         await expect(page.locator('#state')).toHaveText('false')
     })
 
-    test('defaultOpen opens after mount', async ({ page }) => {
-        await mountFixture(page, 'default-open')
-
-        await expect(page.locator('.panel')).toBeVisible()
+    test('initial controlled opening reports once under StrictMode', async ({ page }) => {
+        const messages = await mountFixture(page, 'controlled-initial')
         await expect(page.locator('#state')).toHaveText('true')
-    })
-
-    test('defaultOpen reports once and subsequent changes use the latest callback', async ({ page }) => {
-        const messages = await mountFixture(page, 'lifecycle')
-
-        await expect(page.locator('#state')).toHaveText('true')
-        await expect.poll(() => events(page)).toEqual(['lifecycle:0:true'])
-        // Re-render without a pointer interaction light-dismissing the popover.
-        await page.locator('#rerender').evaluate((button: HTMLButtonElement) => button.click())
-        await expect(page.locator('#rerender')).toHaveText('Re-render 1')
-        await page.keyboard.press('Escape')
-        await expect(page.locator('#state')).toHaveText('false')
-        await expect.poll(() => events(page)).toEqual(['lifecycle:0:true', 'lifecycle:1:false'])
+        await expect.poll(() => events(page)).toEqual(['controlled:true'])
         expect(messages).toEqual([])
     })
 
-    test('defaultOpen is not reapplied on prop changes or content replacement', async ({ page }) => {
-        await mountFixture(page, 'lifecycle')
-        await expect(page.locator('#state')).toHaveText('true')
-        await page.keyboard.press('Escape')
-        await expect(page.locator('#state')).toHaveText('false')
-
-        await page.click('#toggle-default')
-        await page.click('#toggle-default')
-        expect(await isOpen(page, '.panel')).toBe(false)
-
-        await page.click('#toggle-content')
-        await expect(page.locator('.panel')).toHaveCount(0)
-        await page.click('#toggle-content')
-        await expect(page.locator('.panel')).toHaveCount(1)
-        expect(await isOpen(page, '.panel')).toBe(false)
-        await expect(page.locator('#state')).toHaveText('false')
-    })
-
-    test('defaultOpen waits for content to attach', async ({ page }) => {
-        const messages = await mountFixture(page, 'deferred')
-        await expect(page.locator('.panel')).toHaveCount(0)
-        await expect(page.locator('#state')).toHaveText('false')
-
-        await page.click('#toggle-content')
-        await expect(page.locator('.panel')).toBeVisible()
-        await expect(page.locator('#state')).toHaveText('true')
-        await expect.poll(() => events(page)).toEqual(['lifecycle:0:true'])
-        expect(messages).toEqual([])
-    })
-
-    test('imperative requests override the pending default before attachment', async ({ page }) => {
+    test('controlled state applies when content attaches or is replaced', async ({ page }) => {
         await mountFixture(page, 'deferred')
-        await page.click('#hide')
-        await page.click('#toggle-content')
-        await expect(page.locator('.panel')).toHaveCount(1)
-        expect(await isOpen(page, '.panel')).toBe(false)
-        expect(await events(page)).toEqual([])
-
-        await page.click('#toggle-content')
-        await expect(page.locator('.panel')).toHaveCount(0)
-        await page.click('#show')
-        await page.click('#toggle-content')
-        await expect(page.locator('.panel')).toBeVisible()
-        await expect(page.locator('#state')).toHaveText('true')
-        await expect.poll(() => events(page)).toEqual(['lifecycle:0:true'])
-    })
-
-    test('controlled state takes precedence over defaultOpen, including content replacement', async ({ page }) => {
-        const messages = await mountFixture(page, 'controlled-default')
-        expect(await isOpen(page, '.panel')).toBe(false)
-        expect(await events(page)).toEqual([])
-
-        await page.click('#external-open')
-        await expect(page.locator('#state')).toHaveText('true')
-        // Avoid light dismissal so the controlled request stays true across replacement.
-        await page.locator('#toggle-content').evaluate((button: HTMLButtonElement) => button.click())
         await expect(page.locator('.panel')).toHaveCount(0)
         await page.click('#toggle-content')
         await expect(page.locator('.panel')).toBeVisible()
-        await expect(page.locator('#state')).toHaveText('true')
-
-        await page.click('#external-close')
+        await page.click('#toggle-content')
         await expect(page.locator('#state')).toHaveText('false')
+        await page.click('#toggle-content')
+        await expect(page.locator('.panel')).toBeVisible()
+        await page.click('#external-close')
         await expect(page.locator('.panel')).toBeHidden()
-        expect(messages).toEqual([])
     })
 
-    test('stops reporting after unmount', async ({ page }) => {
-        const messages = await mountFixture(page, 'unmount')
-
-        await page.click('#trigger')
-        await expect(page.locator('#state')).toHaveText('true')
+    test('unchanged controlled props do not undo native dismissal on unrelated renders', async ({ page }) => {
+        await mountFixture(page, 'controlled-readonly')
+        await expect(page.locator('.panel')).toBeVisible()
         await page.keyboard.press('Escape')
         await expect(page.locator('#state')).toHaveText('false')
-        await page.click('#unmount')
-        await expect(page.locator('.panel')).toHaveCount(0)
-        expect(await events(page)).toEqual(['popover:true', 'popover:false'])
-        expect(messages).toEqual([])
+        await expect(page.locator('#controlled')).toHaveText('true')
+        await page.click('#rerender')
+        await expect(page.locator('#rerender')).toHaveText('Re-render 1')
+        await expect(page.locator('.panel')).toBeHidden()
     })
 })
 
@@ -301,4 +233,38 @@ test('returned prop objects keep their identity across re-renders only when comp
     expect(stable).toEqual(
         variant() === 'compiled' ? { trigger: true, content: true } : { trigger: false, content: false }
     )
+})
+
+test('base hooks do not re-render on native open or close', async ({ page }) => {
+    await mountFixture(page, 'identity')
+    const commits = await page.evaluate(() => window.nookCommits)
+    await page.hover('#trigger')
+    await expect(page.locator('.tooltip')).toBeVisible()
+    await page.click('#trigger')
+    await expect(page.locator('.panel')).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.locator('.panel')).toBeHidden()
+    expect(await page.evaluate(() => window.nookCommits)).toBe(commits)
+})
+
+test('optional observation follows replacement and unsubscribes from old elements', async ({ page }) => {
+    const messages = await mountFixture(page, 'observation')
+    const old = await page.locator('.panel').elementHandle()
+    await old!.evaluate((element: HTMLElement) => element.showPopover())
+    await expect(page.locator('#state')).toHaveText('true')
+    await page.click('#replace')
+    await expect(page.locator('#state')).toHaveText('false')
+    await page.locator('.panel').evaluate((element: HTMLElement) => element.showPopover())
+    await expect(page.locator('#state')).toHaveText('true')
+    await page.click('#observe')
+    await expect(page.locator('#state')).toHaveText('false')
+    await page.locator('.panel').evaluate((element: HTMLElement) => element.hidePopover())
+    await old!.evaluate((element) =>
+        element.dispatchEvent(new ToggleEvent('toggle', { oldState: 'closed', newState: 'open' }))
+    )
+    await expect(page.locator('#state')).toHaveText('false')
+    await page.click('#observe')
+    await page.locator('.panel').evaluate((element: HTMLElement) => element.showPopover())
+    await expect(page.locator('#state')).toHaveText('true')
+    expect(messages).toEqual([])
 })

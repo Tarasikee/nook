@@ -1,0 +1,93 @@
+@import 'tailwindcss' source(none);
+@source '.';
+@source '../../packages/ui/src';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+    html {
+        scroll-padding-top: 6rem;
+    }
+    body {
+        @apply m-0 bg-white font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+    }
+    button,
+    summary,
+    a {
+        @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-600;
+    }
+    [interestfor] {
+        interest-delay: 300ms 100ms;
+    }
+    [hidden] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    .prose {
+        @apply text-base leading-7 text-slate-600 dark:text-slate-300;
+    }
+    .prose > p {
+        @apply my-5;
+    }
+    .prose > h2 {
+        @apply mb-4 mt-12 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white;
+    }
+    .prose > h3,
+    .prose > div > h3 {
+        @apply mb-3 mt-8 text-lg font-semibold text-slate-900 dark:text-slate-100;
+    }
+    .prose > ul,
+    .prose > ol {
+        @apply my-5 space-y-2 pl-6;
+    }
+    .prose > ul {
+        @apply list-disc;
+    }
+    .prose > ol {
+        @apply list-decimal;
+    }
+    .prose > p a,
+    .prose > ul a,
+    .prose > ol a,
+    .prose td a {
+        @apply font-medium text-emerald-700 underline decoration-emerald-200 underline-offset-4 dark:text-emerald-400;
+    }
+    .prose :not(pre) > code {
+        @apply rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[0.85em] text-slate-800 dark:bg-slate-800 dark:text-slate-200;
+    }
+    .prose table {
+        @apply w-full border-collapse text-left text-sm;
+    }
+    .prose th {
+        @apply border-b border-slate-200 px-3 py-3 align-top font-semibold text-slate-900 dark:border-slate-700 dark:text-slate-100;
+    }
+    .prose td {
+        @apply border-b border-slate-100 px-3 py-3 align-top dark:border-slate-800;
+    }
+    .prose blockquote,
+    .prose aside {
+        @apply my-6 rounded-r-xl border-l-2 border-emerald-500 bg-emerald-50/60 p-5 text-sm dark:bg-emerald-950/30;
+    }
+    .prose kbd {
+        @apply rounded border border-slate-300 px-1.5 py-0.5 font-mono text-xs dark:border-slate-700;
+    }
+    .prose .lead {
+        @apply mb-8 text-lg leading-relaxed text-slate-500 dark:text-slate-400;
+    }
+    .code-block pre {
+        @apply m-0 overflow-x-auto p-4 text-xs leading-6 sm:text-sm;
+        background: transparent !important;
+    }
+    .code-block pre code {
+        @apply block min-w-max;
+    }
+    .shiki,
+    .shiki span {
+        color: var(--shiki-light);
+    }
+    .dark .shiki,
+    .dark .shiki span {
+        color: var(--shiki-dark) !important;
+    }
+}

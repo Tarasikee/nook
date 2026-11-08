@@ -1,5 +1,8 @@
 'use client'
 
+export { usePopoverControl } from './use-popover-control'
+export { usePopoverOpen } from './use-popover-open'
+
 export {
     usePopover,
     type PopoverCloseProps,

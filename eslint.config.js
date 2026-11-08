@@ -21,8 +21,8 @@ export default tseslint.config(
             '**/dist/**',
             '**/node_modules/**',
             '**/test-results/**',
-            'website/.vitepress/cache/**',
-            'website/.vitepress/dist/**'
+            'website/node_modules/.cache/**',
+            'website/dist/**'
         ]
     },
     ...tseslint.configs.recommended,
@@ -34,7 +34,7 @@ export default tseslint.config(
     },
     {
         // Rules of React, backed by React Compiler analysis.
-        files: ['packages/ui/**/*.{ts,tsx}', 'website/.vitepress/theme/react/**/*.tsx', 'bench/src/**/*.tsx'],
+        files: ['packages/ui/**/*.{ts,tsx}', 'website/src/**/*.tsx', 'bench/src/**/*.tsx'],
         plugins: { 'react-hooks': reactHooks },
         rules: {
             ...reactHooks.configs.flat['recommended-latest'].rules,
@@ -55,25 +55,8 @@ export default tseslint.config(
         }
     },
     {
-        // The native state helper has no React dependency.
-        files: ['packages/ui/src/popover-store.ts'],
-        rules: {
-            'no-restricted-imports': [
-                'error',
-                {
-                    patterns: [
-                        {
-                            group: ['react', 'react-*', 'vue', '@nook/*'],
-                            message: 'Native state helpers must stay framework-independent.'
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
         // Demos are public example code; tests find elements by role and name instead.
-        files: ['website/.vitepress/theme/react/**/*.tsx'],
+        files: ['website/src/**/*.tsx'],
         rules: {
             'no-restricted-syntax': [
                 'error',

@@ -28,7 +28,13 @@ export const buttonVariants = cva(
     }
 )
 
-export type ButtonProps = ComponentProps<'button'> & VariantProps<typeof buttonVariants>
+// React's DOM types do not yet include native command and interest attributes.
+export type ButtonProps = ComponentProps<'button'> &
+    VariantProps<typeof buttonVariants> & {
+        commandfor?: string
+        command?: string
+        interestfor?: string
+    }
 
 export function Button({
     variant = 'secondary',

@@ -28,22 +28,12 @@
             "type": "registry:ui",
             "title": "Dialog",
             "description": "Native modal dialog with declarative open and close commands.",
-            "dependencies": ["class-variance-authority@^0.7.1", "clsx@^2.1.1", "tailwind-merge@^3.7.0"],
+            "dependencies": ["clsx@^2.1.1", "tailwind-merge@^3.7.0"],
             "files": [
                 {
                     "path": "packages/ui/src/Dialog.tsx",
                     "type": "registry:ui",
                     "target": "@ui/Dialog.tsx"
-                },
-                {
-                    "path": "packages/ui/src/Button.tsx",
-                    "type": "registry:ui",
-                    "target": "@ui/Button.tsx"
-                },
-                {
-                    "path": "packages/ui/src/utils.ts",
-                    "type": "registry:ui",
-                    "target": "@ui/utils.ts"
                 },
                 {
                     "path": "packages/ui/src/cn.ts",
@@ -57,18 +47,13 @@
             "name": "popover",
             "type": "registry:ui",
             "title": "Popover",
-            "description": "Native popover with controlled state, light dismissal, and anchor positioning.",
-            "dependencies": ["class-variance-authority@^0.7.1", "clsx@^2.1.1", "tailwind-merge@^3.7.0"],
+            "description": "Styled native popover body, declarative attributes, and opt-in state hooks.",
+            "dependencies": ["clsx@^2.1.1", "tailwind-merge@^3.7.0"],
             "files": [
                 {
                     "path": "packages/ui/src/Popover.tsx",
                     "type": "registry:ui",
                     "target": "@ui/Popover.tsx"
-                },
-                {
-                    "path": "packages/ui/src/Button.tsx",
-                    "type": "registry:ui",
-                    "target": "@ui/Button.tsx"
                 },
                 {
                     "path": "packages/ui/src/utils.ts",
@@ -81,19 +66,19 @@
                     "target": "@ui/use-popover.ts"
                 },
                 {
-                    "path": "packages/ui/src/use-native-popover.ts",
-                    "type": "registry:ui",
-                    "target": "@ui/use-native-popover.ts"
-                },
-                {
-                    "path": "packages/ui/src/popover-store.ts",
-                    "type": "registry:ui",
-                    "target": "@ui/popover-store.ts"
-                },
-                {
                     "path": "packages/ui/src/cn.ts",
                     "type": "registry:ui",
                     "target": "@ui/cn.ts"
+                },
+                {
+                    "path": "packages/ui/src/use-popover-control.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/use-popover-control.ts"
+                },
+                {
+                    "path": "packages/ui/src/use-popover-open.ts",
+                    "type": "registry:ui",
+                    "target": "@ui/use-popover-open.ts"
                 }
             ],
             "docs": "Requires Tailwind CSS v4.3+. Styles are included as utility classes; no component CSS imports."
@@ -102,7 +87,7 @@
             "name": "tooltip",
             "type": "registry:ui",
             "title": "Tooltip",
-            "description": "Native interest-invoker tooltip and tooltip group.",
+            "description": "Styled native tooltip body, interest attributes, and CSS groups.",
             "files": [
                 {
                     "path": "packages/ui/src/Tooltip.tsx",
@@ -120,14 +105,9 @@
                     "target": "@ui/use-tooltip.ts"
                 },
                 {
-                    "path": "packages/ui/src/use-native-popover.ts",
+                    "path": "packages/ui/src/use-popover-open.ts",
                     "type": "registry:ui",
-                    "target": "@ui/use-native-popover.ts"
-                },
-                {
-                    "path": "packages/ui/src/popover-store.ts",
-                    "type": "registry:ui",
-                    "target": "@ui/popover-store.ts"
+                    "target": "@ui/use-popover-open.ts"
                 }
             ],
             "docs": "Requires Tailwind CSS v4.3+. Styles are included as utility classes; no component CSS imports."

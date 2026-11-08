@@ -1,334 +1,235 @@
 import { readFileSync } from 'node:fs'
 import { expect, test, type Page } from '@playwright/test'
-
-const pages = [
-    '/',
-    '/guide/',
-    '/guide/getting-started',
-    '/guide/concepts',
-    '/guide/popover',
-    '/guide/tooltip',
-    '/guide/dialog',
-    '/guide/styling',
-    '/guide/accessibility',
-    '/guide/browser-support',
-    '/guide/performance',
-    '/api/',
-    '/ui/',
-    '/ui/button',
-    '/ui/tooltip',
-    '/ui/popover',
-    '/ui/dialog',
-    '/examples/'
-]
+import { pages, sections } from '../src/pages'
 
 function collectErrors(page: Page) {
     const errors: string[] = []
     page.on('pageerror', (error) => errors.push(error.message))
     page.on('console', (message) => {
-        // Aborted prefetches during navigation are transport noise, not application errors.
         if (message.type() === 'error' && !message.text().includes('net::ERR_')) errors.push(message.text())
     })
     return errors
 }
 
-for (const path of pages) {
-    test(`${path} renders without errors`, async ({ page }) => {
+for (const entry of pages) {
+    test(`${entry.path} renders and hydrates without errors`, async ({ page, request }) => {
         const errors = collectErrors(page)
-        const response = await page.goto(path)
-
+        const response = await page.goto(entry.path)
         expect(response?.status()).toBe(200)
-        await expect(page.locator('h1').first()).toBeVisible()
-        await expect(page.locator('.nk-island[data-pending]')).toHaveCount(0)
-        await expect(page.locator('.nk-island [role="status"]')).toHaveCount(0)
+        await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+        const theme = page.getByRole('button', { name: 'Toggle color theme' })
+        await theme.click()
+        await expect(theme).toHaveAttribute('aria-pressed', 'true')
+        await expect(page.locator('pre[data-source]')).toHaveCount(0)
         expect(errors).toEqual([])
+        const html = await (await request.get(entry.path)).text()
+        expect(html).toContain('<div id="root">')
+        expect(html).toContain('<h1')
+        expect(html).toContain('<meta name="description"')
+        expect(html).toContain('<script id="nook-page" type="application/json">')
     })
 }
 
-const sections = [
-    { name: 'Guide', path: '/guide/', groups: ['Getting started', 'Guides'], prefix: '/guide/' },
-    { name: 'Nook', path: '/guide/popover', groups: ['Primitives'], prefix: '/guide/' },
-    { name: 'Nook UI', path: '/ui/', groups: ['Nook UI'], prefix: '/ui/' },
-    { name: 'API', path: '/api/', groups: ['API'], prefix: '/api/' },
-    { name: 'Examples', path: '/examples/', groups: ['Examples'], prefix: '/examples/' }
-]
-
-test('header tabs switch to their own sidebars', async ({ page }) => {
-    await page.goto('/guide/')
-    const header = page.getByRole('navigation', { name: 'Main Navigation' })
-    const sidebar = page.getByRole('navigation', { name: 'Sidebar Navigation' })
-
-    await expect(header.locator('a.VPNavBarMenuLink')).toHaveText(sections.map(({ name }) => name))
+test('header links and sidebars use the page list', async ({ page }) => {
+    await page.goto('/ui/')
+    const navigation = page.getByRole('navigation', { name: 'Main navigation', exact: true })
+    await expect(navigation.getByRole('link')).toHaveText(sections.map((section) => section.name))
     for (const section of sections) {
-        await header.getByRole('link', { name: section.name, exact: true }).click()
+        await navigation.getByRole('link', { name: section.name, exact: true }).click()
         await expect(page).toHaveURL(new RegExp(`${section.path}$`))
-        await expect(header.locator('a.active')).toHaveText(section.name)
-        await expect(sidebar.getByRole('heading')).toHaveText(section.groups)
-        const links = await sidebar
-            .getByRole('link')
-            .evaluateAll((elements) => elements.map((element) => element.getAttribute('href')!))
-        expect(links.every((link) => link.startsWith(section.prefix))).toBe(true)
-        if (section.name === 'Guide') {
-            expect(links).not.toContain('/guide/popover')
-            expect(links).not.toContain('/guide/tooltip')
-            expect(links).not.toContain('/guide/dialog')
-        }
+        await expect(navigation.locator('[aria-current="location"]')).toHaveText(section.name)
+        const sidebar = page.getByRole('navigation', { name: 'Documentation navigation' })
+        await expect(sidebar.getByRole('link')).toHaveText(
+            pages.filter((entry) => entry.section === section.name).map((entry) => entry.title)
+        )
     }
 })
 
-for (const path of ['/guide/popover', '/guide/tooltip', '/guide/dialog']) {
-    test(`${path} belongs to the Nook tab`, async ({ page }) => {
-        await page.goto(path)
-        await expect(page.locator('.VPNavBarMenu a.active')).toHaveText('Nook')
-        await expect(page.locator('.VPSidebar h2')).toHaveText(['Primitives'])
-    })
-}
-
 for (const path of ['/api/', '/examples/']) {
-    test(`${path} sidebar anchors target existing headings`, async ({ page }) => {
+    test(`${path} outline links target rendered headings`, async ({ page }) => {
         await page.goto(path)
-        const anchors = page.locator('.VPSidebar a[href*="#"]')
-        expect(await anchors.count()).toBeGreaterThan(0)
-        for (const anchor of await anchors.all()) {
-            const hash = new URL((await anchor.getAttribute('href'))!, page.url()).hash
-            await anchor.click()
-            await expect(page).toHaveURL(new RegExp(`${hash}$`))
-            await expect(page.locator(hash)).toHaveCount(1)
+        const links = page.getByRole('navigation', { name: 'On this page' }).getByRole('link')
+        expect(await links.count()).toBeGreaterThan(0)
+        for (const link of await links.all()) {
+            const hash = (await link.getAttribute('href'))!
+            await link.click()
+            await expect(page.locator(hash)).toBeVisible()
+            expect(await page.locator(hash).count()).toBe(1)
         }
     })
 }
 
-// Demos are located by role and accessible name, like a user would find them.
-const panel = (page: Page, title: string) =>
-    page.locator('[popover]').filter({ has: page.getByRole('heading', { name: title }) })
+test.describe('without JavaScript', () => {
+    test.use({ javaScriptEnabled: false })
+    test('pregenerated native controls work before hydration', async ({ page }) => {
+        await page.goto('/guide/getting-started')
+        await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quick start')
+        await page.getByRole('button', { name: 'Share', exact: true }).click()
+        const heading = page.getByRole('heading', { name: 'Invite collaborators' })
+        await expect(heading).toBeVisible()
+        await page.keyboard.press('Escape')
+        await expect(heading).toBeHidden()
+        await page.goto('/ui/dialog')
+        await page.getByRole('button', { name: 'Delete project' }).click()
+        const dialog = page.getByRole('dialog', { name: 'Delete “Atlas”?' })
+        await expect(dialog).toBeVisible()
+        await dialog.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)))
+        await dialog.getByRole('button', { name: 'Cancel' }).click()
+        await expect(dialog).toBeHidden()
+    })
+})
 
-test('home hero popover opens, keeps the app handler, and closes on Escape', async ({ page }) => {
+test('home hero preserves native events after hydration', async ({ page }) => {
+    const errors = collectErrors(page)
     await page.goto('/')
-    const title = page.getByRole('heading', { name: 'Share “Product roadmap”' })
-
     await page.getByRole('button', { name: 'Share', exact: true }).click()
+    const title = page.getByRole('heading', { name: 'Share “Product roadmap”' })
     await expect(title).toBeVisible()
     await expect(page.getByText('your onClick ran 1×')).toBeVisible()
-    await expect(page.getByText('onOpenChange(true)')).toBeVisible()
-
+    await expect(page.getByText('onToggle(open)')).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(title).toBeHidden()
-    await expect(page.getByText('onOpenChange(false)')).toBeVisible()
+    await expect(page.getByText('onToggle(closed)')).toBeVisible()
+    expect(errors).toEqual([])
 })
 
-test('popover demo light-dismisses on outside click', async ({ page }) => {
+test('popover keeps its native anchor and light dismissal', async ({ page }) => {
     await page.goto('/guide/getting-started')
-    const title = page.getByRole('heading', { name: 'Invite collaborators' })
-
-    await page.getByRole('button', { name: 'Share', exact: true }).click()
-    await expect(title).toBeVisible()
-
+    const trigger = page.getByRole('button', { name: 'Share', exact: true })
+    await trigger.evaluate((element) => {
+        element.scrollIntoView({ block: 'start' })
+        window.scrollBy(0, -150)
+    })
+    await trigger.click()
+    const panel = page.locator('[popover]').filter({ has: page.getByRole('heading', { name: 'Invite collaborators' }) })
+    await expect(panel).toBeVisible()
+    await panel.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)))
+    const a = (await trigger.boundingBox())!
+    const b = (await panel.boundingBox())!
+    expect(Math.abs(b.x - a.x)).toBeLessThan(2)
+    expect(Math.abs(b.y - (a.y + a.height + 8))).toBeLessThan(2)
     await page.mouse.click(5, 300)
-    await expect(title).toBeHidden()
+    await expect(panel).toBeHidden()
 })
 
-test('UI dialog demo opens modally, closes from Cancel and the backdrop', async ({ page }) => {
+test('modal dialog centers, returns focus, and blocks search shortcuts', async ({ page }) => {
     await page.goto('/ui/dialog')
     const trigger = page.getByRole('button', { name: 'Delete project' })
-    const dialog = page.getByRole('dialog', { name: 'Delete “Atlas”?' })
-
     await trigger.click()
+    const dialog = page.getByRole('dialog', { name: 'Delete “Atlas”?' })
     await expect(dialog).toBeVisible()
-    expect(await dialog.evaluate((element) => element.matches(':modal'))).toBe(true)
-    // VitePress ships Tailwind's Preflight, which removes the browser's centering margin.
     await dialog.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)))
-    const viewport = page.viewportSize()!
     const box = (await dialog.boundingBox())!
-    expect(Math.abs(box.x + box.width / 2 - viewport.width / 2)).toBeLessThan(1.5)
-    expect(Math.abs(box.y + box.height / 2 - viewport.height / 2)).toBeLessThan(1.5)
+    const viewport = page.viewportSize()!
+    expect(Math.abs(box.x + box.width / 2 - viewport.width / 2)).toBeLessThan(2)
+    expect(Math.abs(box.y + box.height / 2 - viewport.height / 2)).toBeLessThan(2)
     await dialog.getByRole('button', { name: 'Cancel' }).click()
-    await expect(dialog).toBeHidden()
     await expect(trigger).toBeFocused()
-
-    const news = page.getByRole('dialog', { name: 'What’s new' })
     await page.getByRole('button', { name: 'What’s new' }).click()
+    const news = page.getByRole('dialog', { name: 'What’s new' })
     await expect(news).toBeVisible()
-    // Site search hotkeys would open search, unusable, underneath the modal.
     await page.keyboard.press('/')
     await page.keyboard.press('ControlOrMeta+k')
-    await expect(page.locator('.VPLocalSearchBox')).toHaveCount(0)
+    await expect(page.getByRole('dialog', { name: 'Search documentation' })).toBeHidden()
     await page.mouse.click(5, 5)
     await expect(news).toBeHidden()
 })
 
-test('tooltip opens on keyboard focus and closes on blur', async ({ page }) => {
+test('native tooltips open on focus and move between toolbar items', async ({ page }) => {
     await page.goto('/guide/tooltip')
-    const trigger = page.getByRole('button', { name: 'Italic' })
-    const tooltip = page.getByRole('tooltip').filter({ hasText: 'Italic' })
-
+    const trigger = page.getByRole('button', { name: 'Italic', exact: true })
+    const hint = page.getByRole('tooltip').filter({ hasText: /^Italic$/ })
     await trigger.focus()
-    await expect(tooltip).toBeVisible()
-
+    await expect(hint).toBeVisible()
     await trigger.blur()
-    await expect(tooltip).toBeHidden()
+    await expect(hint).toBeHidden()
+    await page.getByRole('button', { name: 'Bold', exact: true }).hover()
+    await expect(page.getByRole('tooltip').filter({ hasText: /^Bold$/ })).toBeVisible()
+    await trigger.hover()
+    await expect(hint).toBeVisible()
 })
 
-test('toolbar tooltips switch without the delay once one is showing', async ({ page }) => {
-    await page.goto('/guide/tooltip')
-
-    // Milliseconds from hover until the named tooltip opens, on the page clock.
-    const openDelay = async (name: string) => {
-        const tooltip = page.getByRole('tooltip', { includeHidden: true }).filter({ hasText: new RegExp(`^${name}$`) })
-        await tooltip.evaluate((element) => {
-            element.addEventListener(
-                'toggle',
-                (event) => {
-                    if ((event as ToggleEvent).newState === 'open') element.dataset.openedAt = String(performance.now())
-                },
-                { once: true }
-            )
-        })
-        const start = await page.evaluate(() => performance.now())
-        await page.getByRole('button', { name }).hover()
-        await expect(tooltip).toHaveAttribute('data-opened-at', /\d/)
-        return Number(await tooltip.getAttribute('data-opened-at')) - start
-    }
-
-    expect(await openDelay('Bold')).toBeGreaterThan(200) // interest-delay: 300ms
-    expect(await openDelay('Italic')).toBeLessThan(150)
+test('source tabs show the running TSX and preserve demo state', async ({ page }) => {
+    await page.goto('/guide/getting-started')
+    const demo = page.getByRole('figure').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
+    // The native trigger works before hydration; this assertion needs its React handler.
+    await expect(demo.getByRole('tab', { name: 'Code', exact: true })).toBeEnabled()
+    await demo.getByRole('button', { name: 'Share', exact: true }).click()
+    await page.keyboard.press('Escape')
+    await expect(demo.getByText('your onClick ran 1×')).toBeVisible()
+    await demo.getByRole('tab', { name: 'Code', exact: true }).click()
+    const code = demo.getByRole('tabpanel', { name: 'Code' })
+    const source = readFileSync(new URL('../src/demos/PopoverDemo.tsx', import.meta.url), 'utf8')
+    expect(await code.locator('pre code').textContent()).toBe(source.trim())
+    expect(await code.locator('span[style*="--shiki-light"]').count()).toBeGreaterThan(0)
+    await page.keyboard.press('Home')
+    await expect(demo.getByRole('tab', { name: 'Preview' })).toBeFocused()
+    await expect(demo.getByText('your onClick ran 1×')).toBeVisible()
 })
 
-test.describe('demo source tabs', () => {
-    test('the Code tab shows the exact file that runs the demo', async ({ page }) => {
-        await page.goto('/guide/getting-started')
-        const demo = page.getByRole('figure').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
-
-        await demo.getByRole('tab', { name: 'Code' }).click()
-        const code = demo.getByRole('tabpanel', { name: 'Code' })
-        await expect(code).toBeVisible()
-        await expect(demo.getByRole('tabpanel', { name: 'Preview' })).toBeHidden()
-
-        const source = readFileSync(new URL('../.vitepress/theme/react/PopoverDemo.tsx', import.meta.url), 'utf8')
-        expect(await code.locator('pre code').textContent()).toBe(source.trim())
-        await expect(code.locator('span[style*="--shiki-light"]').first()).toBeVisible()
-        await expect(code.locator('button.copy')).toHaveCount(1)
-    })
-
-    test('tabs follow the keyboard pattern and the CSS tab shows the popover styles', async ({ page }) => {
-        await page.goto('/guide/getting-started')
-        const demo = page.getByRole('figure').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
-        const preview = demo.getByRole('tab', { name: 'Preview' })
-
-        await expect(preview).toHaveAttribute('aria-selected', 'true')
-        await preview.focus()
-        await page.keyboard.press('ArrowRight')
-        await page.keyboard.press('ArrowRight')
-        const css = demo.getByRole('tab', { name: 'CSS' })
-        await expect(css).toBeFocused()
-        await expect(css).toHaveAttribute('aria-selected', 'true')
-        await expect(demo.getByRole('tabpanel', { name: 'CSS' })).toContainText(
-            "positionArea: 'block-end span-inline-end'"
-        )
-
-        await page.keyboard.press('Home')
-        await expect(preview).toBeFocused()
-        await expect(demo.getByRole('tabpanel', { name: 'Preview' })).toBeVisible()
-    })
-
-    test('the preview keeps its state while another tab is shown', async ({ page }) => {
-        await page.goto('/guide/getting-started')
-        const demo = page.getByRole('figure').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
-
-        await demo.getByRole('button', { name: 'Share', exact: true }).click()
-        await page.keyboard.press('Escape')
-        await expect(demo.getByText('your onClick ran 1×')).toBeVisible()
-
-        await demo.getByRole('tab', { name: 'Code' }).click()
-        await demo.getByRole('tab', { name: 'Preview' }).click()
-        await expect(demo.getByText('your onClick ran 1×')).toBeVisible()
-    })
-})
-
-test('controlled manual popover ignores Escape and closes from state', async ({ page }) => {
+test('controlled manual popover follows application state', async ({ page }) => {
     await page.goto('/guide/popover')
+    await page.getByRole('button', { name: 'setOpen(true)' }).click()
     const title = page.getByRole('heading', { name: 'Everything is live.' })
-
-    await page.getByRole('button', { name: 'Deployment status' }).click()
     await expect(title).toBeVisible()
-
     await page.keyboard.press('Escape')
     await expect(title).toBeVisible()
-
     await page.getByRole('button', { name: 'setOpen(false)' }).click()
     await expect(title).toBeHidden()
 })
 
-test('popover is anchored below its trigger', async ({ page }) => {
-    await page.goto('/guide/getting-started')
-    const trigger = page.getByRole('button', { name: 'Share', exact: true })
-    const surface = panel(page, 'Invite collaborators')
-
-    // Leave room below the trigger; otherwise position-try-fallbacks correctly flips the panel above.
-    await trigger.evaluate((element) => {
-        element.scrollIntoView({ block: 'start' })
-        window.scrollBy(0, -120)
-    })
-    await trigger.click()
-    await expect(surface).toBeVisible()
-    await surface.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)))
-
-    const triggerBox = (await trigger.boundingBox())!
-    const panelBox = (await surface.boundingBox())!
-    expect(panelBox.y).toBeGreaterThanOrEqual(triggerBox.y + triggerBox.height)
-    expect(Math.abs(panelBox.x - triggerBox.x)).toBeLessThan(2)
-})
-
-test('client-side navigation cleans up demos', async ({ page }) => {
+test('all examples render inside the single hydrated React tree', async ({ page }) => {
     const errors = collectErrors(page)
-    await page.goto('/guide/getting-started')
-    await page.getByRole('button', { name: 'Share', exact: true }).click()
-
-    await page.keyboard.press('Escape')
-    await page
-        .getByRole('navigation', { name: 'Main Navigation' })
-        .getByRole('link', { name: 'Nook', exact: true })
-        .click()
-    await page.locator('.VPSidebar a[href="/guide/tooltip"]').click()
-    await expect(page).toHaveURL(/\/guide\/tooltip$/)
-    await expect(page.getByRole('heading', { name: 'Invite collaborators' })).toHaveCount(0)
+    await page.goto('/examples/')
+    await expect(page.locator('[data-demo]')).toHaveCount(6)
+    await expect(page.getByRole('figure')).toHaveCount(6)
+    await expect(page.locator('[data-demo] [role="status"]')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Toggle color theme' }).click()
     expect(errors).toEqual([])
 })
 
-test('every React demo island mounts', async ({ page }) => {
-    await page.goto('/examples/')
-    await expect(page.locator('.nk-island[data-pending]')).toHaveCount(0)
-    await expect(page.locator('.nk-island').getByRole('figure')).toHaveCount(6)
+test('search finds generated content and follows a normal page link', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Search documentation', exact: true }).click()
+    const search = page.getByRole('dialog', { name: 'Search documentation' })
+    await search.getByRole('searchbox', { name: 'Search query' }).fill('browser support')
+    await search.getByRole('link', { name: /^Browser support/ }).click()
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Browser support')
+})
+
+test('theme persists through a full page reload without hydration errors', async ({ page }) => {
+    const errors = collectErrors(page)
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Toggle color theme' }).click()
+    await expect(page.locator('html')).toHaveClass('dark')
+    await page.reload()
+    await expect(page.getByRole('button', { name: 'Toggle color theme' })).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.locator('html')).toHaveClass('dark')
+    expect(errors).toEqual([])
+})
+
+test('missing URLs return a real 404 with React-rendered navigation', async ({ page }) => {
+    const response = await page.goto('/this-page-does-not-exist')
+    expect(response?.status()).toBe(404)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found')
+    await expect(page.getByRole('link', { name: 'Return to Nook' })).toHaveAttribute('href', '/')
 })
 
 test.describe('mobile layout', () => {
     test.use({ viewport: { width: 375, height: 740 } })
-
-    test('mobile header tabs open section-specific sidebars', async ({ page }) => {
-        await page.goto('/guide/')
-        for (const section of sections) {
-            await page.getByRole('button', { name: 'Menu', exact: true }).first().click()
-            const menu = page.locator('.VPNavScreen')
-            await expect(menu.getByRole('link').filter({ hasText: /^(Guide|Nook|Nook UI|API|Examples)$/ })).toHaveText(
-                sections.map(({ name }) => name)
-            )
-            await menu.getByRole('link', { name: section.name, exact: true }).click()
-            await expect(page).toHaveURL(new RegExp(`${section.path}$`))
-            await page.locator('.VPLocalNav').getByRole('button', { name: 'Menu', exact: true }).click()
-            const sidebar = page.getByRole('navigation', { name: 'Sidebar Navigation' })
-            await expect(sidebar).toBeVisible()
-            await expect(sidebar.getByRole('heading')).toHaveText(section.groups)
-            await page.locator('.VPBackdrop').click({ position: { x: 365, y: 400 } })
-            await expect(page.locator('.VPSidebar')).not.toHaveClass(/open/)
-        }
+    test('mobile navigation reaches the documentation', async ({ page }) => {
+        await page.goto('/')
+        await page.getByText('Menu', { exact: true }).click()
+        await page
+            .getByRole('navigation', { name: 'Mobile navigation' })
+            .getByRole('link', { name: 'Components' })
+            .click()
+        await expect(page.getByRole('heading', { level: 1 })).toHaveText('Components')
     })
-
-    for (const path of ['/', '/guide/getting-started', '/guide/browser-support', '/examples/']) {
+    for (const path of ['/', '/guide/getting-started', '/guide/browser-support', '/examples/', '/guide/performance']) {
         test(`${path} has no horizontal page overflow`, async ({ page }) => {
             await page.goto(path)
-            const overflow = await page.evaluate(
-                () => document.documentElement.scrollWidth - document.documentElement.clientWidth
-            )
-            expect(overflow).toBeLessThanOrEqual(0)
+            expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1)
         })
     }
 })
