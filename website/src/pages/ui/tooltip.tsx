@@ -1,5 +1,6 @@
 import { ReactDemo } from '../../components/ReactDemo'
 import { Code } from '../../components/Code'
+import { examples } from '../../demos/examples'
 
 export default function UiTooltipPage() {
     return (
@@ -9,11 +10,7 @@ export default function UiTooltipPage() {
                 trigger explicitly.
             </p>
             <ReactDemo name="ui-tooltip" />
-            <Code
-                code={
-                    "const tooltip = useTooltip({ role: 'label' })\n\n<Button {...tooltip.triggerProps} icon><BoldIcon /></Button>\n<TooltipBody {...tooltip.contentProps}>Bold</TooltipBody>"
-                }
-            />
+            <Code code={examples.publish} />
             <p>
                 Native div attributes, handlers, and refs pass through. The defaults are <code>popover="hint"</code>,{' '}
                 <code>role="tooltip"</code>, <code>side="top"</code>, and <code>align="center"</code>. Set{' '}

@@ -110,7 +110,10 @@ test.describe('Button', () => {
     test('defaults to type="button" and keeps its handlers', async ({ page }) => {
         const messages = await mountFixture(page, 'buttons')
         await expect(page.getByRole('button', { name: 'Save' })).toHaveCSS('background-color', 'rgb(4, 120, 87)')
+        await expect(page.getByRole('button', { name: 'Save' })).toHaveCSS('padding-inline', '16px')
+        await expect(page.getByRole('button', { name: 'Ghost' })).toHaveCSS('padding-inline', '12px')
         await expect(page.getByRole('button', { name: 'Send' })).toHaveCSS('width', '36px')
+        await expect(page.getByRole('button', { name: 'Send' })).toHaveCSS('padding-inline', '0px')
         await page.getByRole('button', { name: 'Save' }).click()
         await expect(page.locator('#clicks')).toHaveText('1')
         await expect(page.getByRole('button', { name: 'Send' })).toHaveAttribute('type', 'submit')

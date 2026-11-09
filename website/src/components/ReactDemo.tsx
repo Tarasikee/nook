@@ -1,13 +1,13 @@
-import { DemoSourceContext } from '../demos/Demo'
+import { DemoCodeContext } from '../demos/Demo'
 import { demos, type DemoName } from '../demos'
 
 export function ReactDemo({ name }: { name: DemoName }) {
-    const { Component, source } = demos[name]
+    const { Component, code } = demos[name]
     return (
         <div data-demo={name}>
-            <DemoSourceContext value={source}>
+            <DemoCodeContext value={code}>
                 <Component />
-            </DemoSourceContext>
+            </DemoCodeContext>
         </div>
     )
 }

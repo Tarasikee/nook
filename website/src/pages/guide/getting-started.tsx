@@ -1,5 +1,6 @@
 import { Code } from '../../components/Code'
 import { ReactDemo } from '../../components/ReactDemo'
+import { examples } from '../../demos/examples'
 
 export default function GuideGettingStartedPage() {
     return (
@@ -23,11 +24,7 @@ export default function GuideGettingStartedPage() {
                 installs its npm dependencies. It does not add a Nook runtime package.
             </p>
             <h2 id="use-the-component">Use the component</h2>
-            <Code
-                code={
-                    "import { Button } from '@/components/ui/Button'\nimport { PopoverBody } from '@/components/ui/Popover'\nimport { usePopover } from '@/components/ui/use-popover'\n\nexport function ShareMenu() {\n  const popover = usePopover()\n  return (\n    <>\n      <Button {...popover.triggerProps}>Share</Button>\n      <PopoverBody {...popover.contentProps}>\n        <h2 {...popover.titleProps}>Invite collaborators</h2>\n        <p>Anyone with this link can view the project.</p>\n        <Button {...popover.closeProps}>Done</Button>\n      </PopoverBody>\n    </>\n  )\n}"
-                }
-            />
+            <Code code={examples['ui-popover']} />
             <p>
                 Install <code>Button</code> separately, or use a native button as the trigger. Import paths follow the
                 aliases in your app.

@@ -68,6 +68,8 @@ Verified 2026-11-08 in Chromium 153.0.8010.12 (source and compiled builds under 
 
 The component tests also verify native body refs and handlers through controlled opening and dismissal, CVA button styling, modal focus behavior, tooltip group delays, and Tailwind CSS v4.3.5 utilities compiled from component sources with Preflight. Left/right placements preserve the 8px gap for start, center, and end alignment; reduced-motion preferences disable transitions, and consumer button utility classes override CVA defaults.
 
+Verified 2026-11-08 in Chromium 153.0.8010.12 (`website/tests/smoke.spec.ts`, `packages/ui/tests/components/components.spec.ts`): tooltip toolbar icons retain their 18px width and height inside 36px buttons in development and production. Raw `buttonVariants` previously emitted both `px-0` and `px-4`, leaving 16px horizontal padding and shrinking the SVG to 2px wide; text-button padding now applies only when `icon` is false. Medium and small text buttons retain 16px and 12px horizontal padding.
+
 ## Interest invokers
 
 `interestfor` on `<a>`, `<button>`, `<area>`, or SVG `<a>` targets an element that the browser shows on hover, focus, or long press; Escape cancels all interest. It supplies an implicit anchor. `interest-delay` (one value, or start and end) sets timing; `:interest-source` and `:interest-target` style the pair. `interest` and `loseinterest` fire on the target with `InterestEvent.source`. Detect with `Object.hasOwn(HTMLButtonElement.prototype, 'interestForElement')`. [MDN guide](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using_interest_invokers)
@@ -100,11 +102,15 @@ Observed in Chromium 145 on 2026-09-29 (`packages/ui/tests/hooks/platform.spec.t
 - **Customizable select:** `appearance: base-select`, `::picker(select)`, `<selectedcontent>`. The picker has an implicit popover and anchor. No support baseline is established. [MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select)
 - **`ariaNotify(text, { priority })`** on `Element` or `Document`: announcements without a live region. Caveats: often only the latest is spoken, so combine messages; VoiceOver can drop one that coincides with another accessibility event such as a focus move; ChromeOS never speaks them; live regions take precedence; a Permissions Policy can block it. [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaNotify)
 
+## Performance measurement
+
+Verified 2026-11-08 in Chromium 153.0.8010.12 with production React 19.3.0 (`bench/react-tree.test.mjs`): the React DevTools hook exposes the committed Fiber tree, including components that render no DOM, providers, keyed fragments, text, and portal children. Traversing only current children and siblings excludes alternate work trees and removed portal content. Unmounted roots count zero; missing inspection fails explicitly. The benchmark collects these counts on separate fresh pages so inspection stays out of timing and heap measurements. The seven-run comparison (`bench/run.mjs`) also verified Base UI's composed tooltip/popover trigger, 8px placements, tooltip pointer sweeps, and popover anchoring during scrolling.
+
 ## Documentation navigation
 
 Verified 2026-09-30 in Chromium 153.0.8010.12 (`website/tests/smoke.spec.ts`): header tabs switch to section-specific sidebars, primitive pages activate only the Nook tab, API and Examples sidebar anchors target existing headings, and mobile menus expose the same sections. Client-side navigation still cleans up React demos.
 
-Verified 2026-11-08 in Chromium 153.0.8010.12 (`website/tests/smoke.spec.ts`, `website/tests/export.spec.ts`): the React-only website pregenerates complete page HTML and hydrates a single root without replacing its markup. Native popover and dialog commands work with JavaScript disabled. Controls that require JavaScript stay disabled until hydration, avoiding lost clicks during a cold development load. Checks cover the generated search index, highlighted source tabs, theme persistence, heading links, static 404 responses, and mobile navigation; 375px layouts keep wide tables and code blocks within their own scroll containers.
+Verified 2026-11-08 in Chromium 153.0.8010.12 (`website/tests/smoke.spec.ts`, `website/tests/export.spec.ts`, `website/tests/examples.spec.ts`): the React-only website pregenerates complete page HTML and hydrates a single root without replacing its markup. Native popover and dialog commands work with JavaScript disabled. Controls that require JavaScript stay disabled until hydration, avoiding lost clicks during a cold development load. Code tabs show independently authored implementations without imports or private demo helpers; copying preserves the displayed code, highlighting works, and switching tabs preserves preview state. The snippets typecheck against React and Nook's public APIs. Checks also cover the generated search index, theme persistence, heading links, static 404 responses, and mobile navigation; 375px layouts keep wide tables and code blocks within their own scroll containers.
 
 ## Open questions
 

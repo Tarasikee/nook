@@ -1,4 +1,5 @@
 import { Code } from '../../components/Code'
+import { examples } from '../../demos/examples'
 
 export default function GuideConceptsPage() {
     return (
@@ -24,10 +25,7 @@ export default function GuideConceptsPage() {
                 to your own handlers. Merge classes and existing ARIA references explicitly:
             </p>
 
-            <Code
-                code={'<button {...actions.triggerProps} {...hint.triggerProps} onClick={track}>…</button>\n'}
-                language="tsx"
-            />
+            <Code code={examples.combined} />
             <p>
                 Your design system's <code>&lt;Button&gt;</code> works if it forwards props to a native button.
             </p>

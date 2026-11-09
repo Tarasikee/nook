@@ -1,5 +1,6 @@
 import { ReactDemo } from '../../components/ReactDemo'
 import { Code } from '../../components/Code'
+import { examples } from '../../demos/examples'
 
 export default function UiPopoverPage() {
     return (
@@ -9,11 +10,7 @@ export default function UiPopoverPage() {
                 buttons explicitly.
             </p>
             <ReactDemo name="ui-popover" />
-            <Code
-                code={
-                    'const popover = usePopover()\n\n<Button {...popover.triggerProps}>Share</Button>\n<PopoverBody {...popover.contentProps}>\n  <h2 {...popover.titleProps}>Invite collaborators</h2>\n  <p>Anyone with the link can view this project.</p>\n  <Button {...popover.closeProps}>Done</Button>\n</PopoverBody>'
-                }
-            />
+            <Code code={examples['ui-popover']} />
             <p>
                 All native div attributes, event handlers, and refs pass through. <code>popover</code> defaults to{' '}
                 <code>'auto'</code>. <code>side</code> accepts <code>top | bottom | left | right</code> and defaults to{' '}
@@ -30,11 +27,7 @@ export default function UiPopoverPage() {
                 Put both sets of native attributes on your button and render the bodies separately. Your app owns prop
                 conflicts and coordination.
             </p>
-            <Code
-                code={
-                    'const popover = usePopover()\nconst tooltip = useTooltip()\n\n<Button {...popover.triggerProps} {...tooltip.triggerProps}>Actions</Button>\n<TooltipBody {...tooltip.contentProps}>Available actions</TooltipBody>\n<PopoverBody {...popover.contentProps}>\n  <h2 {...popover.titleProps}>Actions</h2>\n  <Button {...popover.closeProps}>Done</Button>\n</PopoverBody>'
-                }
-            />
+            <Code code={examples['ui-combined']} />
         </>
     )
 }

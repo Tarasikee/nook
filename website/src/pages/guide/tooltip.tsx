@@ -1,5 +1,6 @@
 import { ReactDemo } from '../../components/ReactDemo'
 import { Code } from '../../components/Code'
+import { examples } from '../../demos/examples'
 
 export default function GuideTooltipPage() {
     return (
@@ -11,12 +12,7 @@ export default function GuideTooltipPage() {
 
             <ReactDemo name="tooltip" />
 
-            <Code
-                code={
-                    'const tooltip = useTooltip({ role: \'label\' })\n\n<button {...tooltip.triggerProps}><BoldIcon aria-hidden /></button>\n<div {...tooltip.contentProps} className="tooltip">Bold</div>\n'
-                }
-                language="tsx"
-            />
+            <Code code={examples.tooltip} />
             <h2 id="what-the-browser-does-and-what-nook-adds">What the browser does, and what Nook adds</h2>
 
             <p>

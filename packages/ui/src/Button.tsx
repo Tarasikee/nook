@@ -17,12 +17,14 @@ export const buttonVariants = cva(
                     'border-[#0369a1]/25 bg-sky-400/14 text-[#0369a1] hover:border-[#0369a1] dark:bg-sky-400/16 dark:text-sky-300 dark:hover:border-sky-300',
                 ghost: 'border-slate-200 bg-transparent text-slate-600 hover:border-slate-600 hover:text-slate-900 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-400 dark:hover:text-slate-50'
             },
-            size: { medium: 'min-h-9 gap-2 px-4 text-sm', small: 'min-h-8 gap-1.5 px-3 text-xs' },
+            size: { medium: 'min-h-9 gap-2 text-sm', small: 'min-h-8 gap-1.5 text-xs' },
             icon: { true: 'px-0', false: null }
         },
         compoundVariants: [
             { size: 'medium', icon: true, className: 'w-9' },
-            { size: 'small', icon: true, className: 'w-8' }
+            { size: 'small', icon: true, className: 'w-8' },
+            { size: 'medium', icon: false, className: 'px-4' },
+            { size: 'small', icon: false, className: 'px-3' }
         ],
         defaultVariants: { variant: 'secondary', size: 'medium', icon: false }
     }

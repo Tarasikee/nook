@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises'
 
 // Verifies every benchmark item is compiled by React Compiler, so the comparison stays fair.
 let failed = false
-for (const lib of ['nook', 'radix', 'floating']) {
+for (const lib of ['nook', 'radix', 'floating', 'base']) {
     const path = new URL(`./src/${lib}.tsx`, import.meta.url).pathname
     const events = []
     await transformAsync(await readFile(path, 'utf8'), {

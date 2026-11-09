@@ -156,7 +156,7 @@ export const pages: PageDefinition[] = [
     {
         path: '/examples/',
         title: 'Examples',
-        description: 'Live patterns; each Code tab shows the exact source that runs it.',
+        description: 'Live patterns with standalone implementations to copy into your app.',
         section: 'Examples',
         group: 'Examples',
         load: () => import('./pages/examples/index')

@@ -5,7 +5,7 @@ export default function GuidePerformancePage() {
         <>
             <p className="lead">
                 Native primitives move work from JavaScript into the browser. This page measures the gain and the cost
-                against Radix and Floating UI.
+                against Radix, Floating UI, and Base UI.
             </p>
 
             <p>
@@ -17,6 +17,14 @@ export default function GuidePerformancePage() {
 
             <BenchResults />
 
+            <p>
+                DOM elements count the whole document after mount, including hidden content. React tree nodes count the
+                committed Fiber tree below the React root, including components, providers, fragments, host elements,
+                text nodes, and portals. This measures the mounted React tree, not temporary JSX element allocations or
+                alternate work trees. React counts come from separate fresh pages, keeping inspection out of the timing
+                and heap measurements.
+            </p>
+
             <h2 id="reading-the-results">Reading the results</h2>
 
             <ul>
@@ -27,11 +35,12 @@ export default function GuidePerformancePage() {
                 </li>
                 <li>
                     <strong>Nook costs more DOM:</strong> it renders hidden content up front, while the others mount it
-                    on open. It also does more browser style and layout work during a pointer sweep.
+                    on open. Its mounted React tree is larger than Floating UI's, but smaller than Radix's and Base
+                    UI's. It also does more browser style and layout work during a pointer sweep.
                 </li>
                 <li>
                     <strong>Limits:</strong> Chromium only, one machine, a synthetic screen with slowed CPU. Measure
-                    your own interface.
+                    your own interface. Fiber counts depend on React's internal tree representation.
                 </li>
                 <li>
                     <strong>Fairness note:</strong> reading Floating UI's <code>refs.*</code> inline during render makes

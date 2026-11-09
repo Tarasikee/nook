@@ -10,7 +10,7 @@ export default function UiButtonPage() {
 
             <ReactDemo name="ui-button" />
 
-            <Code code={'<Button variant="primary" onClick={save}>Save changes</Button>\n'} language="tsx" />
+            <Code code={'<Button variant="primary" type="submit">Save changes</Button>'} />
             <div className="my-6 overflow-x-auto">
                 <table>
                     <thead>
@@ -74,7 +74,7 @@ export default function UiButtonPage() {
             <ul>
                 <li>
                     <strong>Name icon buttons:</strong> <code>aria-label</code>, or wrap them in a{' '}
-                    <a href="/ui/tooltip">Tooltip</a> with <code>asLabel</code>.
+                    <a href="/ui/tooltip">Tooltip</a> with <code>useTooltip({"{ role: 'label' }"})</code>.
                 </li>
             </ul>
         </>

@@ -1,4 +1,5 @@
 import { Code } from '../../components/Code'
+import { examples } from '../../demos/examples'
 
 export default function ApiPage() {
     return (
@@ -6,10 +7,6 @@ export default function ApiPage() {
             <p className="lead">
                 Declarative attributes by default. State synchronization and observation are separate opt-in hooks.
             </p>
-            <Code
-                code={"import { usePopover, useTooltip, usePopoverControl, usePopoverOpen } from '@nook/ui/hooks'"}
-                language="ts"
-            />
             <h2 id="usepopover">usePopover</h2>
             <p>
                 <code>usePopover({'{ mode?, id? }'})</code> generates IDs and native attributes. The mode defaults to{' '}
@@ -123,11 +120,7 @@ export default function ApiPage() {
                 and unsubscribes when passed <code>null</code>. The server snapshot is <code>false</code>; hydration
                 picks up the native state.
             </p>
-            <Code
-                code={
-                    'const [panel, setPanel] = useState<HTMLDivElement | null>(null)\nconst open = usePopoverOpen(panel)\n\n<PopoverBody {...popover.contentProps} ref={setPanel}>…</PopoverBody>'
-                }
-            />
+            <Code code={examples.observed} />
             <h2 id="core">Native events and refs</h2>
             <p>
                 Use <code>onToggle</code> for notifications, <code>element.matches(':popover-open')</code> for an

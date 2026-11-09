@@ -11,7 +11,7 @@
         "preview": "pnpm --filter @nook/website preview",
         "check": "prettier --check . && pnpm check:workspace-deps && pnpm lint && pnpm -r typecheck && pnpm check:compiler",
         "check:workspace-deps": "pnpm --filter @nook/cli check:workspace-deps",
-        "test": "pnpm build && pnpm test:registry && pnpm --filter @nook/ui test && pnpm --filter @nook/website test",
+        "test": "pnpm build && pnpm test:registry && pnpm --filter @nook/bench test && pnpm --filter @nook/ui test && pnpm --filter @nook/website test",
         "clean": "rm -rf dist packages/*/dist packages/*/test-results packages/*/node_modules/.cache website/test-results website/dist website/node_modules/.cache bench/results",
         "lint": "eslint --max-warnings 0 .",
         "format": "prettier --write .",

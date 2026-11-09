@@ -1,4 +1,5 @@
 import { Code } from '../../components/Code'
+import { examples } from '../../demos/examples'
 
 const items = [
     {
@@ -43,11 +44,7 @@ export default function UiIndexPage() {
                 and shadcn.
             </p>
             <Code language="sh" code={'pnpm build:registry\npnpm exec nook add button tooltip --cwd ../your-app'} />
-            <Code
-                code={
-                    "import { Button } from '@/components/ui/Button'\nimport { TooltipBody } from '@/components/ui/Tooltip'\nimport { useTooltip } from '@/components/ui/use-tooltip'\n\nconst tooltip = useTooltip()\n\n<Button {...tooltip.triggerProps}>Save</Button>\n<TooltipBody {...tooltip.contentProps}>Save changes</TooltipBody>"
-                }
-            />
+            <Code code={examples.publish} />
             <h2 id="styling">Styling</h2>
             <p>
                 Styles live in Tailwind utility classes. There are no component CSS imports. Button variants use CVA;{' '}

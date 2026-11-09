@@ -1,4 +1,5 @@
 import { Code } from '../../components/Code'
+import { examples } from '../../demos/examples'
 
 export default function GuideDialogPage() {
     return (
@@ -58,12 +59,7 @@ export default function GuideDialogPage() {
                 instead of keeping a second copy of the state:
             </p>
 
-            <Code
-                code={
-                    "new MutationObserver(() => setOpen(dialog.open)).observe(dialog, { attributeFilter: ['open'] })\n"
-                }
-                language="tsx"
-            />
+            <Code code={examples['dialog-state']} />
             <h2 id="browser-support">Browser support</h2>
 
             <p>

@@ -1,5 +1,6 @@
 import { Code } from '../../components/Code'
 import { ReactDemo } from '../../components/ReactDemo'
+import { examples } from '../../demos/examples'
 
 export default function GuidePopoverPage() {
     return (
@@ -44,12 +45,7 @@ export default function GuidePopoverPage() {
 
             <h2 id="controlled-state">Controlled state</h2>
 
-            <Code
-                code={
-                    "const [open, setOpen] = useState(false)\nconst [panel, setPanel] = useState<HTMLDivElement | null>(null)\nconst [trigger, setTrigger] = useState<HTMLButtonElement | null>(null)\nconst status = usePopover({ mode: 'manual' })\nusePopoverControl(panel, open, trigger)\n\n<button {...status.triggerProps} ref={setTrigger}>Status</button>\n<PopoverBody {...status.contentProps} ref={setPanel}\n  onToggle={(event) => setOpen(event.newState === 'open')}>\n  <h2 {...status.titleProps}>Status</h2>\n</PopoverBody>"
-                }
-                language="tsx"
-            />
+            <Code code={examples.controlled} />
             <ReactDemo name="controlled" />
 
             <aside>
@@ -72,12 +68,7 @@ export default function GuidePopoverPage() {
                 browser anchors the popover to it. Requests require an attached element; the helpers do not queue them.
             </p>
 
-            <Code
-                code={
-                    'async function deploy() {\n  await startDeployment()\n  panel?.showPopover({ source: trigger })\n}'
-                }
-                language="tsx"
-            />
+            <Code code={examples.imperative} />
             <h2 id="keyboard-and-focus">Keyboard and focus</h2>
 
             <p>

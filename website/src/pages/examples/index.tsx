@@ -4,8 +4,7 @@ export default function ExamplesIndexPage() {
     return (
         <>
             <p className="lead">
-                Every demo runs on <code>@nook/ui/hooks</code>. Open a demo's <strong>Code</strong> tab for the exact
-                source, including its Tailwind utilities and local style helpers.
+                Open a demo's <strong>Code</strong> tab for a standalone implementation you can copy into your app.
             </p>
 
             <h2 id="share-popover">Share popover</h2>

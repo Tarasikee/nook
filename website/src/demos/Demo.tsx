@@ -2,7 +2,7 @@ import { createContext, use, useId, useState, type KeyboardEvent, type ReactNode
 import { Code } from '../components/Code'
 import { useHydrated } from '../useHydrated'
 
-export const DemoSourceContext = createContext<string | null>(null)
+export const DemoCodeContext = createContext<string | null>(null)
 
 export function Demo({
     title,
@@ -17,7 +17,7 @@ export function Demo({
     unsupported?: string
     children: ReactNode
 }) {
-    const source = use(DemoSourceContext)
+    const code = use(DemoCodeContext)
     const hydrated = useHydrated()
     const [tab, setTab] = useState<'preview' | 'code'>('preview')
     const id = useId()
@@ -37,7 +37,7 @@ export function Demo({
                     {title}{' '}
                     {badge ? <span className="ml-2 font-mono text-xs font-normal text-slate-400">{badge}</span> : null}
                 </span>
-                {source ? (
+                {code ? (
                     <div
                         role="tablist"
                         aria-label={`${title} demo`}
@@ -66,8 +66,8 @@ export function Demo({
             </figcaption>
             <div
                 id={`${id}-preview`}
-                role={source ? 'tabpanel' : undefined}
-                aria-labelledby={source ? `${id}-preview-tab` : undefined}
+                role={code ? 'tabpanel' : undefined}
+                aria-labelledby={code ? `${id}-preview-tab` : undefined}
                 hidden={tab !== 'preview'}
                 className="flex min-h-48 flex-wrap items-center justify-center gap-5 bg-slate-50/60 px-5 py-12 dark:bg-slate-900/30"
             >
@@ -78,7 +78,7 @@ export function Demo({
                     </p>
                 ) : null}
             </div>
-            {source ? (
+            {code ? (
                 <div
                     id={`${id}-code`}
                     role="tabpanel"
@@ -86,7 +86,7 @@ export function Demo({
                     hidden={tab !== 'code'}
                     className="px-3"
                 >
-                    <Code code={source} />
+                    <Code code={code} />
                 </div>
             ) : null}
             {hint && tab === 'preview' ? (

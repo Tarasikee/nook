@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import { expect, test, type Page } from '@playwright/test'
 import { pages, sections } from '../src/pages'
 
@@ -42,6 +41,29 @@ test('header links and sidebars use the page list', async ({ page }) => {
         await expect(sidebar.getByRole('link')).toHaveText(
             pages.filter((entry) => entry.section === section.name).map((entry) => entry.title)
         )
+    }
+})
+
+test('performance tables compare Base UI and show DOM and React tree counts', async ({ page }) => {
+    await page.goto('/guide/performance')
+    for (const table of await page.getByRole('table').all()) {
+        await expect(
+            table
+                .getByRole('rowheader', { name: 'Base UI', exact: true })
+                .or(table.getByRole('columnheader', { name: 'Base UI', exact: true }))
+        ).toBeVisible()
+    }
+    for (const count of [200, 1000]) {
+        const section = page
+            .locator('section')
+            .filter({ has: page.getByRole('heading', { name: `Mount, ${count} items`, exact: true }) })
+        await expect(section.getByRole('columnheader', { name: 'DOM elements', exact: true })).toBeVisible()
+        await expect(
+            section.getByRole('columnheader', { name: 'React tree nodes (Fibers)', exact: true })
+        ).toBeVisible()
+        for (const row of await section.locator('tbody tr').all()) {
+            expect(Number(await row.getByRole('cell').last().textContent())).toBeGreaterThan(count)
+        }
     }
 })
 
@@ -135,6 +157,28 @@ test('modal dialog centers, returns focus, and blocks search shortcuts', async (
     await expect(news).toBeHidden()
 })
 
+for (const path of ['/guide/tooltip', '/ui/tooltip']) {
+    test(`${path} tooltip toolbar renders and hydrates without errors`, async ({ page }) => {
+        const errors = collectErrors(page)
+        await page.goto(path)
+        await expect(
+            page
+                .getByRole('tablist', { name: 'Tooltip demo', exact: true })
+                .getByRole('tab', { name: 'Code', exact: true })
+        ).toBeEnabled()
+        const toolbar = page.getByRole('toolbar', { name: 'Formatting' })
+        await expect(toolbar.getByRole('button')).toHaveCount(3)
+        for (const label of ['Bold', 'Italic', 'Insert link']) {
+            const button = toolbar.getByRole('button', { name: label, exact: true })
+            await expect(button).toHaveCSS('width', '36px')
+            await expect(button).toHaveCSS('height', '36px')
+            await expect(button.locator('svg')).toHaveCSS('width', '18px')
+            await expect(button.locator('svg')).toHaveCSS('height', '18px')
+        }
+        expect(errors).toEqual([])
+    })
+}
+
 test('native tooltips open on focus and move between toolbar items', async ({ page }) => {
     await page.goto('/guide/tooltip')
     const trigger = page.getByRole('button', { name: 'Italic', exact: true })
@@ -149,7 +193,8 @@ test('native tooltips open on focus and move between toolbar items', async ({ pa
     await expect(hint).toBeVisible()
 })
 
-test('source tabs show the running TSX and preserve demo state', async ({ page }) => {
+test('code tabs show standalone implementations and preserve demo state', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
     await page.goto('/guide/getting-started')
     const demo = page.getByRole('figure').filter({ has: page.getByRole('tablist', { name: 'Popover demo' }) })
     // The native trigger works before hydration; this assertion needs its React handler.
@@ -159,9 +204,13 @@ test('source tabs show the running TSX and preserve demo state', async ({ page }
     await expect(demo.getByText('your onClick ran 1×')).toBeVisible()
     await demo.getByRole('tab', { name: 'Code', exact: true }).click()
     const code = demo.getByRole('tabpanel', { name: 'Code' })
-    const source = readFileSync(new URL('../src/demos/PopoverDemo.tsx', import.meta.url), 'utf8')
-    expect(await code.locator('pre code').textContent()).toBe(source.trim())
+    const implementation = await code.locator('pre code').textContent()
+    expect(implementation).toContain('function SharePopover()')
+    expect(implementation).not.toMatch(/\bimport\b|<Demo\b|kit\.|useUnsupported|nook\/ui/)
     expect(await code.locator('span[style*="--shiki-light"]').count()).toBeGreaterThan(0)
+    await code.getByRole('button', { name: 'Copy code' }).click()
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(implementation)
+    await demo.getByRole('tab', { name: 'Code', exact: true }).focus()
     await page.keyboard.press('Home')
     await expect(demo.getByRole('tab', { name: 'Preview' })).toBeFocused()
     await expect(demo.getByText('your onClick ran 1×')).toBeVisible()

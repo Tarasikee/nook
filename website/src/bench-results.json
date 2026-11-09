@@ -1,12 +1,12 @@
 {
-    "date": "2026-09-29T08:11:05.262Z",
-    "browser": "145.0.7632.6",
+    "date": "2026-11-08T10:45:58.518Z",
+    "browser": "153.0.8010.12",
     "cpu": 4,
     "runs": 7,
     "sizes": [
         {
             "lib": "nook",
-            "addedKB": "1.7"
+            "addedKB": "1.0"
         },
         {
             "lib": "radix",
@@ -14,7 +14,11 @@
         },
         {
             "lib": "floating",
-            "addedKB": "17.3"
+            "addedKB": "17.2"
+        },
+        {
+            "lib": "base",
+            "addedKB": "44.6"
         }
     ],
     "results": [
@@ -24,30 +28,43 @@
             "rows": [
                 {
                     "lib": "nook",
-                    "commitMs": 30.7,
-                    "commitMs range": "29–34",
-                    "firstFrameMs": 65.3,
-                    "firstFrameMs range": "62–74",
-                    "heapMB": 3.7,
-                    "domNodes": 1206
+                    "commitMs": 28.3,
+                    "commitMs range": "26–30",
+                    "firstFrameMs": 70.3,
+                    "firstFrameMs range": "64–76",
+                    "heapMB": 3,
+                    "domNodes": 1206,
+                    "reactFibers": 2202
                 },
                 {
                     "lib": "radix",
-                    "commitMs": 56.1,
-                    "commitMs range": "53–63",
-                    "firstFrameMs": 116.6,
-                    "firstFrameMs range": "112–127",
-                    "heapMB": 9.1,
-                    "domNodes": 406
+                    "commitMs": 63.2,
+                    "commitMs range": "61–67",
+                    "firstFrameMs": 141.7,
+                    "firstFrameMs range": "134–143",
+                    "heapMB": 9.2,
+                    "domNodes": 406,
+                    "reactFibers": 6805
                 },
                 {
                     "lib": "floating",
-                    "commitMs": 51.7,
-                    "commitMs range": "49–57",
-                    "firstFrameMs": 119.5,
-                    "firstFrameMs range": "113–133",
+                    "commitMs": 57.2,
+                    "commitMs range": "54–59",
+                    "firstFrameMs": 134.5,
+                    "firstFrameMs range": "131–140",
                     "heapMB": 12.6,
-                    "domNodes": 406
+                    "domNodes": 406,
+                    "reactFibers": 602
+                },
+                {
+                    "lib": "base",
+                    "commitMs": 93,
+                    "commitMs range": "91–105",
+                    "firstFrameMs": 149,
+                    "firstFrameMs range": "142–162",
+                    "heapMB": 13,
+                    "domNodes": 406,
+                    "reactFibers": 3406
                 }
             ]
         },
@@ -57,30 +74,43 @@
             "rows": [
                 {
                     "lib": "nook",
-                    "commitMs": 59.7,
-                    "commitMs range": "57–66",
-                    "firstFrameMs": 129.9,
-                    "firstFrameMs range": "124–135",
-                    "heapMB": 8.6,
-                    "domNodes": 6006
+                    "commitMs": 58.9,
+                    "commitMs range": "56–63",
+                    "firstFrameMs": 141.2,
+                    "firstFrameMs range": "131–147",
+                    "heapMB": 5.3,
+                    "domNodes": 6006,
+                    "reactFibers": 11002
                 },
                 {
                     "lib": "radix",
-                    "commitMs": 150.8,
-                    "commitMs range": "148–155",
-                    "firstFrameMs": 324.7,
-                    "firstFrameMs range": "317–335",
+                    "commitMs": 168.2,
+                    "commitMs range": "160–185",
+                    "firstFrameMs": 365.4,
+                    "firstFrameMs range": "358–413",
                     "heapMB": 32.8,
-                    "domNodes": 2006
+                    "domNodes": 2006,
+                    "reactFibers": 34005
                 },
                 {
                     "lib": "floating",
-                    "commitMs": 144.7,
-                    "commitMs range": "135–159",
-                    "firstFrameMs": 365.9,
-                    "firstFrameMs range": "339–379",
-                    "heapMB": 51,
-                    "domNodes": 2006
+                    "commitMs": 160,
+                    "commitMs range": "135–174",
+                    "firstFrameMs": 415,
+                    "firstFrameMs range": "349–451",
+                    "heapMB": 51.1,
+                    "domNodes": 2006,
+                    "reactFibers": 3002
+                },
+                {
+                    "lib": "base",
+                    "commitMs": 251.7,
+                    "commitMs range": "234–289",
+                    "firstFrameMs": 374,
+                    "firstFrameMs range": "349–417",
+                    "heapMB": 49.7,
+                    "domNodes": 2006,
+                    "reactFibers": 17006
                 }
             ]
         },
@@ -90,18 +120,23 @@
             "rows": [
                 {
                     "lib": "nook",
-                    "rerenderMs": 29.2,
-                    "rerenderMs range": "29–34"
+                    "rerenderMs": 20.1,
+                    "rerenderMs range": "19–23"
                 },
                 {
                     "lib": "radix",
-                    "rerenderMs": 113.9,
-                    "rerenderMs range": "108–116"
+                    "rerenderMs": 102.5,
+                    "rerenderMs range": "101–126"
                 },
                 {
                     "lib": "floating",
-                    "rerenderMs": 84.5,
-                    "rerenderMs range": "78–89"
+                    "rerenderMs": 94.4,
+                    "rerenderMs range": "89–99"
+                },
+                {
+                    "lib": "base",
+                    "rerenderMs": 244.1,
+                    "rerenderMs range": "238–254"
                 }
             ]
         },
@@ -111,20 +146,26 @@
             "rows": [
                 {
                     "lib": "nook",
-                    "openMs": 6.3,
-                    "openMs range": "5–7",
+                    "openMs": 8.4,
+                    "openMs range": "8–9",
                     "placed": true
                 },
                 {
                     "lib": "radix",
-                    "openMs": 23,
-                    "openMs range": "22–24",
+                    "openMs": 29.8,
+                    "openMs range": "25–39",
                     "placed": true
                 },
                 {
                     "lib": "floating",
-                    "openMs": 19.2,
-                    "openMs range": "19–21",
+                    "openMs": 24.4,
+                    "openMs range": "21–28",
+                    "placed": true
+                },
+                {
+                    "lib": "base",
+                    "openMs": 41.4,
+                    "openMs range": "40–44",
                     "placed": true
                 }
             ]
@@ -135,20 +176,26 @@
             "rows": [
                 {
                     "lib": "nook",
-                    "hoverMs": 4.3,
-                    "hoverMs range": "4–5",
+                    "hoverMs": 5.4,
+                    "hoverMs range": "4–7",
                     "placed": true
                 },
                 {
                     "lib": "radix",
-                    "hoverMs": 19.9,
-                    "hoverMs range": "18–45",
+                    "hoverMs": 45.8,
+                    "hoverMs range": "24–53",
                     "placed": true
                 },
                 {
                     "lib": "floating",
-                    "hoverMs": 16.6,
-                    "hoverMs range": "16–18",
+                    "hoverMs": 19.3,
+                    "hoverMs range": "19–24",
+                    "placed": true
+                },
+                {
+                    "lib": "base",
+                    "hoverMs": 64.2,
+                    "hoverMs range": "41–77",
                     "placed": true
                 }
             ]
@@ -159,26 +206,34 @@
             "rows": [
                 {
                     "lib": "nook",
-                    "scriptMs": 46.4,
-                    "scriptMs range": "38–55",
-                    "styleLayoutMs": 30.5,
-                    "styleLayoutMs range": "28–37",
+                    "scriptMs": 28.5,
+                    "scriptMs range": "18–35",
+                    "styleLayoutMs": 61.2,
+                    "styleLayoutMs range": "44–67",
                     "shown": true
                 },
                 {
                     "lib": "radix",
-                    "scriptMs": 162.8,
-                    "scriptMs range": "157–179",
-                    "styleLayoutMs": 23.3,
-                    "styleLayoutMs range": "16–25",
+                    "scriptMs": 258.5,
+                    "scriptMs range": "242–280",
+                    "styleLayoutMs": 37.8,
+                    "styleLayoutMs range": "32–45",
                     "shown": true
                 },
                 {
                     "lib": "floating",
-                    "scriptMs": 141.5,
-                    "scriptMs range": "127–171",
-                    "styleLayoutMs": 14.7,
-                    "styleLayoutMs range": "13–20",
+                    "scriptMs": 205.8,
+                    "scriptMs range": "177–211",
+                    "styleLayoutMs": 19.5,
+                    "styleLayoutMs range": "19–22",
+                    "shown": true
+                },
+                {
+                    "lib": "base",
+                    "scriptMs": 308.5,
+                    "scriptMs range": "295–326",
+                    "styleLayoutMs": 36.3,
+                    "styleLayoutMs range": "30–40",
                     "shown": true
                 }
             ]
@@ -189,32 +244,42 @@
             "rows": [
                 {
                     "lib": "nook",
-                    "scriptMs": 0.1,
-                    "scriptMs range": "0–1",
-                    "styleLayoutMs": 0,
-                    "styleLayoutMs range": "0–0",
-                    "avgFrameMs": 8.3,
-                    "avgFrameMs range": "8–8",
+                    "scriptMs": 0.2,
+                    "scriptMs range": "0–0",
+                    "styleLayoutMs": 0.1,
+                    "styleLayoutMs range": "0–1",
+                    "avgFrameMs": 16.7,
+                    "avgFrameMs range": "17–17",
                     "placed": true
                 },
                 {
                     "lib": "radix",
-                    "scriptMs": 5.9,
-                    "scriptMs range": "5–9",
-                    "styleLayoutMs": 5.1,
-                    "styleLayoutMs range": "4–6",
-                    "avgFrameMs": 8.3,
-                    "avgFrameMs range": "8–8",
+                    "scriptMs": 11.6,
+                    "scriptMs range": "7–14",
+                    "styleLayoutMs": 15.4,
+                    "styleLayoutMs range": "10–18",
+                    "avgFrameMs": 16.7,
+                    "avgFrameMs range": "17–17",
                     "placed": true
                 },
                 {
                     "lib": "floating",
-                    "scriptMs": 3.6,
-                    "scriptMs range": "2–5",
+                    "scriptMs": 9.6,
+                    "scriptMs range": "9–12",
                     "styleLayoutMs": 0,
                     "styleLayoutMs range": "0–0",
-                    "avgFrameMs": 8.3,
-                    "avgFrameMs range": "8–8",
+                    "avgFrameMs": 16.7,
+                    "avgFrameMs range": "17–17",
+                    "placed": true
+                },
+                {
+                    "lib": "base",
+                    "scriptMs": 8.9,
+                    "scriptMs range": "7–10",
+                    "styleLayoutMs": 9.4,
+                    "styleLayoutMs range": "9–14",
+                    "avgFrameMs": 16.7,
+                    "avgFrameMs range": "17–17",
                     "placed": true
                 }
             ]

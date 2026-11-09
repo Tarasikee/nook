@@ -1,5 +1,5 @@
 /**
- * Compares Nook with Radix and Floating UI on the same screen: N items, each a button with a
+ * Compares Nook with Radix, Floating UI, and Base UI on the same screen: N items, each a button with a
  * hover tooltip and a click popover, written idiomatically for each library.
  *
  * Fairness rules:
@@ -20,8 +20,10 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { gzipSync } from 'node:zlib'
 
+const { countReactFibers, installReactTreeProbe } = await import(new URL('./react-tree.mjs', import.meta.url))
+
 const here = fileURLToPath(new URL('.', import.meta.url))
-const libraries = ['nook', 'radix', 'floating']
+const libraries = ['nook', 'radix', 'floating', 'base']
 const runs = Number(process.env.RUNS ?? 7)
 const cpu = Number(process.env.CPU ?? 4)
 
@@ -78,11 +80,12 @@ const median = (values) => [...values].sort((a, b) => a - b)[Math.floor(values.l
 const range = (values) => `${Math.min(...values).toFixed(0)}–${Math.max(...values).toFixed(0)}`
 const gzip = (code) => gzipSync(code, { level: 9 }).length
 
-async function openPage(browser, code, count) {
+async function openPage(browser, code, count, inspectReact = false) {
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
     const cdp = await page.context().newCDPSession(page)
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu })
     await page.setContent(`<!doctype html><style>${css}</style><div id="root"></div>`)
+    if (inspectReact) await page.evaluate(installReactTreeProbe)
     await page.evaluate((n) => (window.benchCount = n), count)
     await page.addScriptTag({ content: code })
     await page.waitForFunction(() => window.benchPainted > 0)
@@ -263,8 +266,15 @@ for (const { scenario, count } of plan) {
         const samples = []
         for (let run = 0; run < runs; run++) {
             const { page, cdp } = await openPage(browser, code[lib], count)
-            samples.push(await scenarios[scenario](page, cdp))
+            const sample = await scenarios[scenario](page, cdp)
             await page.close()
+            if (scenario === 'mount') {
+                // Inspect a separate fresh page so DevTools instrumentation cannot affect measured performance.
+                const { page } = await openPage(browser, code[lib], count, true)
+                sample.reactFibers = await page.evaluate(countReactFibers)
+                await page.close()
+            }
+            samples.push(sample)
         }
         const row = { lib }
         for (const key of Object.keys(samples[0])) {
@@ -272,7 +282,7 @@ for (const { scenario, count } of plan) {
             if (typeof values[0] === 'boolean') {
                 row[key] = values.every(Boolean)
             } else {
-                row[key] = Number(median(values).toFixed(key === 'domNodes' ? 0 : 1))
+                row[key] = Number(median(values).toFixed(key === 'domNodes' || key === 'reactFibers' ? 0 : 1))
                 if (key.endsWith('Ms')) row[`${key} range`] = range(values)
             }
         }

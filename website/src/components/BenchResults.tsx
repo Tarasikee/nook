@@ -7,6 +7,7 @@ const labels: Record<string, string> = {
     firstFrameMs: 'To first frame (ms)',
     heapMB: 'JS heap (MB)',
     domNodes: 'DOM elements',
+    reactFibers: 'React tree nodes (Fibers)',
     rerenderMs: 'Re-render all (ms)',
     openMs: 'Click → placed (ms)',
     hoverMs: 'Hover → placed (ms)',
@@ -26,7 +27,7 @@ const titles: Record<string, string> = {
     scroll: 'Scroll 60 frames with a popover open'
 }
 
-const libraryNames: Record<string, string> = { nook: 'Nook', radix: 'Radix', floating: 'Floating UI' }
+const libraryNames: Record<string, string> = { nook: 'Nook', radix: 'Radix', floating: 'Floating UI', base: 'Base UI' }
 
 const metrics = (rows: Row[]) => Object.keys(rows[0]).filter((key) => key in labels)
 
